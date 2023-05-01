@@ -1,5 +1,9 @@
 import { Inter } from "next/font/google";
-import Summary from "../components/stats/summary";
+import AtAGlance from "@/components/stats/atAGlance";
+
+import jan from "@/data/Jan.json";
+import feb from "@/data/Feb.json";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
@@ -8,8 +12,9 @@ export default function Home() {
       className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
     >
       <h1>TEST PAGE</h1>
-      <div id="stat-test"></div>
-      <Summary label="month" statistic={1200} lastStatistic={1000} />
+      <div id="stat-test">
+        <AtAGlance month={jan} prevMonth={feb} />
+      </div>
     </main>
   );
 }
