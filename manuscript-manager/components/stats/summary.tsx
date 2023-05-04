@@ -7,27 +7,31 @@ import {
   StatHelpText,
   StatArrow,
 } from "@chakra-ui/react";
-
+import { getPercentageChange } from "@/utils/math";
 interface SummaryProps {
   statistic: number;
   label: string;
 
-  lastStatistic?: number;
+  lastStatistic: number;
 }
 
 function Summary({ statistic, label, lastStatistic }: SummaryProps) {
+  const percent: string = getPercentageChange(statistic, lastStatistic) + "%";
+
   return (
     <Stat>
       <StatLabel>{label}</StatLabel>
       <StatNumber>{statistic}</StatNumber>
-      {statistic && lastStatistic ? (
-        <StatHelpText>
-          Last {label}: {lastStatistic}
-          <StatArrow
-            type={statistic > lastStatistic ? "increase" : "decrease"}
-          ></StatArrow>
-        </StatHelpText>
-      ) : undefined}
+      <StatHelpText>
+        {percent}
+        <StatArrow
+          type={statistic > lastStatistic ? "increase" : "decrease"}
+        ></StatArrow>
+      </StatHelpText>
+
+      <StatHelpText>
+        Last {label}: {lastStatistic}
+      </StatHelpText>
     </Stat>
   );
 }
