@@ -6,7 +6,6 @@ import {
   StatNumber,
   StatHelpText,
   StatArrow,
-  StatGroup,
 } from "@chakra-ui/react";
 
 interface SummaryProps {
