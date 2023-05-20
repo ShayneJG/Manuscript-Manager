@@ -12,7 +12,7 @@ import {
 import { fakeManuscripts } from "@/data/Manuscripts";
 
 //This component is used to place manuscript data into a table.
-interface manuscriptType {
+interface ManuscriptType {
   user: string;
   payrate: number;
   date: Date;
@@ -25,13 +25,19 @@ interface manuscriptType {
   turnAround: string;
   authorBio: number;
 }
-export default function ManuscriptTable(
-  data: manuscriptType[],
-  caption?: string
-) {
+
+interface ManuscriptTableProps {
+  data: ManuscriptType[];
+  caption?: string;
+}
+export default function ManuscriptTable({
+  data,
+  caption,
+}: ManuscriptTableProps) {
+  let tick: string = "✓";
   return (
     <TableContainer>
-      <Table>
+      <Table variant={"striped"}>
         {caption ? <TableCaption>{caption}</TableCaption> : undefined}
         <Thead>
           <Tr>
@@ -47,6 +53,24 @@ export default function ManuscriptTable(
             <Th>Author Biography</Th>
           </Tr>
         </Thead>
+        <Tbody>
+          {data.map((manuscript) => {
+            return (
+              <Tr>
+                <Td>{manuscript.date.toDateString()}</Td>
+                <Td>{manuscript.user}</Td>
+                <Td>{manuscript.manuscriptID}</Td>
+                <Td>{manuscript.wordcount}</Td>
+                <Td>{manuscript.latex ? tick : undefined}</Td>
+                <Td>{manuscript.double ? tick : undefined}</Td>
+                <Td>{manuscript.triple ? tick : undefined}</Td>
+                <Td>{manuscript.bonus}</Td>
+                <Td>{manuscript.turnAround}</Td>
+                <Td>{manuscript.authorBio}</Td>
+              </Tr>
+            );
+          })}
+        </Tbody>
       </Table>
     </TableContainer>
   );

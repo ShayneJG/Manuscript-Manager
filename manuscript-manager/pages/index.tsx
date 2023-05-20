@@ -3,6 +3,8 @@ import AtAGlance from "@/components/stats/atAGlance";
 
 import jan from "@/data/Jan.json";
 import feb from "@/data/Feb.json";
+import ManuscriptTable from "@/components/table/table";
+import { fakeManuscripts } from "@/data/Manuscripts";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,6 +15,7 @@ export default function Home() {
     >
       <h1>TEST PAGE</h1>
       <div id="stat-test">
+        <ManuscriptTable data={fakeManuscripts} caption="Test Table" />
         <AtAGlance month={jan} prevMonth={feb} />
       </div>
     </main>
