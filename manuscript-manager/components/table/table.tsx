@@ -9,7 +9,6 @@ import {
   TableCaption,
   TableContainer,
 } from "@chakra-ui/react";
-import { fakeManuscripts } from "@/data/Manuscripts";
 
 //This component is used to place manuscript data into a table.
 interface ManuscriptType {
@@ -54,9 +53,9 @@ export default function ManuscriptTable({
           </Tr>
         </Thead>
         <Tbody>
-          {data.map((manuscript) => {
+          {data.map((manuscript, index) => {
             return (
-              <Tr>
+              <Tr key={index}>
                 <Td>{manuscript.date.toDateString()}</Td>
                 <Td>{manuscript.user}</Td>
                 <Td>{manuscript.manuscriptID}</Td>
