@@ -9,21 +9,9 @@ import {
   TableCaption,
   TableContainer,
 } from "@chakra-ui/react";
+import { ManuscriptType } from "@/types/manuscripts";
 
 //This component is used to place manuscript data into a table.
-interface ManuscriptType {
-  user: string;
-  payrate: number;
-  date: Date;
-  manuscriptID: string;
-  wordcount: number;
-  latex: boolean;
-  double: boolean;
-  triple: boolean;
-  bonus: number;
-  turnAround: string;
-  authorBio: number;
-}
 
 interface ManuscriptTableProps {
   data: ManuscriptType[];
