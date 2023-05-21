@@ -1,18 +1,6 @@
-interface fakeManuscriptType {
-  user: string;
-  payrate: number;
-  date: Date;
-  manuscriptID: string;
-  wordcount: number;
-  latex: boolean;
-  double: boolean;
-  triple: boolean;
-  bonus: number;
-  turnAround: string;
-  authorBio: number;
-}
+import { ManuscriptType } from "@/types/manuscripts";
 
-export let fakeManuscripts: fakeManuscriptType[] = [
+export let fakeManuscripts: ManuscriptType[] = [
   {
     user: "Shayne",
     payrate: 0.0074,
