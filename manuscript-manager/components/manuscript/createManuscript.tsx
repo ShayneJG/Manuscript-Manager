@@ -33,7 +33,7 @@ export default function CreateManuscript() {
   const [turnaround, setTurnaround] = useState<string>("");
   const [authorbio, setAuthorbio] = useState<number>(0);
   return (
-    <Box>
+    <Box borderWidth="1px" borderRadius="lg" p={2}>
       <FormControl id="date">
         <FormLabel>Date</FormLabel>
         <Box>
