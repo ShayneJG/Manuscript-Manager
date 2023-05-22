@@ -33,6 +33,8 @@ export default function CreateManuscript() {
       <FormControl>
         <FormLabel>Date</FormLabel>
         <Box>
+          {/* Chakra UI does not have a date picker component. It has an input of type date,
+          but that was too weird to use, so we are using react-datepicker here, which simplifies things a lot */}
           <DatePicker
             dateFormat={"dd/MM/yyyy"}
             selected={manuscriptDate}
