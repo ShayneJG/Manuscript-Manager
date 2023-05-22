@@ -4,6 +4,11 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 import {
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
   Input,
   Box,
   FormControl,
@@ -24,8 +29,11 @@ export default function CreateManuscript() {
   const [latex, setLatex] = useState<boolean>(false);
   const [double, setDouble] = useState<boolean>(false);
   const [triple, setTriple] = useState<boolean>(false);
+  const [bonus, setBonus] = useState<number>(0);
+  const [turnaround, setTurnaround] = useState<string>("");
+  const [authorbio, setAuthorbio] = useState<number>(0);
   return (
-    <div>
+    <Box>
       <FormControl id="date">
         <FormLabel>Date</FormLabel>
         <Box>
@@ -59,8 +67,19 @@ export default function CreateManuscript() {
           }}
         />
       </FormControl>
-      {/* Boxing together the 3 toggle options to make layout simpler */}
-      <Stack direction="row" spacing={`2rem`}>
+      <FormControl isRequired id="turnaround time">
+        <FormLabel>Turnaround Time</FormLabel>
+        <Input
+          value={turnaround}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setTurnaround(e.target.value)
+          }
+        />
+      </FormControl>
+      {/* Boxing together the 3 toggle options to make layout simpler
+          The checkbox component from Chakra UI also appears to use the HTMLInputElement type.
+      */}
+      <Stack direction="row" spacing={`2rem`} id="checkboxes">
         <Checkbox
           checked={latex}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
@@ -86,6 +105,40 @@ export default function CreateManuscript() {
           Triple
         </Checkbox>
       </Stack>
-    </div>
+      <FormControl id="bonus">
+        <FormLabel>Bonus</FormLabel>
+        <NumberInput
+          value={bonus + "%"}
+          onChange={(e: string) => {
+            const inputValue = e;
+            const numericValue = Number(inputValue.replace("%", ""));
+            if (!isNaN(numericValue)) {
+              setBonus(numericValue);
+            }
+          }}
+        >
+          <NumberInputField />
+          <NumberInputStepper>
+            <NumberIncrementStepper />
+            <NumberDecrementStepper />
+          </NumberInputStepper>
+        </NumberInput>
+
+        <FormHelperText>
+          Bonuses are sometimes offered by the English Department
+        </FormHelperText>
+      </FormControl>
+
+      <FormControl id="author biography">
+        <FormLabel>Author Biography</FormLabel>
+        <Input
+          type="number"
+          value={authorbio}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            setAuthorbio(e.target.valueAsNumber);
+          }}
+        />
+      </FormControl>
+    </Box>
   );
 }
