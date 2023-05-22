@@ -13,11 +13,10 @@ import {
   Box,
   FormControl,
   FormLabel,
-  FormErrorMessage,
   FormHelperText,
   Checkbox,
   Stack,
-  HTMLChakraComponents,
+  Button,
 } from "@chakra-ui/react";
 import { ChangeEvent, useState } from "react";
 //this component handles the creation of new manuscripts, and will eventually send the manuscript as a request to the backend.
@@ -32,6 +31,8 @@ export default function CreateManuscript() {
   const [bonus, setBonus] = useState<number>(0);
   const [turnaround, setTurnaround] = useState<string>("");
   const [authorbio, setAuthorbio] = useState<number>(0);
+
+  //TODO: OnSubmit function sends SET request for manuscript to backend.
   return (
     <Box borderWidth="1px" borderRadius="lg" p={2}>
       <FormControl id="date">
@@ -139,6 +140,7 @@ export default function CreateManuscript() {
           }}
         />
       </FormControl>
+      <Button>Submit</Button>
     </Box>
   );
 }
