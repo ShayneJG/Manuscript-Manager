@@ -10,6 +10,9 @@ import {
   FormLabel,
   FormErrorMessage,
   FormHelperText,
+  Checkbox,
+  Stack,
+  HTMLChakraComponents,
 } from "@chakra-ui/react";
 import { ChangeEvent, useState } from "react";
 //this component handles the creation of new manuscripts, and will eventually send the manuscript as a request to the backend.
@@ -18,6 +21,9 @@ export default function CreateManuscript() {
   const [manuscriptID, setManuscriptID] = useState<string>("");
   const [date, setDate] = useState<Date>(new Date());
   const [wordcount, setWordcount] = useState<number>();
+  const [latex, setLatex] = useState<boolean>(false);
+  const [double, setDouble] = useState<boolean>(false);
+  const [triple, setTriple] = useState<boolean>(false);
   return (
     <div>
       <FormControl id="date">
@@ -53,6 +59,33 @@ export default function CreateManuscript() {
           }}
         />
       </FormControl>
+      {/* Boxing together the 3 toggle options to make layout simpler */}
+      <Stack direction="row" spacing={`2rem`}>
+        <Checkbox
+          checked={latex}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            setLatex(e.target.checked);
+          }}
+        >
+          LaTeX
+        </Checkbox>
+        <Checkbox
+          checked={double}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            setDouble(e.target.checked);
+          }}
+        >
+          Double
+        </Checkbox>
+        <Checkbox
+          checked={triple}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            setTriple(e.target.checked);
+          }}
+        >
+          Triple
+        </Checkbox>
+      </Stack>
     </div>
   );
 }
