@@ -61,6 +61,7 @@ export default function CreateManuscript() {
       <FormControl id="wordcount" isRequired>
         <FormLabel>Wordcount</FormLabel>
         <Input
+        placeholder="Wordcount"
           type="number"
           value={wordcount}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
@@ -71,6 +72,7 @@ export default function CreateManuscript() {
       <FormControl isRequired id="turnaround time">
         <FormLabel>Turnaround Time</FormLabel>
         <Input
+        placeholder="Turnaround"
           value={turnaround}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             setTurnaround(e.target.value)
