@@ -12,3 +12,7 @@ export default function App({ Component, pageProps }: AppProps) {
     </ChakraProvider>
   );
 }
+
+//the ChakraProvider gives access to Chakra UI components in the app.
+//UserProvider is Auth0 and gives access to authenticated user data to all components,
+//i.e., can use useUser() in components.
