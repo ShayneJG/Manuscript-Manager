@@ -16,6 +16,8 @@ export default function Home() {
     >
       <h1>MANUSCRIPT MANAGER</h1>
       <div id="stat-test">
+        <a href="/api/auth/login">Login</a>
+        <a href="/api/auth/logout">Logout</a>
         <CreateManuscript />
         <ManuscriptTable data={fakeManuscripts} caption="Test Table" />
         <AtAGlance month={jan} prevMonth={feb} />
