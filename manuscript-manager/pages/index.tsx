@@ -14,8 +14,10 @@ export default function Home() {
     <main
       className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
     >
-      <h1>TEST PAGE</h1>
+      <h1>MANUSCRIPT MANAGER</h1>
       <div id="stat-test">
+        <a href="/api/auth/login">Login</a>
+        <a href="/api/auth/logout">Logout</a>
         <CreateManuscript />
         <ManuscriptTable data={fakeManuscripts} caption="Test Table" />
         <AtAGlance month={jan} prevMonth={feb} />

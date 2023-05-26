@@ -11,7 +11,6 @@ import { getPercentageChange } from "@/utils/math";
 interface SummaryProps {
   statistic: number;
   label: string;
-
   lastStatistic: number;
 }
 
