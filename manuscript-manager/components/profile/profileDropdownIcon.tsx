@@ -59,15 +59,10 @@ export default function ProfileAvatarDropdown() {
             <MenuItem>My Account</MenuItem>
             <MenuItem>Manuscript Search</MenuItem>
             <MenuItem>Monthly Data</MenuItem>
-            {user ? (
-              <MenuItem as="a" href="/api/auth/logout">
-                Log Out
-              </MenuItem>
-            ) : (
-              <MenuItem as="a" href="/api/auth/login">
-                Log In
-              </MenuItem>
-            )}
+
+            <MenuItem as="a" href="/api/auth/logout">
+              Log Out
+            </MenuItem>
           </MenuGroup>
           <MenuDivider />
           <MenuGroup title="Help">
