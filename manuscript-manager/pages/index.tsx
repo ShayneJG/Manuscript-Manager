@@ -28,12 +28,11 @@ export default function Home() {
         <CreateManuscript />
       </GridItem>
       <GridItem area="main">
-        {" "}
         <main
           className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
         >
           <ManuscriptTable data={fakeManuscripts} caption="Test Table" />
-        </main>{" "}
+        </main>
       </GridItem>
       <GridItem area="footer">
         <AtAGlance month={jan} prevMonth={feb} />
