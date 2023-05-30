@@ -44,7 +44,7 @@ export default function Profile() {
       <h1>Profile</h1>
       <Box>
         <form>
-          <FormControl isRequired>
+          <FormControl isDisabled>
             <FormLabel>Name</FormLabel>
             <Input
               type="text"
@@ -54,7 +54,7 @@ export default function Profile() {
               }}
             ></Input>
           </FormControl>
-          <FormControl isRequired>
+          <FormControl isDisabled>
             <FormLabel>Email</FormLabel>
             <Input
               type="email"
