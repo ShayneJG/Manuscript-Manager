@@ -15,7 +15,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
            .limit(5)
            .toArray();
 
-       res.json(manuscripts); // serves the response in JSON format to the browser - this will be displayed when visiting the /api/manuscripts path
+       res.json(manuscripts); // serves the response in JSON format to the browser - this will be displayed when visiting the /api/manuscripts path in browser
    } catch (e) {
        console.error(e);
    }
