@@ -12,7 +12,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
        const manuscripts = await db // uses MongoDB MQL queries to access info from the database
            .collection("manuscripts")
            .find({})
-           .limit(10)
+           .limit(5)
            .toArray();
 
        res.json(manuscripts); // serves the response in JSON format to the browser - this will be displayed when visiting the /api/manuscripts path
