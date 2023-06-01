@@ -1,4 +1,10 @@
 import { useUser } from "@auth0/nextjs-auth0/client";
+
+import {
+  UserPayType,
+  getUserMetadata,
+  updateUserMetadata,
+} from "@/utils/auth/auth0management";
 import {
   Alert,
   AlertIcon,
@@ -17,10 +23,22 @@ export default function Profile() {
   const { user, error, isLoading } = useUser();
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-  const [rate, setRate] = useState<number>();
+  const [rate, setRate] = useState<number>(0);
   //this handles the async nature of useUser. When the data finally comes in,
   //it updates the required fields
   useEffect(() => {
+    const fetchPayRate = async () => {
+      console.log(user?.sub!);
+      let metadata = await getUserMetadata(user?.sub!);
+      if (metadata) {
+        console.log(metadata);
+        // setRate(userPayRate);
+      } else {
+        console.log("metadata was not retreived");
+      }
+    };
+
+    fetchPayRate();
     if (user?.name) {
       setName(user.name);
     }
@@ -38,7 +56,13 @@ export default function Profile() {
       </Alert>
     );
 
-  const onSubmit = () => {};
+  async function handlePayUpdate(userID: string, userRate: number) {
+    const payRate: UserPayType = {
+      payRate: userRate,
+    };
+    console.log("handlePayUpdate called", userID, userRate);
+    await updateUserMetadata(userID, payRate);
+  }
   return user ? (
     <Center flexDirection="column">
       <h1>Profile</h1>
@@ -75,7 +99,15 @@ export default function Profile() {
             ></Input>
             <FormHelperText>e.g., 0.0070</FormHelperText>
           </FormControl>
-          <Button type="submit">Update</Button>
+          <Button
+            type="submit"
+            onClick={(e) => {
+              e.preventDefault();
+              if (user?.sub) handlePayUpdate(user.sub, rate);
+            }}
+          >
+            Update
+          </Button>
         </form>
       </Box>
     </Center>
