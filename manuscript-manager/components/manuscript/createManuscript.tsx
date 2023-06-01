@@ -32,19 +32,43 @@ export default function CreateManuscript() {
   const [turnaround, setTurnaround] = useState<string>("");
   const [authorbio, setAuthorbio] = useState<number>(0);
 
-  const handleSubmit = () => {
+  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     // send post request through API endpoint
     
-    fetch('/api/postManuscript', {
+    const manuscript = {
+      date,
+      manuscriptID,
+      wordcount,
+      latex,
+      double,
+      triple,
+      bonus,
+      turnaround,
+      authorbio,
+    }
+    
+    console.log(JSON.stringify(manuscript));
+    
+    const response = await fetch('/api/postManuscript', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(objectWithData),
+      body: JSON.stringify(manuscript),
     })
+    
+    const json = await response.json();
+    
+    if (!response.ok) {
+      console.log("There was an error submitting the manuscript.");
+    }
+    if (response.ok) {
+      // TODO: reset state values and input fields
+      console.log("Response ok:", response);
+    }
   }
   
-  //TODO: OnSubmit function sends SET request for manuscript to backend.
   return (
     <Box borderWidth="1px" borderRadius="lg" p={2}>
       <FormControl id="date">
@@ -154,7 +178,7 @@ export default function CreateManuscript() {
           }}
         />
       </FormControl>
-      <Button onClick={handleSubmit}>Submit</Button>
+      <Button onClick={(e) => handleSubmit(e)}>Submit</Button>
     </Box>
   );
 }
