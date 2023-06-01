@@ -49,7 +49,7 @@ export default function ManuscriptTable({
         <Tbody>
           {data.map((manuscript, index) => {
             
-            // getServerSideProps returns dates as strings - see the required workaround solution in index.tsx
+            // getServerSideProps is returning the dates as strings - see the required workaround solution in index.tsx
             // so they need to be converted back into dates and then toDateString() to display them as needed for the table
             const date = new Date(manuscript.date) 
             

@@ -32,6 +32,18 @@ export default function CreateManuscript() {
   const [turnaround, setTurnaround] = useState<string>("");
   const [authorbio, setAuthorbio] = useState<number>(0);
 
+  const handleSubmit = () => {
+    // send post request through API endpoint
+    
+    fetch('/api/postManuscript', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(objectWithData),
+    })
+  }
+  
   //TODO: OnSubmit function sends SET request for manuscript to backend.
   return (
     <Box borderWidth="1px" borderRadius="lg" p={2}>
@@ -142,7 +154,7 @@ export default function CreateManuscript() {
           }}
         />
       </FormControl>
-      <Button>Submit</Button>
+      <Button onClick={handleSubmit}>Submit</Button>
     </Box>
   );
 }
