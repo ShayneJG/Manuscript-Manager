@@ -7,12 +7,12 @@ import { fakeManuscripts } from "@/data/Manuscripts";
 import CreateManuscript from "@/components/manuscript/createManuscript";
 import { GetServerSideProps } from "next"; // in-built getServerSideProps type
 import clientPromise from "../lib/mongodb";
-import { ManuscriptDBType } from "@/types/dbManuscriptsTest";
+import { ManuscriptType } from "@/types/manuscripts";
 
 const inter = Inter({ subsets: ["latin"] });
 
 
-export default function Home({ manuscripts }: ManuscriptDBType[]) {
+export default function Home({ manuscripts }: { manuscripts: ManuscriptType[] }) {
   
   console.log(manuscripts);
   
@@ -25,7 +25,7 @@ export default function Home({ manuscripts }: ManuscriptDBType[]) {
         <a href="/api/auth/login">Login</a>
         <a href="/api/auth/logout">Logout</a>
         <CreateManuscript />
-        <ManuscriptTable data={fakeManuscripts} caption="Test Table" />
+        <ManuscriptTable data={manuscripts} caption="Test data from MongoDB" />
         <AtAGlance month={jan} prevMonth={feb} />
       </div>
     </main>
@@ -41,10 +41,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
            .collection("manuscripts") 
            .find({})
            .toArray();
-           
+  
+  // getServerSideProps can only be passed a plain JS object
+  // When we get data from MongoDB, it contains complex data types - Object ids, doubles, floats, etc. 
+  // getServerSideProps can only deal with strings, numbers, arrays, objects, etc.
+  // So we have to add this workaround of stringifying the data we get back, and then reparsing it:
   const manuscripts = JSON.parse(JSON.stringify(data));
   
+  
   return {
-    props: { manuscripts: manuscripts},
+    props: { manuscripts: manuscripts },
   }
 }

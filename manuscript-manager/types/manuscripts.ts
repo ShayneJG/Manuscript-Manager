@@ -1,13 +1,17 @@
 export interface ManuscriptType {
   user: string;
   payrate: number;
-  date: Date;
+  date: string; 
   manuscriptID: string;
-  wordcount: number;
+  wordCount: number;
   latex: boolean;
   double: boolean;
   triple: boolean;
   bonus: number;
   turnAround: string;
   authorBio: number;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  _id: string;    
 }
