@@ -34,16 +34,13 @@ export default function ProfileAvatarDropdown() {
 
   const name: string = user?.name || "Guest";
   const image: string | undefined = user?.picture || undefined;
-  console.log(user)
 
   if (user === undefined) {
     return (
       <Flex>
         <Avatar name={name} src={image} />
         <h1>{name}</h1>
-        <Button as="a" href="/api/auth/login
-
-" colorScheme="blue">
+        <Button as="a" href="/api/auth/login" colorScheme="blue">
           Log In
         </Button>
       </Flex>
