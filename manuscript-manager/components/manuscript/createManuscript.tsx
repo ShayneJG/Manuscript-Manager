@@ -19,37 +19,36 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { ChangeEvent, useState } from "react";
+import { DM_Serif_Display } from "next/font/google";
 //this component handles the creation of new manuscripts, and will eventually send the manuscript as a request to the backend.
 
 export default function CreateManuscript() {
   const [manuscriptID, setManuscriptID] = useState<string>("");
   const [date, setDate] = useState<Date>(new Date());
-  const [wordcount, setWordcount] = useState<number>();
+  const [wordCount, setWordCount] = useState<number>();
   const [latex, setLatex] = useState<boolean>(false);
   const [double, setDouble] = useState<boolean>(false);
   const [triple, setTriple] = useState<boolean>(false);
   const [bonus, setBonus] = useState<number>(0);
-  const [turnaround, setTurnaround] = useState<string>("");
-  const [authorbio, setAuthorbio] = useState<number>(0);
+  const [turnAround, setTurnAround] = useState<string>("");
+  const [authorBio, setAuthorBio] = useState<number>(0);
 
+  // Sends a POST request through the postManuscript API endpoint
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    // send post request through API endpoint
-    
+ 
     const manuscript = {
       date,
       manuscriptID,
-      wordcount,
+      wordCount,
       latex,
       double,
       triple,
       bonus,
-      turnaround,
-      authorbio,
+      turnAround,
+      authorBio,
     }
-    
-    console.log(JSON.stringify(manuscript));
-    
+    console.log("manuscript being submitted: ", JSON.stringify(manuscript));
     const response = await fetch('/api/postManuscript', {
       method: 'POST',
       headers: {
@@ -63,9 +62,19 @@ export default function CreateManuscript() {
     if (!response.ok) {
       console.log("There was an error submitting the manuscript.");
     }
+    
     if (response.ok) {
       // TODO: reset state values and input fields
-      console.log("Response ok:", response);
+      console.log("Response ok:", json);
+      setManuscriptID("")
+      setDate(new Date())
+      setWordCount(undefined)
+      setLatex(false)
+      setDouble(false)
+      setTriple(false)
+      setBonus(0)
+      setTurnAround("")
+      setAuthorBio(0)
     }
   }
   
@@ -91,27 +100,28 @@ export default function CreateManuscript() {
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             setManuscriptID(e.target.value)
           }
+          required
         />
       </FormControl>
 
-      <FormControl id="wordcount" isRequired>
+      <FormControl id="wordCount" isRequired>
         <FormLabel>Wordcount</FormLabel>
         <Input
         placeholder="Wordcount"
           type="number"
-          value={wordcount}
+          value={wordCount}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            setWordcount(e.target.valueAsNumber);
+            setWordCount(e.target.valueAsNumber);
           }}
         />
       </FormControl>
-      <FormControl isRequired id="turnaround time">
+      <FormControl isRequired id="turnAround time">
         <FormLabel>Turnaround Time</FormLabel>
         <Input
         placeholder="Turnaround"
-          value={turnaround}
+          value={turnAround}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setTurnaround(e.target.value)
+            setTurnAround(e.target.value)
           }
         />
       </FormControl>
@@ -172,9 +182,9 @@ export default function CreateManuscript() {
         <FormLabel>Author Biography</FormLabel>
         <Input
           type="number"
-          value={authorbio}
+          value={authorBio}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            setAuthorbio(e.target.valueAsNumber);
+            setAuthorBio(e.target.valueAsNumber);
           }}
         />
       </FormControl>

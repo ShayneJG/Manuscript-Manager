@@ -32,7 +32,7 @@ export default function Home({ manuscripts }: { manuscripts: ManuscriptType[] })
   );
 }
 
-
+// getServerSideProps will find manuscripts from the DB before sending data to end-user
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const client = await clientPromise; 
   const db = client.db("test"); 
@@ -40,14 +40,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const data = await db
            .collection("manuscripts") 
            .find({})
+           .sort({date: 1})
            .toArray();
+           
   
   // getServerSideProps can only be passed a plain JS object
   // When we get data from MongoDB, it contains complex data types - Object ids, doubles, floats, etc. 
   // getServerSideProps can only deal with strings, numbers, arrays, objects, etc.
   // So we have to add this workaround of stringifying the data we get back, and then reparsing it:
   const manuscripts = JSON.parse(JSON.stringify(data));
-  
   
   return {
     props: { manuscripts: manuscripts },

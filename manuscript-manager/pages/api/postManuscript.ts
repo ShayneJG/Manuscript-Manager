@@ -1,4 +1,4 @@
-// API endpoint to POST manuscript to MongoDB
+// API endpoint to POST a manuscript to MongoDB
 
 
 import clientPromise from "../../lib/mongodb";
@@ -6,13 +6,14 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-      if (req.method !== 'POST') {
+  // Checks the request is POST    
+  if (req.method !== 'POST') {
             res.status(405).send({ message: 'Only POST requests allowed' })
             return
           } // This is not necessary but is good practice.
       
           console.log(req.body);
-          const newManuscript = req.body;
+          const newManuscript = req?.body;
           
           try {
             const client = await clientPromise;
