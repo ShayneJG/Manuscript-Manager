@@ -40,20 +40,22 @@ import {
           </MenuButton>
           <MenuList>
             <MenuGroup title="Profile">
-              <MenuItem>My Profile</MenuItem>
-              <MenuItem>Manuscript Search</MenuItem>
-              <MenuItem>Monthly Data</MenuItem>
-              <MenuItem>Goals</MenuItem>
+              <MenuItem as="a" href="/profile">My Profile</MenuItem>
+              <MenuItem as="a" href="/search">Manuscript Search</MenuItem>
+              <MenuItem as="a" href="/monthly">Monthly Data</MenuItem>
+              <MenuItem as="a" href="/goals">Goals</MenuItem>
   
-              <MenuItem onClick={() => {signOut()}}>
-                Sign Out
-              </MenuItem>
+              
             </MenuGroup>
             <MenuDivider />
             <MenuGroup title="Help">
               <MenuItem>FAQ</MenuItem>
               <MenuItem>Contact</MenuItem>
             </MenuGroup>
+            <MenuGroup>
+            <MenuItem onClick={() => {signOut()}}>
+                Sign Out
+              </MenuItem></MenuGroup>
           </MenuList>
         </Menu>
         <h1>{name}</h1>
@@ -61,11 +63,12 @@ import {
     )} else {return (
         <Flex>
             <Menu>
-          <Avatar name={"Guest"} src={"Guest Image"} />
+            <MenuButton> <Avatar name={"Guest"} src={"Guest Image"} /></MenuButton>
+            <MenuList>
+                <MenuItem onClick={() => signIn()}>Sign In</MenuItem>
+            </MenuList>
           
-          <Button as="a" onClick={() => signIn()} colorScheme="blue">
-            Sign In
-          </Button></Menu><h1>{"Guest: Not signed in"}</h1>
+          </Menu><h1>{"Guest: Not signed in"}</h1>
         </Flex>
       );}
   }
