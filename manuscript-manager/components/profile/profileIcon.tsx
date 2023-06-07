@@ -40,9 +40,10 @@ import {
           </MenuButton>
           <MenuList>
             <MenuGroup title="Profile">
-              <MenuItem>My Account</MenuItem>
+              <MenuItem>My Profile</MenuItem>
               <MenuItem>Manuscript Search</MenuItem>
               <MenuItem>Monthly Data</MenuItem>
+              <MenuItem>Goals</MenuItem>
   
               <MenuItem onClick={() => {signOut()}}>
                 Sign Out
