@@ -6,6 +6,7 @@ import feb from "@/data/Feb.json";
 import ManuscriptTable from "@/components/table/table";
 import { fakeManuscripts } from "@/data/Manuscripts";
 import CreateManuscript from "@/components/manuscript/createManuscript";
+import ProfileAvatarDropdown from "@/components/profile/profileIcon";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,6 +16,7 @@ export default function Home() {
       className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
     >
       <h1>TEST PAGE</h1>
+      <ProfileAvatarDropdown />
       <div id="stat-test">
         <CreateManuscript />
         <ManuscriptTable data={fakeManuscripts} caption="Test Table" />
