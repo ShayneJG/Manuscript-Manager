@@ -6,7 +6,7 @@ import clientPromise from "../../lib/mongodb";
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 // API route handler that gets executed when the .../api/manuscript route is called
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+export default async function getManuscripts(req: NextApiRequest, res: NextApiResponse) {
    try {
        const client = await clientPromise; // clientPromise is a function that gets the instance of the MongoDB database
        const db = client.db("test"); // specifies which collection in the database we are accessing

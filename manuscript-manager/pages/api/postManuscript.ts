@@ -5,7 +5,7 @@ import clientPromise from "../../lib/mongodb";
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+export default async function postManuscript(req: NextApiRequest, res: NextApiResponse) {
   // Checks the request is POST    
   if (req.method !== 'POST') {
             res.status(405).send({ message: 'Only POST requests allowed' })
@@ -18,7 +18,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           try {
             const client = await clientPromise;
             const response = await client.db().collection("manuscripts").insertOne(newManuscript);
-            res.status(200).json(response);
+            return res.status(200).json(response);
         } catch (e) {
             console.error(e);
         }
