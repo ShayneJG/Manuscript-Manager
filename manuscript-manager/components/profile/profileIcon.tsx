@@ -52,10 +52,10 @@ import {
               <MenuItem>FAQ</MenuItem>
               <MenuItem>Contact</MenuItem>
             </MenuGroup>
-            <MenuGroup>
+            <MenuDivider />
             <MenuItem onClick={() => {signOut()}}>
                 Sign Out
-              </MenuItem></MenuGroup>
+              </MenuItem>
           </MenuList>
         </Menu>
         <h1>{name}</h1>
