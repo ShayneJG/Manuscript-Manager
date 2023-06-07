@@ -1,6 +1,5 @@
 // API endpoint to POST a manuscript to MongoDB
 
-
 import clientPromise from "../../lib/mongodb";
 import type { NextApiRequest, NextApiResponse } from 'next';
 
