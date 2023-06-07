@@ -27,20 +27,11 @@ import {
     let image = session?.user?.image || "no image";
     let email = session?.user?.email || "no email";
   
-    if (!session) {
-      return (
-        <Flex>
-            <Menu>
-          <Avatar name={"Guest"} src={"Guest Image"} />
-          
-          <Button as="a" onClick={() => signIn()} colorScheme="blue">
-            Sign In
-          </Button></Menu><h1>{"Guest: Not signed in"}</h1>
-        </Flex>
-      );
-    }
+    
+      
+
   
-    if(session) return (
+    if(session) {return (
       //User exists: Show profile and menu
       <Flex>
         <Menu>
@@ -66,6 +57,15 @@ import {
         </Menu>
         <h1>{name}</h1>
       </Flex>
-    );
+    )} else {return (
+        <Flex>
+            <Menu>
+          <Avatar name={"Guest"} src={"Guest Image"} />
+          
+          <Button as="a" onClick={() => signIn()} colorScheme="blue">
+            Sign In
+          </Button></Menu><h1>{"Guest: Not signed in"}</h1>
+        </Flex>
+      );}
   }
   
