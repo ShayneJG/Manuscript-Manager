@@ -1,10 +1,7 @@
 import { useUser } from "@auth0/nextjs-auth0/client";
 
-import {
-  UserPayType,
-  getUserMetadata,
-  updateUserMetadata,
-} from "@/utils/auth/auth0management";
+import UserPayType from "@/types/userPay";
+
 import {
   Alert,
   AlertIcon,
@@ -27,18 +24,6 @@ export default function Profile() {
   //this handles the async nature of useUser. When the data finally comes in,
   //it updates the required fields
   useEffect(() => {
-    const fetchPayRate = async () => {
-      console.log(user?.sub!);
-      let metadata = await getUserMetadata(user?.sub!);
-      if (metadata) {
-        console.log(metadata);
-        // setRate(userPayRate);
-      } else {
-        console.log("metadata was not retreived");
-      }
-    };
-
-    fetchPayRate();
     if (user?.name) {
       setName(user.name);
     }
@@ -61,7 +46,7 @@ export default function Profile() {
       payRate: userRate,
     };
     console.log("handlePayUpdate called", userID, userRate);
-    await updateUserMetadata(userID, payRate);
+    //TODO: Add request to user data - mongodb
   }
   return user ? (
     <Center flexDirection="column">
