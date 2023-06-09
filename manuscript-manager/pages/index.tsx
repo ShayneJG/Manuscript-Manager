@@ -5,9 +5,11 @@ import feb from "@/data/Feb.json";
 import ManuscriptTable from "@/components/table/table";
 import { fakeManuscripts } from "@/data/Manuscripts";
 import CreateManuscript from "@/components/manuscript/createManuscript";
+
 import { GetServerSideProps } from "next"; // in-built getServerSideProps type
 import clientPromise from "../lib/mongodb";
 import { ManuscriptType } from "@/types/manuscripts";
+import ProfileAvatarDropdown from "@/components/profile/profileIcon";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,10 +22,9 @@ export default function Home({ manuscripts }: { manuscripts: ManuscriptType[] })
     <main
       className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
     >
-      <h1>MANUSCRIPT MANAGER</h1>
+      <h1>TEST PAGE</h1>
+      <ProfileAvatarDropdown />
       <div id="stat-test">
-        <a href="/api/auth/login">Login</a>
-        <a href="/api/auth/logout">Logout</a>
         <CreateManuscript />
         <ManuscriptTable data={manuscripts} caption="Test data from MongoDB" />
         <AtAGlance month={jan} prevMonth={feb} />

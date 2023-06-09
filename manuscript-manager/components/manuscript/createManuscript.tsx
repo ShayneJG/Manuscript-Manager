@@ -107,7 +107,6 @@ export default function CreateManuscript() {
       <FormControl id="wordCount" isRequired>
         <FormLabel>Wordcount</FormLabel>
         <Input
-        placeholder="Wordcount"
           type="number"
           value={wordCount}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
