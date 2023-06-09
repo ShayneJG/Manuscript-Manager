@@ -50,10 +50,21 @@ const fetchUserData = async (email:string) => {
     const {status, data: session} = useSession();
 
     //state
-    const [payRate, setPayRate] = useState<number>()
+    const [payRate, setPayRate] = useState<number>(0)
     
 
-    if(session) {
+    
+
+    
+    if(status === "unauthenticated") {
+      
+        return <Alert>
+            <AlertIcon>User not Logged in</AlertIcon>
+        </Alert>
+    } else if(status === "loading") {
+        return <Spinner></Spinner>
+    } else 
+    {
       fetchUserData(session?.user?.email!)
   .then((payRate) => {
     console.log('Pay Rate:', payRate);
@@ -61,17 +72,8 @@ const fetchUserData = async (email:string) => {
   })
   .catch((error) => {
     console.error('Error:', error);
-  });
-    }
-
-    
-    if(status === "unauthenticated") {
-        return <Alert>
-            <AlertIcon>User not Logged in</AlertIcon>
-        </Alert>
-    } else if(status === "loading") {
-        return <Spinner></Spinner>
-    } else return (<Center flexDirection="column">
+  })
+     return (<Center flexDirection="column">
     <h1>Profile</h1>
     <Box>
       <form>
@@ -106,4 +108,4 @@ const fetchUserData = async (email:string) => {
       </form>
     </Box>
   </Center>)
-  }
+  }}
