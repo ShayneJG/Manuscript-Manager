@@ -1,4 +1,4 @@
-import getUser from "@/utils/getUser";
+
 import {
     Spinner,
     Alert,
@@ -20,14 +20,50 @@ import {
   import { useSession } from "next-auth/react"
 import { useState } from "react";
 
+const fetchUserData = async (email:string) => {
+  try {
+    const response = await fetch(`/api/user/getUser?email=${encodeURIComponent(email)}`);
+    const data = await response.json();
+
+    if (response.ok) {
+      const user = data.user;
+      const payRate = user ? user.payRate : null;
+      return payRate;
+    } else {
+      console.error('Error:', data.error);
+      return null;
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    return null;
+  }
+};
+
+
+
+
 
    export default function Profile() {
-    const user = getUser();
+    
+    
 
-    const {status} = useSession();
+    const {status, data: session} = useSession();
 
     //state
-    const [payRate, setPayRate] = useState<number>(user.payRate)
+    const [payRate, setPayRate] = useState<number>()
+    
+
+    if(session) {
+      fetchUserData(session?.user?.email!)
+  .then((payRate) => {
+    console.log('Pay Rate:', payRate);
+   setPayRate(payRate)
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+  });
+    }
+
     
     if(status === "unauthenticated") {
         return <Alert>
@@ -43,7 +79,7 @@ import { useState } from "react";
           <FormLabel>Name</FormLabel>
           <Input
             type="text"
-            value={user.name}
+            value={session?.user?.name!}
             
           ></Input>
         </FormControl>
@@ -51,7 +87,7 @@ import { useState } from "react";
           <FormLabel>Email</FormLabel>
           <Input
             type="email"
-            value={user.email}
+            value={session?.user?.email!}
             
           ></Input>
         </FormControl>
