@@ -7,7 +7,7 @@ import { authOptions } from '../auth/[...nextauth]';
 
 
 export default  async function getUser(req: NextApiRequest, res: NextApiResponse) {
-    const { email } = req.query; // Assuming the email is sent in the request body
+    const { email } = req.query; 
      
   try {
     const session = await getServerSession(req, res, authOptions);
