@@ -36,7 +36,10 @@ export default function CreateManuscript() {
   // Sends a POST request through the postManuscript API endpoint
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
- 
+
+    // capture date manuscript was submitted (previously Mongoose did this for us)
+    const createdAt = new Date().toISOString();
+
     const manuscript = {
       date,
       manuscriptID,
@@ -47,37 +50,38 @@ export default function CreateManuscript() {
       bonus,
       turnAround,
       authorBio,
-    }
+      createdAt,
+    };
     console.log("manuscript being submitted: ", JSON.stringify(manuscript));
-    const response = await fetch('/api/postManuscript', {
-      method: 'POST',
+    const response = await fetch("/api/manuscripts/postManuscript", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(manuscript),
-    })
-    
+    });
+
     const json = await response.json();
-    
+
     if (!response.ok) {
       console.log("There was an error submitting the manuscript.");
     }
-    
+
     if (response.ok) {
       // TODO: reset state values and input fields
       console.log("Response ok:", json);
-      setManuscriptID("")
-      setDate(new Date())
-      setWordCount(undefined)
-      setLatex(false)
-      setDouble(false)
-      setTriple(false)
-      setBonus(0)
-      setTurnAround("")
-      setAuthorBio(0)
+      setManuscriptID("");
+      setDate(new Date());
+      setWordCount(undefined);
+      setLatex(false);
+      setDouble(false);
+      setTriple(false);
+      setBonus(0);
+      setTurnAround("");
+      setAuthorBio(0);
     }
-  }
-  
+  };
+
   return (
     <Box borderWidth="1px" borderRadius="lg" p={2}>
       <FormControl id="date">
@@ -117,7 +121,7 @@ export default function CreateManuscript() {
       <FormControl isRequired id="turnAround time">
         <FormLabel>Turnaround Time</FormLabel>
         <Input
-        placeholder="Turnaround"
+          placeholder="Turnaround"
           value={turnAround}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             setTurnAround(e.target.value)

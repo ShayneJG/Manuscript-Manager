@@ -13,11 +13,13 @@ import ProfileAvatarDropdown from "@/components/profile/profileIcon";
 
 const inter = Inter({ subsets: ["latin"] });
 
-
-export default function Home({ manuscripts }: { manuscripts: ManuscriptType[] }) {
-  
+export default function Home({
+  manuscripts,
+}: {
+  manuscripts: ManuscriptType[];
+}) {
   console.log(manuscripts);
-  
+
   return (
     <main
       className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
@@ -35,23 +37,31 @@ export default function Home({ manuscripts }: { manuscripts: ManuscriptType[] })
 
 // getServerSideProps will find manuscripts from the DB before sending data to end-user
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const client = await clientPromise; 
-  const db = client.db("test"); 
-  
+  // we need today's manuscripts, this month's manuscripts, and last month's manuscripts
+  const client = await clientPromise;
+  const db = client.db("test");
+
+  // gets all manuscripts after (and including) the first day of the previous pay period (21st)
   const data = await db
-           .collection("manuscripts") 
-           .find({})
-           .sort({date: 1})
-           .toArray();
-           
-  
+    .collection("manuscripts")
+    .find({})
+    .sort({ date: 1 })
+    .toArray();
+
+  // filter data for today's manuscripts, this month's manuscripts, and last month's
+  // today
+
+  // this month
+
+  // last month
+
   // getServerSideProps can only be passed a plain JS object
-  // When we get data from MongoDB, it contains complex data types - Object ids, doubles, floats, etc. 
+  // When we get data from MongoDB, it contains complex data types - Object ids, doubles, floats, etc.
   // getServerSideProps can only deal with strings, numbers, arrays, objects, etc.
   // So we have to add this workaround of stringifying the data we get back, and then reparsing it:
   const manuscripts = JSON.parse(JSON.stringify(data));
-  
+
   return {
     props: { manuscripts: manuscripts },
-  }
-}
+  };
+};
