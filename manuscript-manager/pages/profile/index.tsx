@@ -87,7 +87,7 @@ const updatePayRate = async (payRate: number, email: string) => {
     
 
     useEffect(() => {
-      if(session) {
+      if(status === "authenticated") {
         fetchUserData(session?.user?.email!)
       .then((payRate) => {
       console.log('Pay Rate:', payRate);
@@ -103,7 +103,7 @@ const updatePayRate = async (payRate: number, email: string) => {
     console.error('Error:', error);
   })
       }
-    }, [session])
+    }, [status])
 
     
     if(status === "unauthenticated") {
