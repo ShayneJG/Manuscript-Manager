@@ -23,7 +23,7 @@ export default  async function getUser(req: NextApiRequest, res: NextApiResponse
       if (user) {
         res.send({ user });
       } else {
-        res.send({ error: 'User not found' });
+        res.status(404).send({ error: 'User not found' });
       } 
     }
   } catch (error) {
