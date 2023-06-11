@@ -91,14 +91,16 @@ const updatePayRate = async (payRate: number, email: string) => {
         fetchUserData(session?.user?.email!)
       .then((payRate) => {
       console.log('Pay Rate:', payRate);
-      if(typeof payRate === 'number') {setPayRate(payRate)}
-  })
-  .catch((error) => {
-    if(error === 'User not found') {
-      try {createUserData(session?.user?.name!, session?.user?.email!).then(() => {console.log('User Successfully Created')})}
+      if(typeof payRate === 'number') {setPayRate(payRate)} else {
+        try {createUserData(session?.user?.name!, session?.user?.email!).then(() => {console.log('User Successfully Created')})}
       catch(error) {
         console.error(error);
       }
+      }
+  })
+  .catch((error) => {
+    if(error === 'User not found') {
+      
     } 
     console.error('Error:', error);
   })
