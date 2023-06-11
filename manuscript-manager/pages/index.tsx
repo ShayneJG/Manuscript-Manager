@@ -10,6 +10,8 @@ import { GetServerSideProps } from "next"; // in-built getServerSideProps type
 import clientPromise from "../lib/mongodb";
 import { ManuscriptType } from "@/types/manuscripts";
 import ProfileAvatarDropdown from "@/components/profile/profileIcon";
+import { determinePrevMonthStartDate, determineStartDate } from "@/utils/dates";
+import { currentDates } from "@/utils/dates";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -40,11 +42,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   // we need today's manuscripts, this month's manuscripts, and last month's manuscripts
   const client = await clientPromise;
   const db = client.db("test");
+  const currentDate = new Date();
+  const lastMonthStartDate = determinePrevMonthStartDate(currentDate);
 
   // gets all manuscripts after (and including) the first day of the previous pay period (21st)
   const data = await db
     .collection("manuscripts")
-    .find({})
+    .find({ date: { $gte: lastMonthStartDate.toISOString() } })
     .sort({ date: 1 })
     .toArray();
 

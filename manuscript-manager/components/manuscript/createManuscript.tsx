@@ -52,7 +52,8 @@ export default function CreateManuscript() {
       authorBio,
       createdAt,
     };
-    console.log("manuscript being submitted: ", JSON.stringify(manuscript));
+
+    console.log("manuscript submitted: ", JSON.stringify(manuscript));
     const response = await fetch("/api/manuscripts/postManuscript", {
       method: "POST",
       headers: {
