@@ -57,10 +57,14 @@ const createUserData = async (name: string, email: string) => {
   }
 }
 
-const updatePayRate = async (payRate: number) => {
+const updatePayRate = async (payRate: number, email: string) => {
+  const user = {
+        email: email,
+        payRate: payRate
+  }
   try {
     await fetch('/api/user/updateUser', {method: 'POST', headers: {'Content-Type': 'application/json'},
-  body: JSON.stringify(payRate)
+  body: JSON.stringify(user)
 })
   } catch(error) {
     console.error(error);
@@ -143,9 +147,9 @@ const updatePayRate = async (payRate: number) => {
           ></Input>
           <FormHelperText>e.g., 0.0070</FormHelperText>
         </FormControl>
-        <Button onSubmit={(e) => {
+        <Button  onClick={(e) => {
           e.preventDefault()
-          updatePayRate(payRate)
+          updatePayRate(payRate, session?.user?.email!)
           }} type="submit">Update</Button>
       </form>
     </Box>
