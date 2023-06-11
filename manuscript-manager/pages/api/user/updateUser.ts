@@ -9,6 +9,7 @@ import { authOptions } from '../auth/[...nextauth]';
  export default async function updateUser(req: NextApiRequest, res: NextApiResponse) {
 
     let user = req.body;
+    console.log(user)
     
 
     try {
@@ -20,16 +21,25 @@ import { authOptions } from '../auth/[...nextauth]';
             const db = client.db("test")
 
       // find user based on email
-      const response = await db.collection('users').findOne(user.email);
+      const response = await db.collection('users').findOneAndUpdate(
+        { email: user.email }, // Filter for finding the document
+        { $set: { payRate: user.payRate } }, // Update operation using the $set operator
 
-        if(response) {
-            await db.collection('users').updateOne(response, {payRate: user.payRate})
-        }
+      );
       
-        }
+      if (response.value) {
+        // Document was found and updated successfully
+        console.log('Document updated:', response.value);
+        res.status(200).send({message: "document update success"})
+      } else {
+        // Document with the specified email was not found
+        console.log('Document not found');
+        } }
+        
 
         
 
 }catch (error) {
     res.status(500).send({ error: 'Internal server error' });
+    console.error(error)
   }}
