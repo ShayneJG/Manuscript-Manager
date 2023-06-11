@@ -18,7 +18,7 @@ import {
     Input,FormHelperText
   } from "@chakra-ui/react";
   import { useSession } from "next-auth/react"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const fetchUserData = async (email:string) => {
   try {
@@ -57,6 +57,18 @@ const createUserData = async (name: string, email: string) => {
   }
 }
 
+const updatePayRate = async (payRate: number) => {
+  try {
+    await fetch('/api/user/updateUser', {method: 'POST', headers: {'Content-Type': 'application/json'},
+  body: JSON.stringify(payRate)
+})
+  } catch(error) {
+    console.error(error);
+  }
+}
+
+
+
 
 
 
@@ -70,19 +82,9 @@ const createUserData = async (name: string, email: string) => {
     const [payRate, setPayRate] = useState<number>(0)
     
 
-    
-
-    
-    if(status === "unauthenticated") {
-      
-        return <Alert>
-            <AlertIcon>User not Logged in</AlertIcon>
-        </Alert>
-    } else if(status === "loading") {
-        return <Spinner></Spinner>
-    } else 
-    {
-      fetchUserData(session?.user?.email!)
+    useEffect(() => {
+      if(session) {
+        fetchUserData(session?.user?.email!)
       .then((payRate) => {
       console.log('Pay Rate:', payRate);
       setPayRate(payRate)
@@ -96,6 +98,20 @@ const createUserData = async (name: string, email: string) => {
     } 
     console.error('Error:', error);
   })
+      }
+    }, [session])
+
+    
+    if(status === "unauthenticated") {
+      
+        return <Alert>
+            <AlertIcon>User not Logged in</AlertIcon>
+        </Alert>
+    } else if(status === "loading") {
+        return <Spinner></Spinner>
+    } else 
+    {
+      
      return (<Center flexDirection="column">
     <h1>Profile</h1>
     <Box>
@@ -127,7 +143,10 @@ const createUserData = async (name: string, email: string) => {
           ></Input>
           <FormHelperText>e.g., 0.0070</FormHelperText>
         </FormControl>
-        <Button type="submit">Update</Button>
+        <Button onSubmit={(e) => {
+          e.preventDefault()
+          updatePayRate(payRate)
+          }} type="submit">Update</Button>
       </form>
     </Box>
   </Center>)
