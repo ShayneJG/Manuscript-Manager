@@ -108,8 +108,9 @@ const updatePayRate = async (payRate: number, email: string) => {
     
     if(status === "unauthenticated") {
       
-        return <Alert>
-            <AlertIcon>User not Logged in</AlertIcon>
+        return <Alert status='error'>
+            <AlertIcon  />
+            User not Logged in
         </Alert>
     } else if(status === "loading") {
         return <Spinner></Spinner>
