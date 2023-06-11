@@ -9,6 +9,7 @@ import { authOptions } from '../auth/[...nextauth]';
  export default async function createUser(req: NextApiRequest, res: NextApiResponse) {
 
     let user = req.body;
+    //initialise user to have a default payrate.
     user = {...user, payRate: process.env.PAYRATE_DEFAULT}
 
     try {
