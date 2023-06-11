@@ -31,7 +31,7 @@ const fetchUserData = async (email:string) => {
       return payRate;
     } else {
       console.error('Error:', data.error);
-      return null;
+      return data.error;
     }
   } catch (error) {
     console.error('Error:', error);
@@ -39,6 +39,23 @@ const fetchUserData = async (email:string) => {
   }
 };
 
+const createUserData = async (name: string, email: string) => {
+  try {
+    const user = {
+      name: name,
+      email: email
+    }
+    const response = await fetch('/api/user/createUser', {method: 'POST', 
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(user)
+  });
+
+  const responseData = await response.json;
+  console.log(responseData);
+  } catch(error) {
+    console.error(error)
+  }
+}
 
 
 
@@ -66,11 +83,17 @@ const fetchUserData = async (email:string) => {
     } else 
     {
       fetchUserData(session?.user?.email!)
-  .then((payRate) => {
-    console.log('Pay Rate:', payRate);
-   setPayRate(payRate)
+      .then((payRate) => {
+      console.log('Pay Rate:', payRate);
+      setPayRate(payRate)
   })
   .catch((error) => {
+    if(error === 'User not found') {
+      try {createUserData(session?.user?.name!, session?.user?.email!).then(() => {console.log('User Successfully Created')})}
+      catch(error) {
+        console.error(error);
+      }
+    } 
     console.error('Error:', error);
   })
      return (<Center flexDirection="column">
