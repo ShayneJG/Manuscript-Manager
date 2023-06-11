@@ -99,9 +99,7 @@ const updatePayRate = async (payRate: number, email: string) => {
       }
   })
   .catch((error) => {
-    if(error === 'User not found') {
-      
-    } 
+    
     console.error('Error:', error);
   })
       }
