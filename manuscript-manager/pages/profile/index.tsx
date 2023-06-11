@@ -91,7 +91,7 @@ const updatePayRate = async (payRate: number, email: string) => {
         fetchUserData(session?.user?.email!)
       .then((payRate) => {
       console.log('Pay Rate:', payRate);
-      setPayRate(payRate)
+      if(typeof payRate === 'number') {setPayRate(payRate)}
   })
   .catch((error) => {
     if(error === 'User not found') {
