@@ -2,13 +2,13 @@ import { StatGroup } from "@chakra-ui/react";
 import { jsx } from "@emotion/react";
 import Summary from "./summary";
 
-interface Earnings {
-  wordcount: number;
-  bonus: number;
-  "latex bonus": number;
-  base: number;
+export interface Earnings {
+  totalWordCount: number;
+  totalLatexBonus: number;
+  totalOtherBonuses: number;
+  totalEarnings: number;
+  totalMinusBonuses: number;
 }
-
 interface AtAGlanceProps {
   month: Earnings;
   prevMonth: Earnings;

@@ -14,6 +14,7 @@ import {
   lastMonthStartDate,
   determinePrevMonthStartDate,
 } from "@/utils/dates";
+import { monthlySummary } from "@/utils/monthlyTotals";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,23 +33,24 @@ export default function Home(props: HomeProps) {
     lastMonthsManuscripts,
   } = props;
 
-  console.log("lastMonthStartDate:", lastMonthStartDate);
-  console.log("this months start date:", thisMonthStartDate);
-  console.log("lastMonthsManuscripts:", lastMonthsManuscripts);
+  console.log(todaysManuscripts);
 
   return (
     <main
       className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
     >
-      <h1>TEST PAGE</h1>
+      <h1>MANUSCRIPT MANAGER</h1>
       <ProfileAvatarDropdown />
       <div id="stat-test">
         <CreateManuscript />
         <ManuscriptTable
           data={todaysManuscripts}
-          caption="Test data from MongoDB"
+          caption="(Test data from MongoDB)"
         />
-        <AtAGlance month={jan} prevMonth={feb} />
+        <AtAGlance
+          month={monthlySummary(thisMonthsManuscripts)}
+          prevMonth={monthlySummary(lastMonthsManuscripts)}
+        />
       </div>
     </main>
   );
