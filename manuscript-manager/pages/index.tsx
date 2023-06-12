@@ -26,12 +26,8 @@ interface HomeProps {
 }
 
 export default function Home(props: HomeProps) {
-  const {
-    manuscripts,
-    todaysManuscripts,
-    thisMonthsManuscripts,
-    lastMonthsManuscripts,
-  } = props;
+  const { todaysManuscripts, thisMonthsManuscripts, lastMonthsManuscripts } =
+    props;
 
   return (
     <main
@@ -101,7 +97,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
-      manuscripts,
       todaysManuscripts,
       thisMonthsManuscripts,
       lastMonthsManuscripts,

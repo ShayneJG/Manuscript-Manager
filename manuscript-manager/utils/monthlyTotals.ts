@@ -101,11 +101,11 @@ export function monthlySummary(manuscripts: ManuscriptType[]): Earnings {
   let totalMinusBonuses = 0;
 
   if (manuscripts) {
-    totalWordCount = calculateTotalWordCount(manuscripts);
-    totalLatexBonus = calculateTotalLatex(manuscripts);
-    totalOtherBonuses = calculateTotalBonus(manuscripts);
-    totalEarnings = calculateTotalEarnings(manuscripts);
-    totalMinusBonuses = totalWordCount * defaultPayRate;
+    totalWordCount = Number(calculateTotalWordCount(manuscripts).toFixed(2));
+    totalLatexBonus = Number(calculateTotalLatex(manuscripts).toFixed(2));
+    totalOtherBonuses = Number(calculateTotalBonus(manuscripts).toFixed(2));
+    totalEarnings = Number(calculateTotalEarnings(manuscripts).toFixed(2));
+    totalMinusBonuses = Number((totalWordCount * defaultPayRate).toFixed(2));
   }
 
   return {
