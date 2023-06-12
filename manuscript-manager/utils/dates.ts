@@ -11,20 +11,6 @@ export function currentDates(): [Date, number, number, number] {
   return [currentDate, currentMonth, currentYear, currentDay];
 }
 
-// export function dateRangeFilter(arr, view) {
-//       const currentDate = new Date();
-//       const currentMonth = currentDate.getMonth();
-//       const currentYear = currentDate.getFullYear();
-//       const currentDay = currentDate.getDate();
-
-//       switch (view) {
-//         case "monthly":
-//           return payPeriodFilter(arr, currentMonth, currentYear, currentDay);
-//         case "daily":
-//           return dayFilter(arr, currentMonth, currentYear, currentDay);
-//       }
-//     }
-
 // returns the start date of current pay period
 export function determineStartDate(month: number, year: number, day: number) {
   let startDate;
@@ -34,6 +20,7 @@ export function determineStartDate(month: number, year: number, day: number) {
   return startDate;
 }
 
+// give this pay period's start date to get last pay period's start date
 export function determinePrevMonthStartDate(date: Date): Date {
   const previousMonthDate = new Date(date);
   const currentDay = date.getDate();
@@ -82,3 +69,15 @@ export function dayFilter(
     return objMonth === month && objYear === year && objDay === day;
   });
 }
+
+export const [currentDate, currentMonth, currentYear, currentDay] =
+  currentDates();
+
+export const thisMonthStartDate = determineStartDate(
+  currentMonth,
+  currentYear,
+  currentDay
+);
+
+export const lastMonthStartDate =
+  determinePrevMonthStartDate(thisMonthStartDate);

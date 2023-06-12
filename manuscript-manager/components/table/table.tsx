@@ -23,10 +23,6 @@ export default function ManuscriptTable({
   data,
   caption,
 }: ManuscriptTableProps) {
-  
-  const testDate = new Date('2011-04-11T10:20:30Z')
-  console.log(testDate.toDateString());
-  
   let tick: string = "✓";
   return (
     <TableContainer>
@@ -48,11 +44,10 @@ export default function ManuscriptTable({
         </Thead>
         <Tbody>
           {data.map((manuscript, index) => {
-            
             // getServerSideProps is returning the dates as strings - see the required workaround solution in index.tsx
             // so they need to be converted back into dates and then toDateString() to display them as needed for the table
-            const date = new Date(manuscript.date) 
-            
+            const date = new Date(manuscript.date);
+
             return (
               <Tr key={index}>
                 <Td>{date.toDateString()}</Td>
