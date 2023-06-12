@@ -33,8 +33,6 @@ export default function Home(props: HomeProps) {
     lastMonthsManuscripts,
   } = props;
 
-  console.log(todaysManuscripts);
-
   return (
     <main
       className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
@@ -45,7 +43,7 @@ export default function Home(props: HomeProps) {
         <CreateManuscript />
         <ManuscriptTable
           data={todaysManuscripts}
-          caption="(Test data from MongoDB)"
+          caption="(Test data from MongoDB: 'Today's manuscripts')"
         />
         <AtAGlance
           month={monthlySummary(thisMonthsManuscripts)}

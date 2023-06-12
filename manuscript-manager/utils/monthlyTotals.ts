@@ -26,18 +26,22 @@ function calculateTotalLatex(manuscripts: ManuscriptType[]): number {
   const totalLatexBonus = manuscripts
     .filter((manuscript) => manuscript.latex)
     .reduce((total, latexManuscript) => {
-      return total + latexManuscript.wordCount * defaultLatexBonus;
+      return (
+        total +
+        (latexManuscript.wordCount + latexManuscript.authorBio) *
+          defaultLatexBonus
+      );
     }, 0);
 
   return totalLatexBonus;
 }
 
-// under 4 hours check
-function isUnderFourHours(turnAround: string): boolean {
-  const [hours, minutes, seconds] = turnAround.split(":").map(Number);
-  const totalHours = hours + minutes / 60 + seconds / 3600;
-  return totalHours < 4;
-}
+// alternative function to check if manuscript is under 4 hours (currently doesn't work properly)
+// function isUnderFourHours(turnAround: string): boolean {
+//   const [hours, minutes, seconds] = turnAround.trim().split(":").map(Number);
+//   const totalHours = hours + minutes / 60 + seconds / 3600;
+//   return totalHours < 4;
+// }
 
 // calculates total other bonuses (speed, double, triple, extra)
 function calculateTotalBonus(manuscripts: ManuscriptType[]): number {
@@ -45,7 +49,7 @@ function calculateTotalBonus(manuscripts: ManuscriptType[]): number {
   // for each manuscript, check if speed is true
   // if it is, multiply manuscript.wordCount by 0.1, add the results together
   const totalSpeedBonus = manuscripts
-    .filter((manuscript) => isUnderFourHours(manuscript.turnAround))
+    .filter((manuscript) => parseInt(manuscript.turnAround, 10) < 4)
     .reduce((total, speedyManuscript) => {
       return total + speedyManuscript.wordCount * 0.1;
     }, 0);
@@ -90,11 +94,19 @@ function calculateTotalEarnings(manuscripts: ManuscriptType[]): number {
 }
 
 export function monthlySummary(manuscripts: ManuscriptType[]): Earnings {
-  const totalWordCount = calculateTotalWordCount(manuscripts);
-  const totalLatexBonus = calculateTotalLatex(manuscripts);
-  const totalOtherBonuses = calculateTotalBonus(manuscripts);
-  const totalEarnings = calculateTotalEarnings(manuscripts);
-  const totalMinusBonuses = totalWordCount * defaultPayRate;
+  let totalWordCount = 0;
+  let totalLatexBonus = 0;
+  let totalOtherBonuses = 0;
+  let totalEarnings = 0;
+  let totalMinusBonuses = 0;
+
+  if (manuscripts) {
+    totalWordCount = calculateTotalWordCount(manuscripts);
+    totalLatexBonus = calculateTotalLatex(manuscripts);
+    totalOtherBonuses = calculateTotalBonus(manuscripts);
+    totalEarnings = calculateTotalEarnings(manuscripts);
+    totalMinusBonuses = totalWordCount * defaultPayRate;
+  }
 
   return {
     totalWordCount,
