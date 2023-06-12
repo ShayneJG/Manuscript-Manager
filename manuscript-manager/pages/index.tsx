@@ -25,9 +25,16 @@ interface HomeProps {
 }
 
 export default function Home(props: HomeProps) {
-  const { manuscripts, todaysManuscripts, thisMonthsManuscripts } = props;
-  console.log("this months start date:", thisMonthStartDate.toDateString());
-  console.log("this months manuscripts:", thisMonthsManuscripts);
+  const {
+    manuscripts,
+    todaysManuscripts,
+    thisMonthsManuscripts,
+    lastMonthsManuscripts,
+  } = props;
+
+  console.log("lastMonthStartDate:", lastMonthStartDate);
+  console.log("this months start date:", thisMonthStartDate);
+  console.log("lastMonthsManuscripts:", lastMonthsManuscripts);
 
   return (
     <main
@@ -73,17 +80,31 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return manuscriptDate.toDateString() == currentDate.toDateString();
   });
 
-  // this month
+  // this month: manuscripts with dates >= this month start date
   const thisMonthsManuscripts = manuscripts.filter(
     (manuscript: ManuscriptType) => {
       const manuscriptDate = new Date(manuscript.date);
-      return manuscriptDate.toDateString() >= thisMonthStartDate.toDateString();
+      return manuscriptDate >= thisMonthStartDate;
     }
   );
 
-  // last month
+  // last month: manuscripts with dates < this month start date and >= last month start date
+  const lastMonthsManuscripts = manuscripts.filter(
+    (manuscript: ManuscriptType) => {
+      const manuscriptDate = new Date(manuscript.date);
+      return (
+        manuscriptDate >= lastMonthStartDate &&
+        manuscriptDate < thisMonthStartDate
+      );
+    }
+  );
 
   return {
-    props: { manuscripts, todaysManuscripts, thisMonthsManuscripts },
+    props: {
+      manuscripts,
+      todaysManuscripts,
+      thisMonthsManuscripts,
+      lastMonthsManuscripts,
+    },
   };
 };
