@@ -10,6 +10,8 @@ import {
   TableContainer,
 } from "@chakra-ui/react";
 import { ManuscriptType } from "@/types/manuscripts";
+import { DeleteManuscriptButton } from "../manuscript/deleteManuscript";
+import { UpdateManuscriptButton } from "../manuscript/updateManuscript";
 
 //This component is used to place manuscript data into a table.
 
@@ -40,6 +42,7 @@ export default function ManuscriptTable({
             <Th>Bonus</Th>
             <Th>TurnAround</Th>
             <Th>Author Biography</Th>
+            <Th>Actions</Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -60,6 +63,10 @@ export default function ManuscriptTable({
                 <Td>{manuscript.bonus}</Td>
                 <Td>{manuscript.turnAround}</Td>
                 <Td>{manuscript.authorBio}</Td>
+                <Td>
+                  <UpdateManuscriptButton manuscript={manuscript} />
+                  <DeleteManuscriptButton manuscript={manuscript} />
+                </Td>
               </Tr>
             );
           })}
