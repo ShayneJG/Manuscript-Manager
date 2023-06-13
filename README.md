@@ -4,4 +4,4 @@ This is a complete re-write of a project that me (Shayne Geilman) and Emma Moore
 
 The current plan is Typescript, Chakra UI, Next.js, and Node/Express.js and Mongoose/MongoDB for the backend.
 
-We are also aiming to implement some kind of authentication, and will likely use Auth0, even though its probably overkill, just for the practice.
+Authentication is handled by next-auth, and user data is managed by a mongoDB collection (at the moment, this is just payrate/email). 
