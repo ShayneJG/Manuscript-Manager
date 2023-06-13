@@ -1,3 +1,6 @@
+// takes manuscript as a prop from the table
+// so manuscript will correspond with it's own delete button
+
 import { ManuscriptType } from "@/types/manuscripts";
 
 interface UpdateManuscriptButtonProps {
@@ -8,21 +11,29 @@ export const DeleteManuscriptButton: React.FC<UpdateManuscriptButtonProps> = ({
   manuscript,
 }) => {
   const deleteManuscript = async () => {
-    console.log("ManuscriptID:", manuscript._id);
-    const response = await fetch("/api/manuscripts/deleteManuscript", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ id: manuscript._id }),
-    });
+    try {
+      console.log("_id:", manuscript._id);
 
-    const json = await response.json();
-    if (!response.ok) {
-      console.log("There was an error deleting the manuscript.");
-    }
-    if (response.ok) {
-      console.log("Response:", json);
+      const response = await fetch(
+        `/api/manuscripts/deleteManuscript?id=${manuscript._id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const json = await response.json();
+
+      if (!response.ok) {
+        console.log("There was an error deleting the manuscript.");
+      }
+      if (response.ok) {
+        console.log("Response:", json);
+      }
+    } catch (error) {
+      console.error("Error:", error);
     }
   };
 
