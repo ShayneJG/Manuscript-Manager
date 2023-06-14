@@ -50,8 +50,9 @@ const createUserData = async (name: string, email: string) => {
     body: JSON.stringify(user)
   });
 
-  const responseData = await response.json;
+  const responseData = await response.json();
   console.log(responseData);
+  return responseData.payRate
   } catch(error) {
     console.error(error)
   }
@@ -92,7 +93,8 @@ const updatePayRate = async (payRate: number, email: string) => {
       .then((payRate) => {
       console.log('Pay Rate:', payRate);
       if(typeof payRate === 'number') {setPayRate(payRate)} else {
-        try {createUserData(session?.user?.name!, session?.user?.email!).then(() => {console.log('User Successfully Created')})}
+        try {createUserData(session?.user?.name!, session?.user?.email!).then((payRate) => {console.log('User Successfully Created')
+      setPayRate(payRate)})}
       catch(error) {
         console.error(error);
       }

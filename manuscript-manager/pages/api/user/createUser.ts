@@ -23,7 +23,8 @@ import { authOptions } from '../auth/[...nextauth]';
       // create new user based on req.body
       await db.collection('users').insertOne(user);
       console.log("New user created");
-      res.send({ message: 'User created successfully' });
+      res.send({ message: 'User created successfully',
+                 payRate: process.env.PAYRATE_DEFAULT });
         }
 
         
