@@ -14,9 +14,6 @@ export default async function updateManuscript(
     return;
   }
 
-  console.log(req.body);
-  const updatedManuscriptDetails = req?.body;
-
   try {
     const { id } = req.query as { id: string };
     // convert string id to ObjectId id to match db type
@@ -25,7 +22,11 @@ export default async function updateManuscript(
     const response = await client
       .db()
       .collection("manuscripts")
-      .findOneAndUpdate({ _id: objectId }, { $set: { ...req.body } });
+      .findOneAndUpdate(
+        { _id: objectId },
+        { $set: { ...req.body } },
+        { returnDocument: "after" }
+      );
     return res.status(200).json(response);
   } catch (e) {
     console.error(e);

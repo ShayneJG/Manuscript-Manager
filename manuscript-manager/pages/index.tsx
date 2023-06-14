@@ -20,7 +20,6 @@ import { useState } from "react";
 const inter = Inter({ subsets: ["latin"] });
 
 interface HomeProps {
-  manuscripts: ManuscriptType[];
   todaysManuscripts: ManuscriptType[];
   thisMonthsManuscripts: ManuscriptType[];
   lastMonthsManuscripts: ManuscriptType[];
@@ -32,6 +31,9 @@ export default function Home(props: HomeProps) {
   const [manuscriptToUpdate, setManuscriptToUpdate] = useState<
     ManuscriptType | undefined
   >(undefined);
+  const [manuscriptsInState, setManuscriptsInState] = useState<
+    ManuscriptType[]
+  >([...todaysManuscripts]);
 
   return (
     <main
@@ -42,7 +44,7 @@ export default function Home(props: HomeProps) {
       <div id="stat-test">
         <CreateManuscript manuscriptToUpdate={manuscriptToUpdate} />
         <ManuscriptTable
-          data={todaysManuscripts}
+          data={manuscriptsInState}
           caption="(Test data from MongoDB: 'Today's manuscripts')"
           setManuscriptToUpdate={setManuscriptToUpdate}
         />
