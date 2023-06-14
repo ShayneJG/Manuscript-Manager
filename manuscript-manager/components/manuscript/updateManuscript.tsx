@@ -2,10 +2,16 @@ import { ManuscriptType } from "@/types/manuscripts";
 
 interface UpdateManuscriptButtonProps {
   manuscript: ManuscriptType;
+  setManuscriptToUpdate: (manuscript: ManuscriptType) => void;
 }
 
-export const UpdateManuscriptButton: React.FC<UpdateManuscriptButtonProps> = ({
+export default function UpdateManuscriptButton({
   manuscript,
-}) => {
-  return <button>Update</button>;
-};
+  setManuscriptToUpdate,
+}: UpdateManuscriptButtonProps) {
+  const handleEditClick = (manuscript: ManuscriptType) => {
+    setManuscriptToUpdate(manuscript);
+  };
+
+  return <button onClick={() => handleEditClick(manuscript)}>Update</button>;
+}

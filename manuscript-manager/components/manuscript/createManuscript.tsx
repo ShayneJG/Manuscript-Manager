@@ -20,9 +20,16 @@ import {
 } from "@chakra-ui/react";
 import { ChangeEvent, useState } from "react";
 import { DM_Serif_Display } from "next/font/google";
+import { useEffect } from "react";
 //this component handles the creation of new manuscripts, and will eventually send the manuscript as a request to the backend.
 
-export default function CreateManuscript() {
+interface CreateManuscriptProps {
+  manuscriptToUpdate?: ManuscriptType;
+}
+
+export default function CreateManuscript({
+  manuscriptToUpdate,
+}: CreateManuscriptProps) {
   const [manuscriptID, setManuscriptID] = useState<string>("");
   const [date, setDate] = useState<Date>(new Date());
   const [wordCount, setWordCount] = useState<number>();
@@ -82,6 +89,85 @@ export default function CreateManuscript() {
       setAuthorBio(0);
     }
   };
+
+  // sents a PATCH request through the updateManuscript API endpoint
+  const handleUpdate = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    // capture date manuscript was submitted (previously Mongoose did this for us)
+    const updatedAt = new Date().toISOString();
+    const createdAt = manuscriptToUpdate?.createdAt;
+
+    const manuscript = {
+      date,
+      manuscriptID,
+      wordCount,
+      latex,
+      double,
+      triple,
+      bonus,
+      turnAround,
+      authorBio,
+      createdAt,
+      updatedAt,
+    };
+
+    console.log("manuscript updated: ", JSON.stringify(manuscript));
+    if (manuscriptToUpdate) {
+      try {
+        const response = await fetch(
+          `/api/manuscripts/updateManuscript?id=${manuscriptToUpdate._id}`,
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(manuscript),
+          }
+        );
+
+        const json = await response.json();
+
+        if (!response.ok) {
+          console.log("There was an error updating the manuscript.");
+        }
+
+        if (response.ok) {
+          // reset state values and input fields
+          console.log("Response ok:", json);
+          setManuscriptID("");
+          setDate(new Date());
+          setWordCount(undefined);
+          setLatex(false);
+          setDouble(false);
+          setTriple(false);
+          setBonus(0);
+          setTurnAround("");
+          setAuthorBio(0);
+        }
+      } catch (error) {
+        console.error(e);
+      }
+    }
+  };
+
+  // if there is a manuscript to update, set state values accordingly
+  useEffect(() => {
+    if (manuscriptToUpdate) {
+      const m = manuscriptToUpdate;
+      // convert m.date (string) into Date
+      const inputDate = new Date(m.date);
+
+      setManuscriptID(m.manuscriptID);
+      setDate(inputDate);
+      setWordCount(m.wordCount);
+      setLatex(m.latex);
+      setDouble(m.double);
+      setTriple(m.triple);
+      setBonus(m.bonus);
+      setTurnAround(m.turnAround);
+      setAuthorBio(m.authorBio);
+    }
+  }, [manuscriptToUpdate]);
 
   return (
     <Box borderWidth="1px" borderRadius="lg" p={2}>
@@ -192,7 +278,12 @@ export default function CreateManuscript() {
           }}
         />
       </FormControl>
-      <Button onClick={(e) => handleSubmit(e)}>Submit</Button>
+
+      {manuscriptToUpdate ? (
+        <Button onClick={(e) => handleUpdate(e)}>Update</Button>
+      ) : (
+        <Button onClick={(e) => handleSubmit(e)}>Submit</Button>
+      )}
     </Box>
   );
 }

@@ -11,19 +11,21 @@ import {
 } from "@chakra-ui/react";
 import { ManuscriptType } from "@/types/manuscripts";
 import { DeleteManuscriptButton } from "../manuscript/deleteManuscript";
-import { UpdateManuscriptButton } from "../manuscript/updateManuscript";
+import UpdateManuscriptButton from "../manuscript/updateManuscript";
 
 //This component is used to place manuscript data into a table.
 
 interface ManuscriptTableProps {
   data: ManuscriptType[];
   caption?: string;
+  setManuscriptToUpdate: (manuscript: ManuscriptType) => void;
 }
 
 // Takes data and caption passed from Home component and displays it in a table.
 export default function ManuscriptTable({
   data,
   caption,
+  setManuscriptToUpdate,
 }: ManuscriptTableProps) {
   let tick: string = "✓";
   return (
@@ -64,7 +66,10 @@ export default function ManuscriptTable({
                 <Td>{manuscript.turnAround}</Td>
                 <Td>{manuscript.authorBio}</Td>
                 <Td>
-                  <UpdateManuscriptButton manuscript={manuscript} />
+                  <UpdateManuscriptButton
+                    setManuscriptToUpdate={setManuscriptToUpdate}
+                    manuscript={manuscript}
+                  />
                   <DeleteManuscriptButton manuscript={manuscript} />
                 </Td>
               </Tr>
