@@ -24,25 +24,3 @@ export async function getManuscripts(
     console.error(e);
   }
 }
-
-export async function getTodaysManuscripts(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  try {
-    const client = await clientPromise; // clientPromise is a function that gets the instance of the MongoDB database
-    const db = client.db("test"); // specifies which collection in the database we are accessing
-
-    // get yesterday's date for filtering purposes
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-
-    const data = await db
-      .collection("manuscripts")
-      .find({ date: { $gt: yesterday.toISOString() } })
-      .toArray();
-    res.json(data);
-  } catch (e) {
-    console.error(e);
-  }
-}

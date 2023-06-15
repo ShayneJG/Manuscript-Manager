@@ -94,19 +94,15 @@ export default function CreateManuscript({
     } catch (error) {
       console.error("Error:", error);
     }
-
     debugger;
     // update state by fetching new manuscripts for today
     try {
-      const response = await fetch(
-        "/api/manuscripts/getManuscripts/getTodaysManuscripts",
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch("/api/manuscripts/getTodaysManuscripts", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       const json = await response.json();
 
@@ -121,11 +117,11 @@ export default function CreateManuscript({
         setManuscriptsInState(json);
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error getting manuscripts:", error);
     }
   };
 
-  // sents a PATCH request through the updateManuscript API endpoint
+  // sends a PATCH request through the updateManuscript API endpoint
   const handleUpdate = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     // capture date manuscript was submitted (previously Mongoose did this for us)
