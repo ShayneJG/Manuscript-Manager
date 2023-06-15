@@ -10,8 +10,8 @@ import {
   TableContainer,
 } from "@chakra-ui/react";
 import { ManuscriptType } from "@/types/manuscripts";
-import DeleteManuscriptButton from "../manuscript/deleteManuscript";
-import UpdateManuscriptButton from "../manuscript/updateManuscript";
+import DeleteManuscriptButton from "../manuscript/deleteManuscriptButton";
+import UpdateManuscriptButton from "../manuscript/updateManuscriptButton";
 
 //This component is used to place manuscript data into a table.
 
@@ -20,7 +20,7 @@ interface ManuscriptTableProps {
   caption?: string;
   setManuscriptToUpdate: (manuscript: ManuscriptType) => void;
   manuscriptsInState?: ManuscriptType[];
-  setManuscriptsInState: (manuscript: ManuscriptType[]) => void;
+  setManuscriptsInState: (manuscript: ManuscriptType[] | undefined) => void;
 }
 
 // Takes data and caption passed from Home component and displays it in a table.
