@@ -3,14 +3,27 @@
 
 import { ManuscriptType } from "@/types/manuscripts";
 
-interface UpdateManuscriptButtonProps {
+interface DeleteManuscriptButtonProps {
   manuscript: ManuscriptType;
+  manuscriptsInState: ManuscriptType[] | undefined;
+  setManuscriptsInState: (manuscript: ManuscriptType[]) => void;
 }
 
-export const DeleteManuscriptButton: React.FC<UpdateManuscriptButtonProps> = ({
+export default function DeleteManuscriptButton({
   manuscript,
-}) => {
+  manuscriptsInState,
+  setManuscriptsInState,
+}: DeleteManuscriptButtonProps) {
   const deleteManuscript = async () => {
+    // delete manuscript from state
+    if (manuscriptsInState) {
+      const filteredManuscripts = manuscriptsInState.filter(
+        (m) => m._id !== manuscript._id
+      );
+      setManuscriptsInState(filteredManuscripts);
+    }
+
+    // delete manuscript from db
     try {
       console.log("_id:", manuscript._id);
 
@@ -38,4 +51,4 @@ export const DeleteManuscriptButton: React.FC<UpdateManuscriptButtonProps> = ({
   };
 
   return <button onClick={deleteManuscript}>Delete</button>;
-};
+}

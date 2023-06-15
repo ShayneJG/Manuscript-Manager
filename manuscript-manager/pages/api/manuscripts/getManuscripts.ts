@@ -6,7 +6,7 @@ import clientPromise from "../../../lib/mongodb";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 // API route handler that gets executed when the .../api/manuscript route is called
-export default async function getManuscripts(
+export async function getManuscripts(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
@@ -20,6 +20,28 @@ export default async function getManuscripts(
       .toArray();
 
     res.json(manuscripts); // serves the response in JSON format to the browser - this will be displayed when visiting the /api/manuscripts path in browser
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+export async function getTodaysManuscripts(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  try {
+    const client = await clientPromise; // clientPromise is a function that gets the instance of the MongoDB database
+    const db = client.db("test"); // specifies which collection in the database we are accessing
+
+    // get yesterday's date for filtering purposes
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    const data = await db
+      .collection("manuscripts")
+      .find({ date: { $gt: yesterday.toISOString() } })
+      .toArray();
+    res.json(data);
   } catch (e) {
     console.error(e);
   }

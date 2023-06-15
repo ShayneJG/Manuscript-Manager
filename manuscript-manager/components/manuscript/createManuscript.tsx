@@ -25,10 +25,12 @@ import { useEffect } from "react";
 
 interface CreateManuscriptProps {
   manuscriptToUpdate?: ManuscriptType;
+  setManuscriptsInState: (manuscript: ManuscriptType[]) => void;
 }
 
 export default function CreateManuscript({
   manuscriptToUpdate,
+  setManuscriptsInState,
 }: CreateManuscriptProps) {
   const [manuscriptID, setManuscriptID] = useState<string>("");
   const [date, setDate] = useState<Date>(new Date());
@@ -40,10 +42,11 @@ export default function CreateManuscript({
   const [turnAround, setTurnAround] = useState<string>("");
   const [authorBio, setAuthorBio] = useState<number>(0);
 
-  // Sends a POST request through the postManuscript API endpoint
+  // Updates state & sends a POST request through the postManuscript API endpoint
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
+    // add manuscript to db
     // capture date manuscript was submitted (previously Mongoose did this for us)
     const createdAt = new Date().toISOString();
 
@@ -60,33 +63,65 @@ export default function CreateManuscript({
       createdAt,
     };
 
-    console.log("manuscript submitted: ", JSON.stringify(manuscript));
-    const response = await fetch("/api/manuscripts/postManuscript", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(manuscript),
-    });
+    try {
+      const response = await fetch("/api/manuscripts/postManuscript", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(manuscript),
+      });
 
-    const json = await response.json();
+      const json = await response.json();
 
-    if (!response.ok) {
-      console.log("There was an error submitting the manuscript.");
+      if (!response.ok) {
+        console.log("There was an error submitting the manuscript.");
+      }
+
+      if (response.ok) {
+        // TODO: reset state values and input fields
+        console.log("Response ok:", json);
+        setManuscriptID("");
+        setDate(new Date());
+        setWordCount(undefined);
+        setLatex(false);
+        setDouble(false);
+        setTriple(false);
+        setBonus(0);
+        setTurnAround("");
+        setAuthorBio(0);
+      }
+    } catch (error) {
+      console.error("Error:", error);
     }
 
-    if (response.ok) {
-      // TODO: reset state values and input fields
-      console.log("Response ok:", json);
-      setManuscriptID("");
-      setDate(new Date());
-      setWordCount(undefined);
-      setLatex(false);
-      setDouble(false);
-      setTriple(false);
-      setBonus(0);
-      setTurnAround("");
-      setAuthorBio(0);
+    debugger;
+    // update state by fetching new manuscripts for today
+    try {
+      const response = await fetch(
+        "/api/manuscripts/getManuscripts/getTodaysManuscripts",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const json = await response.json();
+
+      if (!response.ok) {
+        console.log("There was an error getting the manuscripts.");
+      }
+
+      if (response.ok) {
+        // update todays manuscripts in state
+        console.log("Response ok:", json);
+
+        setManuscriptsInState(json);
+      }
+    } catch (error) {
+      console.error("Error:", error);
     }
   };
 

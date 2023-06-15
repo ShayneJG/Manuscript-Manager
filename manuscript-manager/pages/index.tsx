@@ -12,7 +12,6 @@ import {
   currentDate,
   thisMonthStartDate,
   lastMonthStartDate,
-  determinePrevMonthStartDate,
 } from "@/utils/dates";
 import { monthlySummary } from "@/utils/monthlyTotals";
 import { useState } from "react";
@@ -42,11 +41,16 @@ export default function Home(props: HomeProps) {
       <h1>MANUSCRIPT MANAGER</h1>
       <ProfileAvatarDropdown />
       <div id="stat-test">
-        <CreateManuscript manuscriptToUpdate={manuscriptToUpdate} />
+        <CreateManuscript
+          manuscriptToUpdate={manuscriptToUpdate}
+          setManuscriptsInState={setManuscriptsInState}
+        />
         <ManuscriptTable
           data={manuscriptsInState}
-          caption="(Test data from MongoDB: 'Today's manuscripts')"
+          caption="(Today's manuscripts)"
           setManuscriptToUpdate={setManuscriptToUpdate}
+          manuscriptsInState={manuscriptsInState}
+          setManuscriptsInState={setManuscriptsInState}
         />
         <AtAGlance
           month={monthlySummary(thisMonthsManuscripts)}
