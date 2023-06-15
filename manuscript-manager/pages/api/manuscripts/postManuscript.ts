@@ -13,7 +13,6 @@ export default async function postManuscript(
     return;
   } // This is not necessary but is good practice.
 
-  console.log(req.body);
   const newManuscript = req?.body;
 
   try {

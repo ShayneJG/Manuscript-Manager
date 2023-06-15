@@ -15,8 +15,6 @@ interface AtAGlanceProps {
 }
 
 function AtAGlance({ month, prevMonth }: AtAGlanceProps) {
-  console.log(typeof month.totalMinusBonuses);
-
   //generates the summaries for each property of earnings
   const summaries: JSX.Element[] = Object.keys(month).map((key) => (
     <Summary

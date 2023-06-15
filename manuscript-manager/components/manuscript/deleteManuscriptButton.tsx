@@ -25,8 +25,6 @@ export default function DeleteManuscriptButton({
 
     // delete manuscript from db
     try {
-      console.log("_id:", manuscript._id);
-
       const response = await fetch(
         `/api/manuscripts/deleteManuscript?id=${manuscript._id}`,
         {
