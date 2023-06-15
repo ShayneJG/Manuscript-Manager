@@ -179,6 +179,31 @@ export default function CreateManuscript({
         console.error(e);
       }
     }
+
+    // update manuscripts in state
+    try {
+      const response = await fetch("/api/manuscripts/getTodaysManuscripts", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const json = await response.json();
+
+      if (!response.ok) {
+        console.log("There was an error getting the manuscripts.");
+      }
+
+      if (response.ok) {
+        // update todays manuscripts in state
+        console.log("Response ok:", json);
+
+        setManuscriptsInState(json);
+      }
+    } catch (error) {
+      console.error("Error getting manuscripts:", error);
+    }
   };
 
   // if there is a manuscript to update, set state values accordingly
@@ -230,7 +255,7 @@ export default function CreateManuscript({
         <FormLabel>Wordcount</FormLabel>
         <Input
           type="number"
-          value={wordCount}
+          value={!wordCount ? "" : wordCount}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             setWordCount(e.target.valueAsNumber);
           }}
