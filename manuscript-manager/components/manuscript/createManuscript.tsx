@@ -17,12 +17,14 @@ import {
   Checkbox,
   Stack,
   Button,
+  Tooltip,
 } from "@chakra-ui/react";
 import { ChangeEvent, useState } from "react";
 import { DM_Serif_Display } from "next/font/google";
+import UserType from "@/types/user";
 //this component handles the creation of new manuscripts, and will eventually send the manuscript as a request to the backend.
 
-export default function CreateManuscript() {
+export default function CreateManuscript({user}: {user: UserType}) {
   const [manuscriptID, setManuscriptID] = useState<string>("");
   const [date, setDate] = useState<Date>(new Date());
   const [wordCount, setWordCount] = useState<number>();
@@ -32,11 +34,14 @@ export default function CreateManuscript() {
   const [bonus, setBonus] = useState<number>(0);
   const [turnAround, setTurnAround] = useState<string>("");
   const [authorBio, setAuthorBio] = useState<number>(0);
+  const name = user.name || undefined;
+  const payRate = user.payRate || undefined;
 
   // Sends a POST request through the postManuscript API endpoint
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
  
+    console.log(user)
     const manuscript = {
       date,
       manuscriptID,
@@ -47,6 +52,8 @@ export default function CreateManuscript() {
       bonus,
       turnAround,
       authorBio,
+      user: name,
+      payrate: payRate 
     }
     console.log("manuscript being submitted: ", JSON.stringify(manuscript));
     const response = await fetch('/api/postManuscript', {
@@ -187,7 +194,8 @@ export default function CreateManuscript() {
           }}
         />
       </FormControl>
-      <Button onClick={(e) => handleSubmit(e)}>Submit</Button>
+      <Tooltip hasArrow bg="red.600" label="No user or pay rate found. If logged in, please ensure your profile is up-to-date" isDisabled={name && payRate ? true : false}>
+      <Button isDisabled={name && payRate ? false : true} onClick={(e) => handleSubmit(e)}>Submit</Button></Tooltip>
     </Box>
   );
 }
