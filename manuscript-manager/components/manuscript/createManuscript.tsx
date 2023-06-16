@@ -17,6 +17,7 @@ import {
   Stack,
   Button,
   Tooltip,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import { ChangeEvent, useState } from "react";
 import UserType from "@/types/user";
@@ -35,9 +36,10 @@ export default function CreateManuscript({
   setManuscriptsInState,
   user,
 }: CreateManuscriptProps) {
+  //Manuscript states
   const [manuscriptID, setManuscriptID] = useState<string>("");
   const [date, setDate] = useState<Date>(new Date());
-  const [wordCount, setWordCount] = useState<number | undefined>();
+  const [wordCount, setWordCount] = useState<number | undefined>(undefined);
   const [latex, setLatex] = useState<boolean>(false);
   const [double, setDouble] = useState<boolean>(false);
   const [triple, setTriple] = useState<boolean>(false);
@@ -46,6 +48,11 @@ export default function CreateManuscript({
   const [authorBio, setAuthorBio] = useState<number>(0);
   const name = user.name || undefined;
   const payRate = user.payRate || undefined;
+
+  //Error states
+  const [manuscriptIDError, setManuscriptIDError] = useState<boolean>(false);
+  const [wordCountError, setwordCountError] = useState<boolean>(false);
+  const [turnAroundError, setTurnAroundError] = useState<boolean>(false);
 
   // Resets state to default values.
   function resetManuscriptState() {
@@ -60,6 +67,27 @@ export default function CreateManuscript({
     setAuthorBio(0);
   }
 
+  function formValidation() {
+    let validates: boolean = true;
+    const turnAroundRegex = /^(?:[0-9]|0[0-9]|1[0-9]|2[0-3]):(?:[0-5][0-9]):(?:[0-5][0-9])$/;
+
+    if(!manuscriptID) {
+      setManuscriptIDError(true);
+      validates = false;
+    }
+
+    if(!turnAroundRegex.test(turnAround)) {
+      setTurnAroundError(true);
+      validates = false;
+    }
+    if((typeof wordCount === 'number') && !isNaN(wordCount) !== true) {
+      setwordCountError(true);
+      validates = false;
+    } 
+    
+    
+    return validates;
+  }
   // Fetches today's manuscripts from db
   async function getTodaysManuscripts() {
     // update manuscripts in state
@@ -97,6 +125,7 @@ export default function CreateManuscript({
       payRate: payRate,
     };
 
+    if(formValidation()) {
     handleManuscripts(
       "POST",
       resetManuscriptState,
@@ -112,7 +141,7 @@ export default function CreateManuscript({
       authorBio,
       userInfo,
       undefined
-    );
+    );}
   }
 
   // Handles updating of a manuscript
@@ -124,6 +153,13 @@ export default function CreateManuscript({
       payRate: payRate,
     };
 
+    
+
+
+
+    
+
+    if(formValidation()) {
     handleManuscripts(
       "PATCH",
       resetManuscriptState,
@@ -139,7 +175,7 @@ export default function CreateManuscript({
       authorBio,
       userInfo,
       manuscriptToUpdate
-    );
+    );}
   }
 
   // If there is a manuscript being updated, sets state values accordingly so the manuscript details are displayed in the form ready to edit
@@ -160,6 +196,15 @@ export default function CreateManuscript({
     }
   }, [manuscriptToUpdate]);
 
+
+
+
+ 
+
+  
+
+
+
   return (
     <Box borderWidth="1px" borderRadius="lg" p={2}>
       <FormControl id="date">
@@ -174,8 +219,8 @@ export default function CreateManuscript({
           />
         </Box>
       </FormControl>
-      <FormControl id="manuscript ID" isRequired>
-        <FormLabel>Manuscript ID</FormLabel>
+      <FormControl isInvalid={manuscriptIDError} id="manuscript ID" isRequired>
+        <FormLabel>Manuscript ID</FormLabel> 
         <Input
           placeholder="Manuscript ID"
           value={manuscriptID}
@@ -183,26 +228,27 @@ export default function CreateManuscript({
             setManuscriptID(e.target.value)
           }
           required
-        />
+        /><FormErrorMessage>Cannot be blank</FormErrorMessage>
       </FormControl>
 
-      <FormControl id="wordCount" isRequired>
+      <FormControl isInvalid={wordCountError} id="wordCount" isRequired>
         <FormLabel>Wordcount</FormLabel>
         <Input
           type="number"
-          value={!wordCount ? "" : wordCount}
+          value={wordCount}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             setWordCount(e.target.valueAsNumber);
           }}
-        />
+        /><FormErrorMessage>Cannot be blank</FormErrorMessage>
       </FormControl>
       <FormControl isRequired id="turnAround time">
         <FormLabel>Turnaround Time</FormLabel>
         <Input
-          placeholder="Turnaround"
+          placeholder="00:00:00"
           value={turnAround}
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setTurnAround(e.target.value)
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>{
+
+            setTurnAround(e.target.value)}
           }
         />
       </FormControl>
