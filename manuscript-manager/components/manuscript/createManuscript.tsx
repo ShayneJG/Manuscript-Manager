@@ -1,5 +1,6 @@
 import { ManuscriptType } from "@/types/manuscripts";
 import DatePicker from "react-datepicker";
+import { MouseEvent } from "react";
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -20,14 +21,25 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import { ChangeEvent, useState } from "react";
-import { DM_Serif_Display } from "next/font/google";
 import UserType from "@/types/user";
+import { useEffect } from "react";
+import { handleManuscripts } from "@/utils/handleManuscripts";
 //this component handles the creation of new manuscripts, and will eventually send the manuscript as a request to the backend.
 
-export default function CreateManuscript({user}: {user: UserType}) {
+interface CreateManuscriptProps {
+  manuscriptToUpdate?: ManuscriptType;
+  setManuscriptsInState: (manuscript: ManuscriptType[]) => void;
+  user: UserType
+}
+
+export default function CreateManuscript({
+  manuscriptToUpdate,
+  setManuscriptsInState,
+  user
+}: CreateManuscriptProps) {
   const [manuscriptID, setManuscriptID] = useState<string>("");
   const [date, setDate] = useState<Date>(new Date());
-  const [wordCount, setWordCount] = useState<number>();
+  const [wordCount, setWordCount] = useState<number | undefined>();
   const [latex, setLatex] = useState<boolean>(false);
   const [double, setDouble] = useState<boolean>(false);
   const [triple, setTriple] = useState<boolean>(false);
@@ -37,12 +49,60 @@ export default function CreateManuscript({user}: {user: UserType}) {
   const name = user.name || undefined;
   const payRate = user.payRate || undefined;
 
-  // Sends a POST request through the postManuscript API endpoint
-  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  // Resets state to default values.
+  function resetManuscriptState() {
+    setManuscriptID("");
+    setDate(new Date());
+    setWordCount(undefined);
+    setLatex(false);
+    setDouble(false);
+    setTriple(false);
+    setBonus(0);
+    setTurnAround("");
+    setAuthorBio(0);
+  }
+
+  // Fetches today's manuscripts from db
+  async function getTodaysManuscripts() {
+    // update manuscripts in state
+    try {
+      const response = await fetch("/api/manuscripts/getTodaysManuscripts", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const json = await response.json();
+
+      if (!response.ok) {
+        console.log("There was an error getting the manuscripts.");
+      }
+
+      if (response.ok) {
+        // update todays manuscripts in state
+        console.log("Response ok:", json);
+
+        setManuscriptsInState(json);
+      }
+    } catch (error) {
+      console.error("Error getting manuscripts:", error);
+    }
+  }
+
+  // Handles submission of a manuscript
+  async function handleSubmit(e: MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
- 
-    console.log(user)
-    const manuscript = {
+
+    const userInfo = {
+      user: name,
+      payrate: payRate
+    }
+    
+    handleManuscripts(
+      "POST",
+      resetManuscriptState,
+      getTodaysManuscripts,
       date,
       manuscriptID,
       wordCount,
@@ -52,39 +112,56 @@ export default function CreateManuscript({user}: {user: UserType}) {
       bonus,
       turnAround,
       authorBio,
-      user: name,
-      payrate: payRate 
-    }
-    console.log("manuscript being submitted: ", JSON.stringify(manuscript));
-    const response = await fetch('/api/postManuscript', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(manuscript),
-    })
-    
-    const json = await response.json();
-    
-    if (!response.ok) {
-      console.log("There was an error submitting the manuscript.");
-    }
-    
-    if (response.ok) {
-      // TODO: reset state values and input fields
-      console.log("Response ok:", json);
-      setManuscriptID("")
-      setDate(new Date())
-      setWordCount(undefined)
-      setLatex(false)
-      setDouble(false)
-      setTriple(false)
-      setBonus(0)
-      setTurnAround("")
-      setAuthorBio(0)
+      userInfo,
+      undefined
     }
   }
-  
+
+  // Handles updating of a manuscript
+  async function handleUpdate(e: MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    
+    const userInfo = {
+      user: name,
+      payrate: payRate
+    }
+    
+    handleManuscripts(
+      "PATCH",
+      resetManuscriptState,
+      getTodaysManuscripts,
+      date,
+      manuscriptID,
+      wordCount,
+      latex,
+      double,
+      triple,
+      bonus,
+      turnAround,
+      authorBio,
+      userInfo,
+      manuscriptToUpdate
+    );
+  }
+
+  // If there is a manuscript being updated, sets state values accordingly so the manuscript details are displayed in the form ready to edit
+  useEffect(() => {
+    if (manuscriptToUpdate) {
+      const m = manuscriptToUpdate;
+      // convert m.date (string) into Date
+      const inputDate = new Date(m.date);
+      setManuscriptID(m.manuscriptID);
+      setDate(inputDate);
+      setWordCount(m.wordCount);
+      setLatex(m.latex);
+      setDouble(m.double);
+      setTriple(m.triple);
+      setBonus(m.bonus);
+      setTurnAround(m.turnAround);
+      setAuthorBio(m.authorBio);
+    }
+  }, [manuscriptToUpdate]);
+
   return (
     <Box borderWidth="1px" borderRadius="lg" p={2}>
       <FormControl id="date">
@@ -115,7 +192,7 @@ export default function CreateManuscript({user}: {user: UserType}) {
         <FormLabel>Wordcount</FormLabel>
         <Input
           type="number"
-          value={wordCount}
+          value={!wordCount ? "" : wordCount}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             setWordCount(e.target.valueAsNumber);
           }}
@@ -124,7 +201,7 @@ export default function CreateManuscript({user}: {user: UserType}) {
       <FormControl isRequired id="turnAround time">
         <FormLabel>Turnaround Time</FormLabel>
         <Input
-        placeholder="Turnaround"
+          placeholder="Turnaround"
           value={turnAround}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             setTurnAround(e.target.value)
@@ -194,8 +271,13 @@ export default function CreateManuscript({user}: {user: UserType}) {
           }}
         />
       </FormControl>
-      <Tooltip hasArrow bg="red.600" label="No user or pay rate found. If logged in, please ensure your profile is up-to-date" isDisabled={name && payRate ? true : false}>
+    {manuscriptToUpdate ? (
+        <Tooltip hasArrow bg="red.600" label="No user or pay rate found. If logged in, please ensure your profile is up-to-date" isDisabled={name && payRate ? true : false}>
+      <Button isDisabled={name && payRate ? false : true} onClick={(e) => handleUpdate(e)}>Update</Button></Tooltip>
+      ) : (
+        <Tooltip hasArrow bg="red.600" label="No user or pay rate found. If logged in, please ensure your profile is up-to-date" isDisabled={name && payRate ? true : false}>
       <Button isDisabled={name && payRate ? false : true} onClick={(e) => handleSubmit(e)}>Submit</Button></Tooltip>
+      )}
     </Box>
   );
 }
