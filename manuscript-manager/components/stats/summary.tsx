@@ -18,10 +18,35 @@ interface SummaryProps {
 function Summary({ statistic, label, lastStatistic }: SummaryProps) {
   const percent: string = getPercentageChange(statistic, lastStatistic) + "%";
 
+  let name;
+  let dollars;
+  switch (label) {
+    case "totalWordCount":
+      name = "Total Word Count";
+      break;
+    case "totalLatexBonus":
+      name = "Total Latex Bonus";
+      break;
+    case "totalOtherBonuses":
+      name = "Total Other Bonuses";
+      break;
+    case "totalEarnings":
+      name = "Total Earnings";
+      dollars = true;
+      break;
+    case "totalMinusBonuses":
+      name = "Total Without Bonuses";
+      dollars = true;
+      break;
+  }
+
   return (
     <Stat>
-      <StatLabel>{label}</StatLabel>
-      <StatNumber>{statistic}</StatNumber>
+      <StatLabel>{name}</StatLabel>
+      <StatNumber>
+        {dollars && "$"}
+        {statistic}
+      </StatNumber>
       <StatHelpText>
         {percent}
         <StatArrow
@@ -29,9 +54,7 @@ function Summary({ statistic, label, lastStatistic }: SummaryProps) {
         ></StatArrow>
       </StatHelpText>
 
-      <StatHelpText>
-        Last {label}: {lastStatistic}
-      </StatHelpText>
+      <StatHelpText>Last month: {lastStatistic}</StatHelpText>
     </Stat>
   );
 }

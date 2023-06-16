@@ -11,6 +11,8 @@ import { ManuscriptType } from "@/types/manuscripts";
 import ProfileAvatarDropdown from "@/components/profile/profileIcon";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import UserType from "@/types/user";
+import { Flex, Grid, GridItem } from "@chakra-ui/react";
+import { Heading } from "@chakra-ui/react";
 
 import {
   currentDate,
@@ -46,29 +48,39 @@ export default function Home(props: HomeProps) {
   console.log("Client side user is: ", user);
 
   return (
-    <main
-      className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
-    >
-      <h1>MANUSCRIPT MANAGER</h1>
-      <ProfileAvatarDropdown />
-      <div id="stat-test">
-        <CreateManuscript
-          user={user}
-          manuscriptToUpdate={manuscriptToUpdate}
-          setManuscriptsInState={setManuscriptsInState}
-        />
-        <ManuscriptTable
-          data={manuscriptsInState}
-          setManuscriptToUpdate={setManuscriptToUpdate}
-          manuscriptsInState={manuscriptsInState}
-          setManuscriptsInState={setManuscriptsInState}
-          caption="(Today's manuscripts)"
-        />
-        <AtAGlance
-          month={monthlySummary(thisMonthsManuscripts)}
-          prevMonth={monthlySummary(lastMonthsManuscripts)}
-        />
-      </div>
+    <main className={`min-h-screen p-24 ${inter.className}`}>
+      <Grid templateColumns="repeat(10, 1fr)" gap="12">
+        <GridItem colSpan={3} id="sidebar">
+          <Flex direction="column" gap="12">
+            <Heading size="lg">Manuscript Manager</Heading>
+            <CreateManuscript
+              user={user}
+              manuscriptToUpdate={manuscriptToUpdate}
+              setManuscriptsInState={setManuscriptsInState}
+            />
+          </Flex>
+        </GridItem>
+        <GridItem colSpan={7}>
+          <Flex id="maincontent" direction="column" gap="12">
+            <div className="self-end">
+              <ProfileAvatarDropdown />
+            </div>
+            <Flex direction="column" gap="12">
+              <AtAGlance
+                month={monthlySummary(thisMonthsManuscripts)}
+                prevMonth={monthlySummary(lastMonthsManuscripts)}
+              />
+              <ManuscriptTable
+                data={manuscriptsInState}
+                setManuscriptToUpdate={setManuscriptToUpdate}
+                manuscriptsInState={manuscriptsInState}
+                setManuscriptsInState={setManuscriptsInState}
+                caption="(Today's manuscripts)"
+              />
+            </Flex>
+          </Flex>
+        </GridItem>
+      </Grid>
     </main>
   );
 }
