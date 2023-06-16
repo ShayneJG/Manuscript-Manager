@@ -18,8 +18,10 @@ import {
   Checkbox,
   Stack,
   Button,
+  Tooltip,
 } from "@chakra-ui/react";
 import { ChangeEvent, useState } from "react";
+import UserType from "@/types/user";
 import { useEffect } from "react";
 import { handleManuscripts } from "@/utils/handleManuscripts";
 //this component handles the creation of new manuscripts, and will eventually send the manuscript as a request to the backend.
@@ -27,11 +29,13 @@ import { handleManuscripts } from "@/utils/handleManuscripts";
 interface CreateManuscriptProps {
   manuscriptToUpdate?: ManuscriptType;
   setManuscriptsInState: (manuscript: ManuscriptType[]) => void;
+  user: UserType
 }
 
 export default function CreateManuscript({
   manuscriptToUpdate,
   setManuscriptsInState,
+  user
 }: CreateManuscriptProps) {
   const [manuscriptID, setManuscriptID] = useState<string>("");
   const [date, setDate] = useState<Date>(new Date());
@@ -42,6 +46,8 @@ export default function CreateManuscript({
   const [bonus, setBonus] = useState<number>(0);
   const [turnAround, setTurnAround] = useState<string>("");
   const [authorBio, setAuthorBio] = useState<number>(0);
+  const name = user.name || undefined;
+  const payRate = user.payRate || undefined;
 
   // Resets state to default values.
   function resetManuscriptState() {
@@ -87,6 +93,12 @@ export default function CreateManuscript({
   // Handles submission of a manuscript
   async function handleSubmit(e: MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
+
+    const userInfo = {
+      user: name,
+      payrate: payRate
+    }
+    
     handleManuscripts(
       "POST",
       resetManuscriptState,
@@ -100,13 +112,20 @@ export default function CreateManuscript({
       bonus,
       turnAround,
       authorBio,
+      userInfo,
       undefined
-    );
+    }
   }
 
   // Handles updating of a manuscript
   async function handleUpdate(e: MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
+    
+    const userInfo = {
+      user: name,
+      payrate: payRate
+    }
+    
     handleManuscripts(
       "PATCH",
       resetManuscriptState,
@@ -120,6 +139,7 @@ export default function CreateManuscript({
       bonus,
       turnAround,
       authorBio,
+      userInfo,
       manuscriptToUpdate
     );
   }
@@ -251,11 +271,12 @@ export default function CreateManuscript({
           }}
         />
       </FormControl>
-
-      {manuscriptToUpdate ? (
-        <Button onClick={(e) => handleUpdate(e)}>Update</Button>
+    {manuscriptToUpdate ? (
+        <Tooltip hasArrow bg="red.600" label="No user or pay rate found. If logged in, please ensure your profile is up-to-date" isDisabled={name && payRate ? true : false}>
+      <Button isDisabled={name && payRate ? false : true} onClick={(e) => handleUpdate(e)}>Update</Button></Tooltip>
       ) : (
-        <Button onClick={(e) => handleSubmit(e)}>Submit</Button>
+        <Tooltip hasArrow bg="red.600" label="No user or pay rate found. If logged in, please ensure your profile is up-to-date" isDisabled={name && payRate ? true : false}>
+      <Button isDisabled={name && payRate ? false : true} onClick={(e) => handleSubmit(e)}>Submit</Button></Tooltip>
       )}
     </Box>
   );
