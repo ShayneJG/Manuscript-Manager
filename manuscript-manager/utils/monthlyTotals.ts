@@ -109,10 +109,10 @@ export function monthlySummary(manuscripts: ManuscriptType[]): Earnings {
   }
 
   return {
+    totalEarnings,
+    totalMinusBonuses,
     totalWordCount,
     totalLatexBonus,
     totalOtherBonuses,
-    totalEarnings,
-    totalMinusBonuses,
   };
 }
