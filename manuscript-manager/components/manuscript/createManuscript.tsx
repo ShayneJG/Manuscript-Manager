@@ -1,9 +1,7 @@
 import { ManuscriptType } from "@/types/manuscripts";
-import DatePicker from "react-datepicker";
 import { MouseEvent } from "react";
-
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
 import {
   NumberInput,
   NumberInputField,
@@ -29,13 +27,13 @@ import { handleManuscripts } from "@/utils/handleManuscripts";
 interface CreateManuscriptProps {
   manuscriptToUpdate?: ManuscriptType;
   setManuscriptsInState: (manuscript: ManuscriptType[]) => void;
-  user: UserType
+  user: UserType;
 }
 
 export default function CreateManuscript({
   manuscriptToUpdate,
   setManuscriptsInState,
-  user
+  user,
 }: CreateManuscriptProps) {
   const [manuscriptID, setManuscriptID] = useState<string>("");
   const [date, setDate] = useState<Date>(new Date());
@@ -96,9 +94,9 @@ export default function CreateManuscript({
 
     const userInfo = {
       user: name,
-      payrate: payRate
-    }
-    
+      payRate: payRate,
+    };
+
     handleManuscripts(
       "POST",
       resetManuscriptState,
@@ -114,18 +112,18 @@ export default function CreateManuscript({
       authorBio,
       userInfo,
       undefined
-    }
+    );
   }
 
   // Handles updating of a manuscript
   async function handleUpdate(e: MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
-    
+
     const userInfo = {
       user: name,
-      payrate: payRate
-    }
-    
+      payRate: payRate,
+    };
+
     handleManuscripts(
       "PATCH",
       resetManuscriptState,
@@ -271,12 +269,34 @@ export default function CreateManuscript({
           }}
         />
       </FormControl>
-    {manuscriptToUpdate ? (
-        <Tooltip hasArrow bg="red.600" label="No user or pay rate found. If logged in, please ensure your profile is up-to-date" isDisabled={name && payRate ? true : false}>
-      <Button isDisabled={name && payRate ? false : true} onClick={(e) => handleUpdate(e)}>Update</Button></Tooltip>
+      {manuscriptToUpdate ? (
+        <Tooltip
+          hasArrow
+          bg="red.600"
+          label="No user or pay rate found. If logged in, please ensure your profile is up-to-date"
+          isDisabled={name && payRate ? true : false}
+        >
+          <Button
+            isDisabled={name && payRate ? false : true}
+            onClick={(e) => handleUpdate(e)}
+          >
+            Update
+          </Button>
+        </Tooltip>
       ) : (
-        <Tooltip hasArrow bg="red.600" label="No user or pay rate found. If logged in, please ensure your profile is up-to-date" isDisabled={name && payRate ? true : false}>
-      <Button isDisabled={name && payRate ? false : true} onClick={(e) => handleSubmit(e)}>Submit</Button></Tooltip>
+        <Tooltip
+          hasArrow
+          bg="red.600"
+          label="No user or pay rate found. If logged in, please ensure your profile is up-to-date"
+          isDisabled={name && payRate ? true : false}
+        >
+          <Button
+            isDisabled={name && payRate ? false : true}
+            onClick={(e) => handleSubmit(e)}
+          >
+            Submit
+          </Button>
+        </Tooltip>
       )}
     </Box>
   );

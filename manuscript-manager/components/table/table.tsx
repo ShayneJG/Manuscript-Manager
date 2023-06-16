@@ -20,7 +20,7 @@ interface ManuscriptTableProps {
   caption?: string;
   setManuscriptToUpdate: (manuscript: ManuscriptType) => void;
   manuscriptsInState?: ManuscriptType[];
-  setManuscriptsInState: (manuscript: ManuscriptType[] | undefined) => void;
+  setManuscriptsInState: (manuscript: ManuscriptType[]) => void;
 }
 
 // Takes data and caption passed from Home component and displays it in a table.

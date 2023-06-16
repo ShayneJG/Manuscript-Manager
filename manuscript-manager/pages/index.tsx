@@ -9,12 +9,9 @@ import { GetServerSideProps } from "next"; // in-built getServerSideProps type
 import clientPromise from "../lib/mongodb";
 import { ManuscriptType } from "@/types/manuscripts";
 import ProfileAvatarDropdown from "@/components/profile/profileIcon";
-import {authOptions} from "@/pages/api/auth/[...nextauth]"; 
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import UserType from "@/types/user";
-import { GetServerSideProps } from "next";
-import clientPromise from "../lib/mongodb";
-import { ManuscriptType } from "@/types/manuscripts";
-import ProfileAvatarDropdown from "@/components/profile/profileIcon";
+
 import {
   currentDate,
   thisMonthStartDate,
@@ -29,12 +26,16 @@ interface HomeProps {
   todaysManuscripts: ManuscriptType[];
   thisMonthsManuscripts: ManuscriptType[];
   lastMonthsManuscripts: ManuscriptType[];
-  user: UserType
+  user: UserType;
 }
 
 export default function Home(props: HomeProps) {
-  const { todaysManuscripts, thisMonthsManuscripts, lastMonthsManuscripts, user } =
-    props;
+  const {
+    todaysManuscripts,
+    thisMonthsManuscripts,
+    lastMonthsManuscripts,
+    user,
+  } = props;
   const [manuscriptToUpdate, setManuscriptToUpdate] = useState<
     ManuscriptType | undefined
   >(undefined);
@@ -42,7 +43,7 @@ export default function Home(props: HomeProps) {
     ManuscriptType[]
   >([...todaysManuscripts]);
 
-  console.log("Client side user is: ", user)
+  console.log("Client side user is: ", user);
 
   return (
     <main
@@ -51,12 +52,22 @@ export default function Home(props: HomeProps) {
       <h1>MANUSCRIPT MANAGER</h1>
       <ProfileAvatarDropdown />
       <div id="stat-test">
-        <CreateManuscript user={user} manuscriptToUpdate={manuscriptToUpdate}
-          setManuscriptsInState={setManuscriptsInState} />
-        <ManuscriptTable data={manuscriptsInState} setManuscriptToUpdate={setManuscriptToUpdate}
+        <CreateManuscript
+          user={user}
+          manuscriptToUpdate={manuscriptToUpdate}
+          setManuscriptsInState={setManuscriptsInState}
+        />
+        <ManuscriptTable
+          data={manuscriptsInState}
+          setManuscriptToUpdate={setManuscriptToUpdate}
           manuscriptsInState={manuscriptsInState}
-          setManuscriptsInState={setManuscriptsInState} caption="(Today's manuscripts)" />
-        <AtAGlance month={monthlySummary(thisMonthsManuscripts)} prevMonth={monthlySummary(lastMonthsManuscripts)} />
+          setManuscriptsInState={setManuscriptsInState}
+          caption="(Today's manuscripts)"
+        />
+        <AtAGlance
+          month={monthlySummary(thisMonthsManuscripts)}
+          prevMonth={monthlySummary(lastMonthsManuscripts)}
+        />
       </div>
     </main>
   );
@@ -79,29 +90,29 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   // When we get data from MongoDB, it contains complex data types - Object ids, doubles, floats, etc.
   // getServerSideProps can only deal with strings, numbers, arrays, objects, etc.
   // So we have to add this workaround of stringifying the data we get back, and then reparsing it:
-  const manuscripts = JSON.parse(JSON.stringify(data)); 
+  const manuscripts = JSON.parse(JSON.stringify(data));
 
-  // gets userdata from the session and passes a user object to the page. This is basically the same data as the user session, but it has the payrate added. 
+  // gets userdata from the session and passes a user object to the page. This is basically the same data as the user session, but it has the payrate added.
 
-  const session = await getServerSession(
-    context.req,
-    context.res,
-    authOptions
-  )
+  const session = await getServerSession(context.req, context.res, authOptions);
 
-  let user = {}
+  let user = {};
 
-    if(session) {
-      // Find the document with the same email
-      const email = session?.user?.email
-      const userData = await db.collection('users').findOne({email})
-      
-      //creates and passes user object for email and payrate usage. Probably not the correct way, as this overlaps with getSession, but it works. 
-        user = {name: userData?.name, email: userData?.email, payRate: userData?.payRate ? userData.payRate : null}
-        console.log("user updated: ", user)
-      }
+  if (session) {
+    // Find the document with the same email
+    const email = session?.user?.email;
+    const userData = await db.collection("users").findOne({ email });
 
-  console.log("server-side user is: ", user)
+    //creates and passes user object for email and payrate usage. Probably not the correct way, as this overlaps with getSession, but it works.
+    user = {
+      name: userData?.name,
+      email: userData?.email,
+      payRate: userData?.payRate ? userData.payRate : null,
+    };
+    console.log("user updated: ", user);
+  }
+
+  console.log("server-side user is: ", user);
 
   // filter data for today's manuscripts, this month's manuscripts, and last month's
   // today: db dates stored as follows: "2023-04-25T08:10:13.000Z", currentDate as follows: Mon Jun 12 2023 16:32:37 GMT+0800 (Australian Western Standard Time)
@@ -134,8 +145,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       todaysManuscripts,
       thisMonthsManuscripts,
       lastMonthsManuscripts,
-      user
+      user,
     },
   };
 };
-
