@@ -10,27 +10,23 @@ import {
   TableContainer,
 } from "@chakra-ui/react";
 import { ManuscriptType } from "@/types/manuscripts";
-import DeleteManuscriptButton from "../manuscript/deleteManuscriptButton";
-import UpdateManuscriptButton from "../manuscript/updateManuscriptButton";
 
 //This component is used to place manuscript data into a table.
 
 interface ManuscriptTableProps {
   data: ManuscriptType[];
   caption?: string;
-  setManuscriptToUpdate: (manuscript: ManuscriptType) => void;
-  manuscriptsInState?: ManuscriptType[];
-  setManuscriptsInState: (manuscript: ManuscriptType[] | undefined) => void;
 }
 
 // Takes data and caption passed from Home component and displays it in a table.
 export default function ManuscriptTable({
   data,
   caption,
-  setManuscriptToUpdate,
-  manuscriptsInState,
-  setManuscriptsInState,
 }: ManuscriptTableProps) {
+  
+  const testDate = new Date('2011-04-11T10:20:30Z')
+  console.log(testDate.toDateString());
+  
   let tick: string = "✓";
   return (
     <TableContainer>
@@ -48,15 +44,15 @@ export default function ManuscriptTable({
             <Th>Bonus</Th>
             <Th>TurnAround</Th>
             <Th>Author Biography</Th>
-            <Th>Actions</Th>
           </Tr>
         </Thead>
         <Tbody>
           {data.map((manuscript, index) => {
+            
             // getServerSideProps is returning the dates as strings - see the required workaround solution in index.tsx
             // so they need to be converted back into dates and then toDateString() to display them as needed for the table
-            const date = new Date(manuscript.date);
-
+            const date = new Date(manuscript.date) 
+            
             return (
               <Tr key={index}>
                 <Td>{date.toDateString()}</Td>
@@ -69,17 +65,6 @@ export default function ManuscriptTable({
                 <Td>{manuscript.bonus}</Td>
                 <Td>{manuscript.turnAround}</Td>
                 <Td>{manuscript.authorBio}</Td>
-                <Td>
-                  <UpdateManuscriptButton
-                    setManuscriptToUpdate={setManuscriptToUpdate}
-                    manuscript={manuscript}
-                  />
-                  <DeleteManuscriptButton
-                    manuscript={manuscript}
-                    manuscriptsInState={manuscriptsInState}
-                    setManuscriptsInState={setManuscriptsInState}
-                  />
-                </Td>
               </Tr>
             );
           })}

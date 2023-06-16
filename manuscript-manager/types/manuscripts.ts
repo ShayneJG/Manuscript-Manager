@@ -1,9 +1,9 @@
 export interface ManuscriptType {
-  user?: string;
-  payrate?: number;
-  date: string;
+  user: string;
+  payrate: number;
+  date: string; 
   manuscriptID: string;
-  wordCount: number | undefined;
+  wordCount: number;
   latex: boolean;
   double: boolean;
   triple: boolean;
@@ -11,7 +11,7 @@ export interface ManuscriptType {
   turnAround: string;
   authorBio: number;
   createdAt: string;
-  updatedAt?: string;
-  __v?: number;
-  _id?: string;
+  updatedAt: string;
+  __v: number;
+  _id: string;    
 }
