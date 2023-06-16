@@ -54,7 +54,10 @@ function Summary({ statistic, label, lastStatistic }: SummaryProps) {
         ></StatArrow>
       </StatHelpText>
 
-      <StatHelpText>Last month: {lastStatistic}</StatHelpText>
+      <StatHelpText>
+        Last month: {dollars && "$"}
+        {lastStatistic}
+      </StatHelpText>
     </Stat>
   );
 }

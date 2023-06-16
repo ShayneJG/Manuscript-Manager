@@ -48,7 +48,7 @@ export default function Home(props: HomeProps) {
   console.log("Client side user is: ", user);
 
   return (
-    <main className={`min-h-screen p-24 ${inter.className}`}>
+    <main className={`min-h-screen py-16 px-24 ${inter.className}`}>
       <Grid templateColumns="repeat(10, 1fr)" gap="12">
         <GridItem colSpan={3} id="sidebar">
           <Flex direction="column" gap="12">
