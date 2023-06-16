@@ -6,7 +6,7 @@ import { ManuscriptType } from "@/types/manuscripts";
 interface DeleteManuscriptButtonProps {
   manuscript: ManuscriptType;
   manuscriptsInState: ManuscriptType[] | undefined;
-  setManuscriptsInState: (manuscript: ManuscriptType[] | undefined) => void;
+  setManuscriptsInState: (manuscript: ManuscriptType[]) => void;
 }
 
 export default function DeleteManuscriptButton({

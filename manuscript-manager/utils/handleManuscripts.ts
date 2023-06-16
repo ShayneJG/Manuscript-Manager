@@ -1,5 +1,10 @@
 import { ManuscriptType } from "@/types/manuscripts";
 
+interface UserInfo {
+  user: string | undefined;
+  payRate: number | undefined;
+}
+
 export async function handleManuscripts(
   action: string,
   reset: () => void,
@@ -13,6 +18,7 @@ export async function handleManuscripts(
   bonus: number,
   turnAround: string,
   authorBio: number,
+  userInfo: UserInfo,
   m?: ManuscriptType
 ) {
   // add manuscript to db
@@ -24,6 +30,8 @@ export async function handleManuscripts(
     action === "POST"
       ? "/api/manuscripts/postManuscript"
       : `/api/manuscripts/updateManuscript?id=${m?._id}`;
+
+  const { user, payRate } = userInfo;
 
   const manuscript = {
     date,
@@ -37,6 +45,8 @@ export async function handleManuscripts(
     authorBio,
     createdAt,
     updatedAt,
+    user,
+    payRate,
   };
 
   try {
