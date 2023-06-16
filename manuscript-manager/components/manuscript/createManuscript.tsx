@@ -39,7 +39,7 @@ export default function CreateManuscript({
   //Manuscript states
   const [manuscriptID, setManuscriptID] = useState<string>("");
   const [date, setDate] = useState<Date>(new Date());
-  const [wordCount, setWordCount] = useState<number | undefined>(undefined);
+  const [wordCount, setWordCount] = useState<number | ''>('');
   const [latex, setLatex] = useState<boolean>(false);
   const [double, setDouble] = useState<boolean>(false);
   const [triple, setTriple] = useState<boolean>(false);
@@ -58,7 +58,7 @@ export default function CreateManuscript({
   function resetManuscriptState() {
     setManuscriptID("");
     setDate(new Date());
-    setWordCount(undefined);
+    setWordCount('');
     setLatex(false);
     setDouble(false);
     setTriple(false);
@@ -68,8 +68,11 @@ export default function CreateManuscript({
   }
 
   function formValidation() {
+    setManuscriptIDError(false);
+    setTurnAroundError(false);
+    setwordCountError(false);
     let validates: boolean = true;
-    const turnAroundRegex = /^(?:[0-9]|0[0-9]|1[0-9]|2[0-3]):(?:[0-5][0-9]):(?:[0-5][0-9])$/;
+    const turnAroundRegex = /^(?:[0-9]|[0-9][0-9]):(?:[0-5][0-9]):(?:[0-5][0-9])$/;
 
     if(!manuscriptID) {
       setManuscriptIDError(true);
@@ -80,12 +83,12 @@ export default function CreateManuscript({
       setTurnAroundError(true);
       validates = false;
     }
-    if((typeof wordCount === 'number') && !isNaN(wordCount) !== true) {
+    if(!wordCount) {
       setwordCountError(true);
       validates = false;
     } 
     
-    
+    console.log(validates)
     return validates;
   }
   // Fetches today's manuscripts from db
@@ -237,11 +240,15 @@ export default function CreateManuscript({
           type="number"
           value={wordCount}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            setWordCount(e.target.valueAsNumber);
+            if(e.target.value === '') {
+              setWordCount('')
+            } else {
+            setWordCount(Number(e.target.value))
+          }
           }}
         /><FormErrorMessage>Cannot be blank</FormErrorMessage>
       </FormControl>
-      <FormControl isRequired id="turnAround time">
+      <FormControl isInvalid={turnAroundError} isRequired id="turnAround time">
         <FormLabel>Turnaround Time</FormLabel>
         <Input
           placeholder="00:00:00"
@@ -250,7 +257,7 @@ export default function CreateManuscript({
 
             setTurnAround(e.target.value)}
           }
-        />
+        /><FormErrorMessage>Must be in the format: 00:00:00</FormErrorMessage>
       </FormControl>
       {/* Boxing together the 3 toggle options to make layout simpler
           The checkbox component from Chakra UI also appears to use the HTMLInputElement type.
