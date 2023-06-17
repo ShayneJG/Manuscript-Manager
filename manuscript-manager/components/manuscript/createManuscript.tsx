@@ -17,12 +17,8 @@ import {
   Stack,
   Button,
   Tooltip,
-
-  FormErrorMessage,
-
   Grid,
   GridItem,
-
 } from "@chakra-ui/react";
 import { ChangeEvent, useState } from "react";
 import UserType from "@/types/user";
@@ -168,176 +164,180 @@ export default function CreateManuscript({
 
   return (
     <Box borderWidth="1px" borderRadius="lg" p={2}>
-      <Grid>
-      <GridItem>
-      <FormControl id="date">
-        <FormLabel>Date</FormLabel>
-        <Box>
-          {/* Chakra UI does not have a date picker component. It has an input of type date,
+      <Grid
+        templateColumns="repeat(2, 50%)"
+        alignItems="center"
+        gap={2}
+        width="98%"
+      >
+        <GridItem>
+          <FormControl id="date">
+            <FormLabel fontSize="sm">Date</FormLabel>
+            <Box>
+              {/* Chakra UI does not have a date picker component. It has an input of type date,
           but that was too weird to use, so we are using react-datepicker here, which simplifies things a lot */}
-          <DatePicker
-            dateFormat={"dd/MM/yyyy"}
-            selected={date}
-            onChange={(date: Date) => setDate(date)}
-          />
-        </Box>
-      </FormControl>
+              <DatePicker
+                dateFormat={"dd/MM/yyyy"}
+                selected={date}
+                onChange={(date: Date) => setDate(date)}
+              />
+            </Box>
+          </FormControl>
         </GridItem>
         <GridItem>
-      <FormControl isInvalid={manuscriptIDError} id="manuscript ID" isRequired>
-        <FormLabel fontSize="sm">Manuscript ID</FormLabel> 
-        <Input
-          placeholder="Manuscript ID"
-          value={manuscriptID}
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setManuscriptID(e.target.value)
-          }
-          size="sm"
-          required
-        /><FormErrorMessage>Cannot be blank</FormErrorMessage>
-      </FormControl>
-</GridItem>
-        <GridItem>
-      <FormControl isInvalid={wordCountError} id="wordCount" isRequired>
-        <FormLabel fontSize="sm">Wordcount</FormLabel>
-        <Input
-          type="number"
-          value={wordCount}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            if(e.target.value === '') {
-              setWordCount('')
-            } else {
-            setWordCount(Number(e.target.value))
-          }
-          }}
-          size="sm"
-        /><FormErrorMessage>Cannot be blank</FormErrorMessage>
-      </FormControl>
-            </GridItem>
-        <GridItem>
-      <FormControl isInvalid={turnAroundError} isRequired id="turnAround time">
-        <FormLabel  fontSize="sm">Turnaround Time</FormLabel>
-        <Input
-          placeholder="00:00:00"
-          value={turnAround}
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>{
+          <FormControl id="author biography">
+            <FormLabel fontSize="sm">Author Biography</FormLabel>
+            <Input
+              type="number"
+              value={authorBio}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                setAuthorBio(e.target.valueAsNumber);
+              }}
+              size="sm"
+            />
+          </FormControl>
+        </GridItem>
 
-            setTurnAround(e.target.value)}
-          }
-          size="sm"
-        /><FormErrorMessage>Must be in the format: 00:00:00</FormErrorMessage>
-      </FormControl></GridItem>
-      {/* Boxing together the 3 toggle options to make layout simpler
-          The checkbox component from Chakra UI also appears to use the HTMLInputElement type.
-      */}
-        <GridItem  alignSelf="end">
-      <Stack direction="row" id="checkboxes">
-        <Checkbox
-          checked={latex}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            setLatex(e.target.checked);
-          }}
-        >
-          <FormLabel margin={0} fontSize="sm">
+        <GridItem>
+          <FormControl id="manuscript ID" isRequired>
+            <FormLabel fontSize="sm">Manuscript ID</FormLabel>
+            <Input
+              placeholder="Manuscript ID"
+              value={manuscriptID}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setManuscriptID(e.target.value)
+              }
+              required
+              size="sm"
+            />
+          </FormControl>
+        </GridItem>
+        <GridItem>
+          <FormControl id="bonus">
+            <FormLabel fontSize="sm">Bonus</FormLabel>
+            <NumberInput
+              value={bonus + "%"}
+              onChange={(e: string) => {
+                const inputValue = e;
+                const numericValue = Number(inputValue.replace("%", ""));
+                if (!isNaN(numericValue)) {
+                  setBonus(numericValue);
+                }
+              }}
+              size="sm"
+            >
+              <NumberInputField />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
+
+            {/* <FormHelperText>
+              Bonuses are sometimes offered by the English Department
+            </FormHelperText> */}
+          </FormControl>
+        </GridItem>
+
+        <GridItem>
+          <FormControl id="wordCount" isRequired>
+            <FormLabel fontSize="sm">Wordcount</FormLabel>
+            <Input
+              type="number"
+              placeholder="4156"
+              value={!wordCount ? "" : wordCount}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                setWordCount(e.target.valueAsNumber);
+              }}
+              size="sm"
+            />
+          </FormControl>
+        </GridItem>
+        <GridItem alignSelf="end">
+          <Stack direction="row" id="checkboxes">
+            <Checkbox
+              checked={latex}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                setLatex(e.target.checked);
+              }}
+            >
+              <FormLabel margin={0} fontSize="sm">
                 LaTeX
               </FormLabel>
-        </Checkbox>
-        <Checkbox
-          checked={double}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            setDouble(e.target.checked);
-          }}
-        >
-          <FormLabel margin={0} fontSize="sm">
+            </Checkbox>
+            <Checkbox
+              checked={double}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                setDouble(e.target.checked);
+              }}
+            >
+              <FormLabel margin={0} fontSize="sm">
                 Double
               </FormLabel>
-        </Checkbox>
-        <Checkbox
-          checked={triple}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            setTriple(e.target.checked);
-          }}
-        >
-          <FormLabel margin={0} fontSize="sm">
+            </Checkbox>
+            <Checkbox
+              checked={triple}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                setTriple(e.target.checked);
+              }}
+            >
+              <FormLabel margin={0} fontSize="sm">
                 Triple
               </FormLabel>
-        </Checkbox>
-      </Stack>
-</GridItem>            
+            </Checkbox>
+          </Stack>
+        </GridItem>
         <GridItem>
-      <FormControl id="bonus">
-        <FormLabel fontSize="sm">Bonus</FormLabel>
-        <NumberInput
-          value={bonus + "%"}
-          onChange={(e: string) => {
-            const inputValue = e;
-            const numericValue = Number(inputValue.replace("%", ""));
-            if (!isNaN(numericValue)) {
-              setBonus(numericValue);
-            }
-            size="sm"
-          }}
-        >
-          <NumberInputField />
-          <NumberInputStepper>
-            <NumberIncrementStepper />
-            <NumberDecrementStepper />
-          </NumberInputStepper>
-        </NumberInput>
+          <FormControl isRequired id="turnAround time">
+            <FormLabel fontSize="sm">Turnaround Time</FormLabel>
+            <Input
+              placeholder="Turnaround"
+              value={turnAround}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setTurnAround(e.target.value)
+              }
+              size="sm"
+            />
+          </FormControl>
+        </GridItem>
+        {/* Boxing together the 3 toggle options to make layout simpler
+          The checkbox component from Chakra UI also appears to use the HTMLInputElement type.
+      */}
 
-        <FormHelperText>
-          Bonuses are sometimes offered by the English Department
-        </FormHelperText>
-      </FormControl>
-</GridItem>
-        <GridItem>
-      <FormControl id="author biography">
-        <FormLabel fontSize="sm">Author Biography</FormLabel>
-        <Input
-          type="number"
-          value={authorBio}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            setAuthorBio(e.target.valueAsNumber);
-          }}
-          size="sm"
-        />
-      </FormControl>
-            </GridItem>
         <GridItem w="100%" alignSelf="end">
-      {manuscriptToUpdate ? (
-        <Tooltip
-          hasArrow
-          bg="red.600"
-          label="No user or pay rate found. If logged in, please ensure your profile is up-to-date"
-          isDisabled={name && payRate ? true : false}
-        >
-          <Button
-            isDisabled={name && payRate ? false : true}
-            onClick={(e) => handleUpdate(e)}
-            className="w-full"
-          >
-            Update
-          </Button>
-        </Tooltip>
-      ) : (
-        <Tooltip
-          hasArrow
-          bg="red.600"
-          label="No user or pay rate found. If logged in, please ensure your profile is up-to-date"
-          isDisabled={name && payRate ? true : false}
-        >
-          <Button
-            isDisabled={name && payRate ? false : true}
-            onClick={(e) => handleSubmit(e)}
-            className="w-full"
-          >
-            Submit
-          </Button>
-        </Tooltip>
-      )}
-            </GridItem>
+          {manuscriptToUpdate ? (
+            <Tooltip
+              hasArrow
+              bg="red.600"
+              label="No user or pay rate found. If logged in, please ensure your profile is up-to-date"
+              isDisabled={name && payRate ? true : false}
+            >
+              <Button
+                isDisabled={name && payRate ? false : true}
+                onClick={(e) => handleUpdate(e)}
+                className="w-full"
+              >
+                Update
+              </Button>
+            </Tooltip>
+          ) : (
+            <Tooltip
+              hasArrow
+              bg="red.600"
+              label="No user or pay rate found. If logged in, please ensure your profile is up-to-date"
+              isDisabled={name && payRate ? true : false}
+            >
+              <Button
+                isDisabled={name && payRate ? false : true}
+                onClick={(e) => handleSubmit(e)}
+                className="w-full"
+              >
+                Submit
+              </Button>
+            </Tooltip>
+          )}
+        </GridItem>
       </Grid>
-
     </Box>
   );
 }
