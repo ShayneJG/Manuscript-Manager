@@ -19,6 +19,7 @@ import {
   Tooltip,
   Grid,
   GridItem,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import { ChangeEvent, useState } from "react";
 import UserType from "@/types/user";
@@ -54,6 +55,7 @@ const [wordCountError, setwordCountError] = useState<boolean>(false);
 const [turnAroundError, setTurnAroundError] = useState<boolean>(false);
 
   function formValidation() {
+    //reset any previous errors
     setManuscriptIDError(false);
     setTurnAroundError(false);
     setwordCountError(false);
@@ -229,7 +231,7 @@ const [turnAroundError, setTurnAroundError] = useState<boolean>(false);
         </GridItem>
 
         <GridItem>
-          <FormControl id="manuscript ID" isRequired>
+          <FormControl isInvalid={manuscriptIDError} id="manuscript ID" isRequired>
             <FormLabel fontSize="sm">Manuscript ID</FormLabel>
             <Input
               placeholder="Manuscript ID"
@@ -239,7 +241,7 @@ const [turnAroundError, setTurnAroundError] = useState<boolean>(false);
               }
               required
               size="sm"
-            />
+            /><FormErrorMessage>Cannot be blank</FormErrorMessage>
           </FormControl>
         </GridItem>
         <GridItem>
@@ -270,7 +272,7 @@ const [turnAroundError, setTurnAroundError] = useState<boolean>(false);
         </GridItem>
 
         <GridItem>
-          <FormControl id="wordCount" isRequired>
+          <FormControl isInvalid={wordCountError} id="wordCount" isRequired>
             <FormLabel fontSize="sm">Wordcount</FormLabel>
             <Input
               type="number"
@@ -280,7 +282,7 @@ const [turnAroundError, setTurnAroundError] = useState<boolean>(false);
                 setWordCount(e.target.valueAsNumber);
               }}
               size="sm"
-            />
+            /> <FormErrorMessage>Cannot be blank</FormErrorMessage>
           </FormControl>
         </GridItem>
         <GridItem alignSelf="end">
@@ -318,7 +320,7 @@ const [turnAroundError, setTurnAroundError] = useState<boolean>(false);
           </Stack>
         </GridItem>
         <GridItem>
-          <FormControl isRequired id="turnAround time">
+          <FormControl isInvalid={turnAroundError} isRequired id="turnAround time">
             <FormLabel fontSize="sm">Turnaround Time</FormLabel>
             <Input
               placeholder="Turnaround"
@@ -327,7 +329,7 @@ const [turnAroundError, setTurnAroundError] = useState<boolean>(false);
                 setTurnAround(e.target.value)
               }
               size="sm"
-            />
+            /> <FormErrorMessage>Must be in the format: 00:00:00</FormErrorMessage>
           </FormControl>
         </GridItem>
         {/* Boxing together the 3 toggle options to make layout simpler
