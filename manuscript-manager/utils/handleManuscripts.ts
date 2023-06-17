@@ -11,7 +11,7 @@ export async function handleManuscripts(
   get: () => void,
   date: Date,
   manuscriptID: string,
-  wordCount: number | undefined,
+  wordCount: number | "",
   latex: boolean,
   double: boolean,
   triple: boolean,
