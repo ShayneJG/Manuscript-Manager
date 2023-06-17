@@ -128,7 +128,7 @@ const [turnAroundError, setTurnAroundError] = useState<boolean>(false);
       user: name,
       payRate: payRate,
     };
-
+    if(formValidation()){
     handleManuscripts(
       "POST",
       resetManuscriptState,
@@ -144,7 +144,7 @@ const [turnAroundError, setTurnAroundError] = useState<boolean>(false);
       authorBio,
       userInfo,
       undefined
-    );
+    )};
   }
 
   // Handles updating of a manuscript
@@ -155,7 +155,7 @@ const [turnAroundError, setTurnAroundError] = useState<boolean>(false);
       user: name,
       payRate: payRate,
     };
-
+    if(formValidation()){
     handleManuscripts(
       "PATCH",
       resetManuscriptState,
@@ -171,7 +171,7 @@ const [turnAroundError, setTurnAroundError] = useState<boolean>(false);
       authorBio,
       userInfo,
       manuscriptToUpdate
-    );
+    )};
   }
 
   // If there is a manuscript being updated, sets state values accordingly so the manuscript details are displayed in the form ready to edit
