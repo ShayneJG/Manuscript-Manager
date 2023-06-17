@@ -12,6 +12,7 @@ import {
 import { ManuscriptType } from "@/types/manuscripts";
 import DeleteManuscriptButton from "../manuscript/deleteManuscriptButton";
 import UpdateManuscriptButton from "../manuscript/updateManuscriptButton";
+import styles from "/custom styles/tableStyles.module.css";
 
 //This component is used to place manuscript data into a table.
 
@@ -34,20 +35,20 @@ export default function ManuscriptTable({
   let tick: string = "✓";
   return (
     <TableContainer>
-      <Table variant={"striped"}>
+      <Table variant={"striped"} size="md">
         {caption ? <TableCaption>{caption}</TableCaption> : undefined}
         <Thead>
           <Tr>
-            <Th>Date</Th>
-            <Th>User</Th>
+            {/* <Th>Date</Th>
+            <Th>User</Th> */}
             <Th>Manuscript</Th>
             <Th>Wordcount</Th>
-            <Th>LaTeX</Th>
+            <Th width="500px">LaTeX</Th>
             <Th>Double</Th>
             <Th>Triple</Th>
             <Th>Bonus</Th>
-            <Th>TurnAround</Th>
-            <Th>Author Biography</Th>
+            <Th>Turnaround</Th>
+            <Th>Author Bio</Th>
             <Th>Actions</Th>
           </Tr>
         </Thead>
@@ -59,8 +60,8 @@ export default function ManuscriptTable({
 
             return (
               <Tr key={index}>
-                <Td>{date.toDateString()}</Td>
-                <Td>{manuscript.user}</Td>
+                {/* <Td>{date.toDateString()}</Td>
+                <Td>{manuscript.user}</Td> */}
                 <Td>{manuscript.manuscriptID}</Td>
                 <Td>{manuscript.wordCount}</Td>
                 <Td>{manuscript.latex ? tick : undefined}</Td>
