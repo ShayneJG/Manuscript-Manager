@@ -3,7 +3,7 @@ export interface ManuscriptType {
   payrate?: number;
   date: string;
   manuscriptID: string;
-  wordCount: number | "";
+  wordCount: number | undefined;
   latex: boolean;
   double: boolean;
   triple: boolean;
