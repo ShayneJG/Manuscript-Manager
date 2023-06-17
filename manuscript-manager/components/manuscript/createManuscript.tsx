@@ -19,6 +19,7 @@ import {
   Tooltip,
   Grid,
   GridItem,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import { ChangeEvent, useState } from "react";
 import UserType from "@/types/user";
@@ -48,6 +49,37 @@ export default function CreateManuscript({
   const [authorBio, setAuthorBio] = useState<number>(0);
   const name = user.name || undefined;
   const payRate = user.payRate || undefined;
+//Error states
+const [manuscriptIDError, setManuscriptIDError] = useState<boolean>(false);
+const [wordCountError, setwordCountError] = useState<boolean>(false);
+const [turnAroundError, setTurnAroundError] = useState<boolean>(false);
+
+  function formValidation() {
+    //reset any previous errors
+    setManuscriptIDError(false);
+    setTurnAroundError(false);
+    setwordCountError(false);
+    let validates: boolean = true;
+    const turnAroundRegex = /^(?:[0-9]|[0-9][0-9]):(?:[0-5][0-9]):(?:[0-5][0-9])$/;
+
+    if(!manuscriptID) {
+      setManuscriptIDError(true);
+      validates = false;
+    }
+
+    if(!turnAroundRegex.test(turnAround)) {
+      setTurnAroundError(true);
+      validates = false;
+    }
+    if(!wordCount) {
+      setwordCountError(true);
+      validates = false;
+    } 
+    
+    console.log(validates)
+    return validates;
+  }
+
 
   // Resets state to default values.
   function resetManuscriptState() {
@@ -98,7 +130,7 @@ export default function CreateManuscript({
       user: name,
       payRate: payRate,
     };
-
+    if(formValidation()){
     handleManuscripts(
       "POST",
       resetManuscriptState,
@@ -114,7 +146,7 @@ export default function CreateManuscript({
       authorBio,
       userInfo,
       undefined
-    );
+    )};
   }
 
   // Handles updating of a manuscript
@@ -125,7 +157,7 @@ export default function CreateManuscript({
       user: name,
       payRate: payRate,
     };
-
+    if(formValidation()){
     handleManuscripts(
       "PATCH",
       resetManuscriptState,
@@ -141,7 +173,7 @@ export default function CreateManuscript({
       authorBio,
       userInfo,
       manuscriptToUpdate
-    );
+    )};
   }
 
   // If there is a manuscript being updated, sets state values accordingly so the manuscript details are displayed in the form ready to edit
@@ -199,7 +231,7 @@ export default function CreateManuscript({
         </GridItem>
 
         <GridItem>
-          <FormControl id="manuscript ID" isRequired>
+          <FormControl isInvalid={manuscriptIDError} id="manuscript ID" isRequired>
             <FormLabel fontSize="sm">Manuscript ID</FormLabel>
             <Input
               placeholder="Manuscript ID"
@@ -209,7 +241,7 @@ export default function CreateManuscript({
               }
               required
               size="sm"
-            />
+            /><FormErrorMessage>Cannot be blank</FormErrorMessage>
           </FormControl>
         </GridItem>
         <GridItem>
@@ -240,7 +272,7 @@ export default function CreateManuscript({
         </GridItem>
 
         <GridItem>
-          <FormControl id="wordCount" isRequired>
+          <FormControl isInvalid={wordCountError} id="wordCount" isRequired>
             <FormLabel fontSize="sm">Wordcount</FormLabel>
             <Input
               type="number"
@@ -250,7 +282,7 @@ export default function CreateManuscript({
                 setWordCount(e.target.valueAsNumber);
               }}
               size="sm"
-            />
+            /> <FormErrorMessage>Cannot be blank</FormErrorMessage>
           </FormControl>
         </GridItem>
         <GridItem alignSelf="end">
@@ -288,7 +320,7 @@ export default function CreateManuscript({
           </Stack>
         </GridItem>
         <GridItem>
-          <FormControl isRequired id="turnAround time">
+          <FormControl isInvalid={turnAroundError} isRequired id="turnAround time">
             <FormLabel fontSize="sm">Turnaround Time</FormLabel>
             <Input
               placeholder="Turnaround"
@@ -297,7 +329,7 @@ export default function CreateManuscript({
                 setTurnAround(e.target.value)
               }
               size="sm"
-            />
+            /> <FormErrorMessage>Must be in the format: 00:00:00</FormErrorMessage>
           </FormControl>
         </GridItem>
         {/* Boxing together the 3 toggle options to make layout simpler
