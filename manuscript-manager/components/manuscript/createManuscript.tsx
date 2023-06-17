@@ -17,7 +17,12 @@ import {
   Stack,
   Button,
   Tooltip,
+
   FormErrorMessage,
+
+  Grid,
+  GridItem,
+
 } from "@chakra-ui/react";
 import { ChangeEvent, useState } from "react";
 import UserType from "@/types/user";
@@ -36,10 +41,9 @@ export default function CreateManuscript({
   setManuscriptsInState,
   user,
 }: CreateManuscriptProps) {
-  //Manuscript states
   const [manuscriptID, setManuscriptID] = useState<string>("");
   const [date, setDate] = useState<Date>(new Date());
-  const [wordCount, setWordCount] = useState<number | ''>('');
+  const [wordCount, setWordCount] = useState<number | undefined>();
   const [latex, setLatex] = useState<boolean>(false);
   const [double, setDouble] = useState<boolean>(false);
   const [triple, setTriple] = useState<boolean>(false);
@@ -49,16 +53,11 @@ export default function CreateManuscript({
   const name = user.name || undefined;
   const payRate = user.payRate || undefined;
 
-  //Error states
-  const [manuscriptIDError, setManuscriptIDError] = useState<boolean>(false);
-  const [wordCountError, setwordCountError] = useState<boolean>(false);
-  const [turnAroundError, setTurnAroundError] = useState<boolean>(false);
-
   // Resets state to default values.
   function resetManuscriptState() {
     setManuscriptID("");
     setDate(new Date());
-    setWordCount('');
+    setWordCount(undefined);
     setLatex(false);
     setDouble(false);
     setTriple(false);
@@ -67,30 +66,6 @@ export default function CreateManuscript({
     setAuthorBio(0);
   }
 
-  function formValidation() {
-    setManuscriptIDError(false);
-    setTurnAroundError(false);
-    setwordCountError(false);
-    let validates: boolean = true;
-    const turnAroundRegex = /^(?:[0-9]|[0-9][0-9]):(?:[0-5][0-9]):(?:[0-5][0-9])$/;
-
-    if(!manuscriptID) {
-      setManuscriptIDError(true);
-      validates = false;
-    }
-
-    if(!turnAroundRegex.test(turnAround)) {
-      setTurnAroundError(true);
-      validates = false;
-    }
-    if(!wordCount) {
-      setwordCountError(true);
-      validates = false;
-    } 
-    
-    console.log(validates)
-    return validates;
-  }
   // Fetches today's manuscripts from db
   async function getTodaysManuscripts() {
     // update manuscripts in state
@@ -128,7 +103,6 @@ export default function CreateManuscript({
       payRate: payRate,
     };
 
-    if(formValidation()) {
     handleManuscripts(
       "POST",
       resetManuscriptState,
@@ -144,7 +118,7 @@ export default function CreateManuscript({
       authorBio,
       userInfo,
       undefined
-    );}
+    );
   }
 
   // Handles updating of a manuscript
@@ -156,13 +130,6 @@ export default function CreateManuscript({
       payRate: payRate,
     };
 
-    
-
-
-
-    
-
-    if(formValidation()) {
     handleManuscripts(
       "PATCH",
       resetManuscriptState,
@@ -178,7 +145,7 @@ export default function CreateManuscript({
       authorBio,
       userInfo,
       manuscriptToUpdate
-    );}
+    );
   }
 
   // If there is a manuscript being updated, sets state values accordingly so the manuscript details are displayed in the form ready to edit
@@ -199,17 +166,10 @@ export default function CreateManuscript({
     }
   }, [manuscriptToUpdate]);
 
-
-
-
- 
-
-  
-
-
-
   return (
     <Box borderWidth="1px" borderRadius="lg" p={2}>
+      <Grid>
+      <GridItem>
       <FormControl id="date">
         <FormLabel>Date</FormLabel>
         <Box>
@@ -222,20 +182,24 @@ export default function CreateManuscript({
           />
         </Box>
       </FormControl>
+        </GridItem>
+        <GridItem>
       <FormControl isInvalid={manuscriptIDError} id="manuscript ID" isRequired>
-        <FormLabel>Manuscript ID</FormLabel> 
+        <FormLabel fontSize="sm">Manuscript ID</FormLabel> 
         <Input
           placeholder="Manuscript ID"
           value={manuscriptID}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             setManuscriptID(e.target.value)
           }
+          size="sm"
           required
         /><FormErrorMessage>Cannot be blank</FormErrorMessage>
       </FormControl>
-
+</GridItem>
+        <GridItem>
       <FormControl isInvalid={wordCountError} id="wordCount" isRequired>
-        <FormLabel>Wordcount</FormLabel>
+        <FormLabel fontSize="sm">Wordcount</FormLabel>
         <Input
           type="number"
           value={wordCount}
@@ -246,10 +210,13 @@ export default function CreateManuscript({
             setWordCount(Number(e.target.value))
           }
           }}
+          size="sm"
         /><FormErrorMessage>Cannot be blank</FormErrorMessage>
       </FormControl>
+            </GridItem>
+        <GridItem>
       <FormControl isInvalid={turnAroundError} isRequired id="turnAround time">
-        <FormLabel>Turnaround Time</FormLabel>
+        <FormLabel  fontSize="sm">Turnaround Time</FormLabel>
         <Input
           placeholder="00:00:00"
           value={turnAround}
@@ -257,19 +224,23 @@ export default function CreateManuscript({
 
             setTurnAround(e.target.value)}
           }
+          size="sm"
         /><FormErrorMessage>Must be in the format: 00:00:00</FormErrorMessage>
-      </FormControl>
+      </FormControl></GridItem>
       {/* Boxing together the 3 toggle options to make layout simpler
           The checkbox component from Chakra UI also appears to use the HTMLInputElement type.
       */}
-      <Stack direction="row" spacing={`2rem`} id="checkboxes">
+        <GridItem  alignSelf="end">
+      <Stack direction="row" id="checkboxes">
         <Checkbox
           checked={latex}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             setLatex(e.target.checked);
           }}
         >
-          LaTeX
+          <FormLabel margin={0} fontSize="sm">
+                LaTeX
+              </FormLabel>
         </Checkbox>
         <Checkbox
           checked={double}
@@ -277,7 +248,9 @@ export default function CreateManuscript({
             setDouble(e.target.checked);
           }}
         >
-          Double
+          <FormLabel margin={0} fontSize="sm">
+                Double
+              </FormLabel>
         </Checkbox>
         <Checkbox
           checked={triple}
@@ -285,11 +258,15 @@ export default function CreateManuscript({
             setTriple(e.target.checked);
           }}
         >
-          Triple
+          <FormLabel margin={0} fontSize="sm">
+                Triple
+              </FormLabel>
         </Checkbox>
       </Stack>
+</GridItem>            
+        <GridItem>
       <FormControl id="bonus">
-        <FormLabel>Bonus</FormLabel>
+        <FormLabel fontSize="sm">Bonus</FormLabel>
         <NumberInput
           value={bonus + "%"}
           onChange={(e: string) => {
@@ -298,6 +275,7 @@ export default function CreateManuscript({
             if (!isNaN(numericValue)) {
               setBonus(numericValue);
             }
+            size="sm"
           }}
         >
           <NumberInputField />
@@ -311,17 +289,21 @@ export default function CreateManuscript({
           Bonuses are sometimes offered by the English Department
         </FormHelperText>
       </FormControl>
-
+</GridItem>
+        <GridItem>
       <FormControl id="author biography">
-        <FormLabel>Author Biography</FormLabel>
+        <FormLabel fontSize="sm">Author Biography</FormLabel>
         <Input
           type="number"
           value={authorBio}
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             setAuthorBio(e.target.valueAsNumber);
           }}
+          size="sm"
         />
       </FormControl>
+            </GridItem>
+        <GridItem w="100%" alignSelf="end">
       {manuscriptToUpdate ? (
         <Tooltip
           hasArrow
@@ -332,6 +314,7 @@ export default function CreateManuscript({
           <Button
             isDisabled={name && payRate ? false : true}
             onClick={(e) => handleUpdate(e)}
+            className="w-full"
           >
             Update
           </Button>
@@ -346,11 +329,15 @@ export default function CreateManuscript({
           <Button
             isDisabled={name && payRate ? false : true}
             onClick={(e) => handleSubmit(e)}
+            className="w-full"
           >
             Submit
           </Button>
         </Tooltip>
       )}
+            </GridItem>
+      </Grid>
+
     </Box>
   );
 }
