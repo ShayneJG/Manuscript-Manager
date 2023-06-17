@@ -48,6 +48,36 @@ export default function CreateManuscript({
   const [authorBio, setAuthorBio] = useState<number>(0);
   const name = user.name || undefined;
   const payRate = user.payRate || undefined;
+//Error states
+const [manuscriptIDError, setManuscriptIDError] = useState<boolean>(false);
+const [wordCountError, setwordCountError] = useState<boolean>(false);
+const [turnAroundError, setTurnAroundError] = useState<boolean>(false);
+
+  function formValidation() {
+    setManuscriptIDError(false);
+    setTurnAroundError(false);
+    setwordCountError(false);
+    let validates: boolean = true;
+    const turnAroundRegex = /^(?:[0-9]|[0-9][0-9]):(?:[0-5][0-9]):(?:[0-5][0-9])$/;
+
+    if(!manuscriptID) {
+      setManuscriptIDError(true);
+      validates = false;
+    }
+
+    if(!turnAroundRegex.test(turnAround)) {
+      setTurnAroundError(true);
+      validates = false;
+    }
+    if(!wordCount) {
+      setwordCountError(true);
+      validates = false;
+    } 
+    
+    console.log(validates)
+    return validates;
+  }
+
 
   // Resets state to default values.
   function resetManuscriptState() {
