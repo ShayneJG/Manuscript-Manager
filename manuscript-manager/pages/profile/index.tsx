@@ -17,6 +17,7 @@ import {
     FormLabel,
     Input,FormHelperText, useToast
   } from "@chakra-ui/react";
+import { GetServerSideProps } from "next";
   import { useSession } from "next-auth/react"
 import { useState, useEffect } from "react";
 
@@ -178,3 +179,8 @@ import { useState, useEffect } from "react";
     </Box>
   </Center>)
   }}
+
+
+  export const getServerSideProps: GetServerSideProps = async (context) => {
+    return {props: {}}
+  }
