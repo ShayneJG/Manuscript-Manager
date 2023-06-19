@@ -20,9 +20,9 @@ import { useSession, signIn, signOut } from "next-auth/react";
 export default function ProfileAvatarDropdown() {
   const { data: session } = useSession();
 
-  let name = session?.user?.name || "no name";
-  let image = session?.user?.image || "no image";
-  let email = session?.user?.email || "no email";
+  let name: string = session?.user?.name || "no name";
+  let image: string = session?.user?.image || "";
+  let email: string = session?.user?.email || "no email";
 
   if (session) {
     return (
@@ -71,7 +71,7 @@ export default function ProfileAvatarDropdown() {
         <Menu>
           <MenuButton>
             {" "}
-            <Avatar name={"Guest"} src={"Guest Image"} />
+            <Avatar name={"Guest"} />
           </MenuButton>
           <MenuList>
             <MenuItem onClick={() => signIn()}>Sign In</MenuItem>
