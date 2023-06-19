@@ -89,25 +89,25 @@ import { useState, useEffect } from "react";
     const [payRate, setPayRate] = useState<number>(0)
     const toast = useToast()
 
-    useEffect(() => {
-      if(status === "authenticated") {
-        fetchUserData(session?.user?.email!)
-      .then((payRate) => {
-      console.log('Pay Rate:', payRate);
-      if(typeof payRate === 'number') {setPayRate(payRate)} else {
-        try {createUserData(session?.user?.name!, session?.user?.email!).then((payRate) => {console.log('User successfully created')
-      setPayRate(payRate)})}
-      catch(error) {
-        console.error(error);
-      }
-      }
-  })
-  .catch((error) => {
+  //   useEffect(() => {
+  //     if(status === "authenticated") {
+  //       fetchUserData(session?.user?.email!)
+  //     .then((payRate) => {
+  //     console.log('Pay Rate:', payRate);
+  //     if(typeof payRate === 'number') {setPayRate(payRate)} else {
+  //       try {createUserData(session?.user?.name!, session?.user?.email!).then((payRate) => {console.log('User successfully created')
+  //     setPayRate(payRate)})}
+  //     catch(error) {
+  //       console.error(error);
+  //     }
+  //     }
+  // })
+  // .catch((error) => {
     
-    console.error('Error:', error);
-  })
-      }
-    }, [status])
+  //   console.error('Error:', error);
+  // })
+  //     }
+  //   }, [status])
 
     
     if(status === "unauthenticated") {
