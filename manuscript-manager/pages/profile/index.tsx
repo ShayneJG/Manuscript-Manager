@@ -17,53 +17,26 @@ import {
     FormLabel,
     Input,FormHelperText, useToast
   } from "@chakra-ui/react";
+import { GetServerSideProps } from "next";
+import { getServerSession } from "next-auth";
   import { useSession } from "next-auth/react"
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { authOptions } from "../api/auth/[...nextauth]";
+import clientPromise from "@/lib/mongodb";
+import UserType from "@/types/user";
 
 
 
+interface ProfileProps {
+  user: UserType
+}
 
 
-
-   export default function Profile() {
+   export default function Profile({user}: ProfileProps) {
     
-    const fetchUserData = async (email:string) => {
-      try {
-        const response = await fetch(`/api/user/getUser?email=${encodeURIComponent(email)}`);
-        const data = await response.json();
     
-        if (response.ok) {
-          const user = data.user;
-          const payRate = user ? user.payRate : null;
-          return payRate;
-        } else {
-          console.error('Error:', data.error);
-          return data.error;
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        return null;
-      }
-    };
     
-    const createUserData = async (name: string, email: string) => {
-      try {
-        const user = {
-          name: name,
-          email: email
-        }
-        const response = await fetch('/api/user/createUser', {method: 'POST', 
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(user)
-      });
     
-      const responseData = await response.json();
-      console.log(responseData);
-      return responseData.payRate
-      } catch(error) {
-        console.error(error)
-      }
-    }
     
     const updatePayRate = async (payRate: number, email: string) => {
       const user = {
@@ -86,28 +59,28 @@ import { useState, useEffect } from "react";
     const {status, data: session} = useSession();
 
     //state
-    const [payRate, setPayRate] = useState<number>(0)
+    const [payRate, setPayRate] = useState<number>(user.payRate)
     const toast = useToast()
 
-    useEffect(() => {
-      if(status === "authenticated") {
-        fetchUserData(session?.user?.email!)
-      .then((payRate) => {
-      console.log('Pay Rate:', payRate);
-      if(typeof payRate === 'number') {setPayRate(payRate)} else {
-        try {createUserData(session?.user?.name!, session?.user?.email!).then((payRate) => {console.log('User successfully created')
-      setPayRate(payRate)})}
-      catch(error) {
-        console.error(error);
-      }
-      }
-  })
-  .catch((error) => {
+  //   useEffect(() => {
+  //     if(status === "authenticated") {
+  //       fetchUserData(session?.user?.email!)
+  //     .then((payRate) => {
+  //     console.log('Pay Rate:', payRate);
+  //     if(typeof payRate === 'number') {setPayRate(payRate)} else {
+  //       try {createUserData(session?.user?.name!, session?.user?.email!).then((payRate) => {console.log('User successfully created')
+  //     setPayRate(payRate)})}
+  //     catch(error) {
+  //       console.error(error);
+  //     }
+  //     }
+  // })
+  // .catch((error) => {
     
-    console.error('Error:', error);
-  })
-      }
-    }, [status])
+  //   console.error('Error:', error);
+  // })
+  //     }
+  //   }, [status])
 
     
     if(status === "unauthenticated") {
@@ -178,3 +151,37 @@ import { useState, useEffect } from "react";
     </Box>
   </Center>)
   }}
+
+
+  export const getServerSideProps: GetServerSideProps = async (context) => {
+
+    const session = await getServerSession(context.req, context.res, authOptions);
+    const client = await clientPromise;
+  const db = client.db("test");
+
+    let user = {};
+
+  if (session) {
+    // Find the document with the same email
+    const email = session?.user?.email;
+    const userData = await db.collection("users").findOne({ email });
+
+    if(!userData) {
+      user = {name: session.user?.name, email: session.user?.email, payRate: process.env.PAYRATE_DEFAULT}
+      await db.collection("users").insertOne(user);
+      
+    } else {
+    
+    user = {
+      name: userData?.name,
+      email: userData?.email,
+      payRate: userData?.payRate,
+    }};
+    
+  }
+
+
+    return {props: {
+      user: user
+    }}
+  }
