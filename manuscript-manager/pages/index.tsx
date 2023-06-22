@@ -73,7 +73,7 @@ export default function Home(props: HomeProps) {
               <ManuscriptTable
                 data={manuscriptsInState}
                 setManuscriptToUpdate={setManuscriptToUpdate}
-                manuscriptsInState={manuscriptsInState}
+                
                 setManuscriptsInState={setManuscriptsInState}
                 caption="(Today's manuscripts)"
               />
