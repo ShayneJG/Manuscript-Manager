@@ -203,12 +203,13 @@ const [turnAroundError, setTurnAroundError] = useState<boolean>(false);
         width="98%"
       >
         <GridItem>
-          <FormControl id="date">
-            <FormLabel fontSize="sm">Date</FormLabel>
+          <FormControl isRequired id="date">
+            <FormLabel htmlFor="date-picker" fontSize="sm">Date</FormLabel>
             <Box>
               {/* Chakra UI does not have a date picker component. It has an input of type date,
           but that was too weird to use, so we are using react-datepicker here, which simplifies things a lot */}
               <DatePicker
+                id="date-picker"
                 dateFormat={"dd/MM/yyyy"}
                 selected={date}
                 onChange={(date: Date) => setDate(date)}
@@ -288,32 +289,35 @@ const [turnAroundError, setTurnAroundError] = useState<boolean>(false);
         <GridItem alignSelf="end">
           <Stack direction="row" id="checkboxes">
             <Checkbox
+              id='latex'
               checked={latex}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 setLatex(e.target.checked);
               }}
             >
-              <FormLabel margin={0} fontSize="sm">
+              <FormLabel htmlFor="latex" margin={0} fontSize="sm">
                 LaTeX
               </FormLabel>
             </Checkbox>
             <Checkbox
+              id='double'
               checked={double}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 setDouble(e.target.checked);
               }}
             >
-              <FormLabel margin={0} fontSize="sm">
+              <FormLabel htmlFor="double" margin={0} fontSize="sm">
                 Double
               </FormLabel>
             </Checkbox>
             <Checkbox
+              id='triple'
               checked={triple}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 setTriple(e.target.checked);
               }}
             >
-              <FormLabel margin={0} fontSize="sm">
+              <FormLabel htmlFor="triple" margin={0} fontSize="sm">
                 Triple
               </FormLabel>
             </Checkbox>
