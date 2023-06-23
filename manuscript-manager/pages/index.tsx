@@ -32,6 +32,8 @@ interface HomeProps {
 }
 
 export default function Home(props: HomeProps) {
+
+ 
   const {
     todaysManuscripts,
     thisMonthsManuscripts,
@@ -73,7 +75,6 @@ export default function Home(props: HomeProps) {
               <ManuscriptTable
                 data={manuscriptsInState}
                 setManuscriptToUpdate={setManuscriptToUpdate}
-                manuscriptsInState={manuscriptsInState}
                 setManuscriptsInState={setManuscriptsInState}
                 caption="(Today's manuscripts)"
               />
@@ -91,24 +92,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const client = await clientPromise;
   const db = client.db("test");
 
-  // gets all manuscripts after (and including) the first day of the previous pay period (21st)
-  const data = await db
-    .collection("manuscripts")
-    .find({ date: { $gte: lastMonthStartDate.toISOString() } })
-    .sort({ date: -1 })
-    .toArray();
-
-  // getServerSideProps can only be passed a plain JS object
-  // When we get data from MongoDB, it contains complex data types - Object ids, doubles, floats, etc.
-  // getServerSideProps can only deal with strings, numbers, arrays, objects, etc.
-  // So we have to add this workaround of stringifying the data we get back, and then reparsing it:
-  const manuscripts = JSON.parse(JSON.stringify(data));
+  
 
   // gets userdata from the session and passes a user object to the page. This is basically the same data as the user session, but it has the payrate added.
 
   const session = await getServerSession(context.req, context.res, authOptions);
 
-  let user = {};
+  let user: UserType = {
+    name: 'guest',
+    email: 'guest@email.com',
+    payRate: Number(process.env.PAYRATE_DEFAULT)
+  };
 
   if (session) {
     // Find the document with the same email
@@ -125,6 +119,22 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   console.log("server-side user is: ", user);
+
+  // gets all manuscripts after (and including) the first day of the previous pay period (21st)
+  const data = await db
+    .collection("manuscripts")
+    .find({ 
+      date: { $gte: lastMonthStartDate.toISOString() },
+      user: user.name 
+    })
+    .sort({ date: -1 })
+    .toArray();
+
+  // getServerSideProps can only be passed a plain JS object
+  // When we get data from MongoDB, it contains complex data types - Object ids, doubles, floats, etc.
+  // getServerSideProps can only deal with strings, numbers, arrays, objects, etc.
+  // So we have to add this workaround of stringifying the data we get back, and then reparsing it:
+  const manuscripts = JSON.parse(JSON.stringify(data));
 
   // filter data for today's manuscripts, this month's manuscripts, and last month's
   // today: db dates stored as follows: "2023-04-25T08:10:13.000Z", currentDate as follows: Mon Jun 12 2023 16:32:37 GMT+0800 (Australian Western Standard Time)

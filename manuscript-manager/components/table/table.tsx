@@ -20,7 +20,7 @@ interface ManuscriptTableProps {
   data: ManuscriptType[];
   caption?: string;
   setManuscriptToUpdate: (manuscript: ManuscriptType) => void;
-  manuscriptsInState?: ManuscriptType[];
+  
   setManuscriptsInState: (manuscript: ManuscriptType[]) => void;
 }
 
@@ -29,7 +29,7 @@ export default function ManuscriptTable({
   data,
   caption,
   setManuscriptToUpdate,
-  manuscriptsInState,
+  
   setManuscriptsInState,
 }: ManuscriptTableProps) {
   let tick: string = "✓";
@@ -77,7 +77,7 @@ export default function ManuscriptTable({
                   />
                   <DeleteManuscriptButton
                     manuscript={manuscript}
-                    manuscriptsInState={manuscriptsInState}
+                    manuscriptsInState={data}
                     setManuscriptsInState={setManuscriptsInState}
                   />
                 </Td>
