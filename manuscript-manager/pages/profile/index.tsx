@@ -133,7 +133,7 @@ export default function Profile({ user }: ProfileProps) {
             
             <form>
               <FormControl>
-                <FormLabel>Workdays a week</FormLabel>
+                <FormLabel>Weekly Workdays</FormLabel>
                 <Input
                   value={day}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => {
