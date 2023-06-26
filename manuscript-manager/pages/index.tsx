@@ -21,6 +21,7 @@ import {
 } from "@/utils/dates";
 import { monthlySummary } from "@/utils/monthlyTotals";
 import { useState } from "react";
+import Header from "@/components/page/header";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -51,10 +52,11 @@ export default function Home(props: HomeProps) {
 
   return (
     <main className={`min-h-screen py-16 px-24 ${inter.className}`}>
+      <Header/>
       <Grid templateColumns="repeat(10, 1fr)" gap="12">
         <GridItem colSpan={3} id="sidebar">
           <Flex direction="column" gap="12">
-            <Heading size="lg">Manuscript Manager</Heading>
+            
             <CreateManuscript
               user={user}
               manuscriptToUpdate={manuscriptToUpdate}
@@ -64,9 +66,7 @@ export default function Home(props: HomeProps) {
         </GridItem>
         <GridItem colSpan={7}>
           <Flex id="maincontent" direction="column" gap="12">
-            <div className="self-end">
-              <ProfileAvatarDropdown />
-            </div>
+            
             <Flex direction="column" gap="12">
               <AtAGlance
                 month={monthlySummary(thisMonthsManuscripts)}
