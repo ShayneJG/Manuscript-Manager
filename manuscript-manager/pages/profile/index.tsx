@@ -157,6 +157,7 @@ export default function Profile({ user }: ProfileProps) {
                 type="submit"
                 onSubmit={async (e) => {
                   e.preventDefault();
+                  //TODO: submit the data to the db
                 }}
               >
                 Update
