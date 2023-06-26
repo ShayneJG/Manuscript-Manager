@@ -20,7 +20,7 @@ import {
 import { GetServerSideProps } from "next";
 import { getServerSession } from "next-auth";
   import { useSession } from "next-auth/react"
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { authOptions } from "../api/auth/[...nextauth]";
 import clientPromise from "@/lib/mongodb";
 import UserType from "@/types/user";
@@ -144,11 +144,11 @@ interface ProfileProps {
       <Heading>Goals</Heading>
       <FormControl>
         <FormLabel>Weekly Earnings</FormLabel>
-        <Input value={weekGoal} onChange={(e) => {setWeekGoal(e.target.valueAsNumber)}} type="number"></Input>
+        <Input value={!weekGoal ? "" : weekGoal} onChange={(e: ChangeEvent<HTMLInputElement>) => {setWeekGoal(e.target.valueAsNumber)}} type="number"></Input>
       </FormControl>
       <FormControl>
         <FormLabel>Monthly Earnings</FormLabel>
-        <Input></Input>
+        <Input value={!monthGoal ? "" : monthGoal} onChange={(e: ChangeEvent<HTMLInputElement>) => {setMonthGoal(e.target.valueAsNumber)}} type="number"></Input>
       </FormControl>
       
     </Box>
