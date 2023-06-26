@@ -24,6 +24,7 @@ import { useState } from "react";
 import { authOptions } from "../api/auth/[...nextauth]";
 import clientPromise from "@/lib/mongodb";
 import UserType from "@/types/user";
+import Header from "@/components/page/header";
 
 
 
@@ -62,25 +63,7 @@ interface ProfileProps {
     const [payRate, setPayRate] = useState<number>(user.payRate)
     const toast = useToast()
 
-  //   useEffect(() => {
-  //     if(status === "authenticated") {
-  //       fetchUserData(session?.user?.email!)
-  //     .then((payRate) => {
-  //     console.log('Pay Rate:', payRate);
-  //     if(typeof payRate === 'number') {setPayRate(payRate)} else {
-  //       try {createUserData(session?.user?.name!, session?.user?.email!).then((payRate) => {console.log('User successfully created')
-  //     setPayRate(payRate)})}
-  //     catch(error) {
-  //       console.error(error);
-  //     }
-  //     }
-  // })
-  // .catch((error) => {
-    
-  //   console.error('Error:', error);
-  // })
-  //     }
-  //   }, [status])
+  
 
     
     if(status === "unauthenticated") {
@@ -94,7 +77,8 @@ interface ProfileProps {
     } else 
     {
       
-     return (<Center flexDirection="column">
+     return (<div className="min-h-screen py-16 px-24">
+      <Header />
     <h1>Profile</h1>
     <Box>
       <form>
@@ -149,7 +133,7 @@ interface ProfileProps {
           }} type="submit">Update</Button>
       </form>
     </Box>
-  </Center>)
+  </div>)
   }}
 
 
