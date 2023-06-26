@@ -61,6 +61,8 @@ interface ProfileProps {
 
     //state
     const [payRate, setPayRate] = useState<number>(user.payRate)
+    const [weekGoal, setWeekGoal] = useState<number>()
+    const [monthGoal, setMonthGoal] = useState<number>()
     const toast = useToast()
 
   
@@ -142,7 +144,7 @@ interface ProfileProps {
       <Heading>Goals</Heading>
       <FormControl>
         <FormLabel>Weekly Earnings</FormLabel>
-        <Input></Input>
+        <Input value={weekGoal} onChange={(e) => {setWeekGoal(e.target.valueAsNumber)}} type="number"></Input>
       </FormControl>
       <FormControl>
         <FormLabel>Monthly Earnings</FormLabel>
