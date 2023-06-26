@@ -66,9 +66,9 @@ export default function Profile({ user }: ProfileProps) {
     return (
       <div className="min-h-screen py-16 px-24">
         <Header />
-        <Grid>
+        <Grid templateColumns={"repeat(2, 1fr)"} gap={6}>
           {/* PROFILE */}
-          <Box id="profile">
+          <Box className="w-2/3" id="profile">
             <Heading>Profile</Heading>
             <Box>
               <form>
@@ -127,11 +127,9 @@ export default function Profile({ user }: ProfileProps) {
 
           {/* GOALS */}
 
-          <Box>
+          <Box className="w-2/3">
             <Heading>Goals</Heading>
-            <Text id="goals-description">
-              Set your weekly/monthly earnings targets
-            </Text>
+            
             <form>
               <FormControl>
                 <FormLabel>Weekly Earnings</FormLabel>
