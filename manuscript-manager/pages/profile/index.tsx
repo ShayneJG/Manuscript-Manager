@@ -140,8 +140,11 @@ interface ProfileProps {
     </Box>
 
     {/* GOALS */}
+
     <Box>
+
       <Heading>Goals</Heading>
+      <form>
       <FormControl>
         <FormLabel>Weekly Earnings</FormLabel>
         <Input value={!weekGoal ? "" : weekGoal} onChange={(e: ChangeEvent<HTMLInputElement>) => {setWeekGoal(e.target.valueAsNumber)}} type="number"></Input>
@@ -150,7 +153,14 @@ interface ProfileProps {
         <FormLabel>Monthly Earnings</FormLabel>
         <Input value={!monthGoal ? "" : monthGoal} onChange={(e: ChangeEvent<HTMLInputElement>) => {setMonthGoal(e.target.valueAsNumber)}} type="number"></Input>
       </FormControl>
+      <Button type="submit"
+      onSubmit={async (e) => {
+        e.preventDefault();
+        
+      }}
       
+      >Update</Button>
+      </form>
     </Box>
   </div>)
   }}
