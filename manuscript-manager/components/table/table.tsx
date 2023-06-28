@@ -39,9 +39,7 @@ export default function ManuscriptTable({
         {caption ? <TableCaption>{caption}</TableCaption> : undefined}
         <Thead>
           <Tr>
-            {/* <Th>Date</Th>
-            <Th>User</Th> */}
-            <Th>Manuscript</Th>
+            <Th maxWidth="100px">Manuscript</Th>
             <Th maxWidth="60px">Wordcount</Th>
             <Th maxWidth="60px">LaTeX</Th>
             <Th maxWidth="60px">Double</Th>
