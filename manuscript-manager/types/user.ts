@@ -6,7 +6,7 @@ export default  interface UserType {
     earnings?: UserEarnings;
 }
 
-interface UserEarnings {
+export interface  UserEarnings {
     workDays: number;
     monthly: number;
 }
