@@ -31,27 +31,28 @@ interface ProfileProps {
 
 export default function Profile({ user }: ProfileProps) {
   const updateUser = async () => {
-    if(session?.user) {
-    const user: UserType = {
-      name: session.user.name!,
-      email: session.user.email!,
-      payRate: payRate,
-      earnings: {
-        workDays: workDays,
-        monthly: monthGoal,
-      },
-    };
-    try {
-      await fetch("/api/user/updateUser", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(user),
-      });
-      return true;
-    } catch (error) {
-      console.error(error);
-      return false;
-    }}
+    if (session?.user) {
+      const user: UserType = {
+        name: session.user.name!,
+        email: session.user.email!,
+        payRate: payRate,
+        earnings: {
+          workDays: workDays,
+          monthly: monthGoal,
+        },
+      };
+      try {
+        await fetch("/api/user/updateUser", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(user),
+        });
+        return true;
+      } catch (error) {
+        console.error(error);
+        return false;
+      }
+    }
   };
 
   const { status, data: session } = useSession();
@@ -107,37 +108,38 @@ export default function Profile({ user }: ProfileProps) {
                   <FormControl>
                     <FormLabel>Workdays</FormLabel>
                     <InputGroup>
-                    
-                    <Input
-                      value={workDays}
-                      onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                        let val = e.target.valueAsNumber
-                        if(val >= 1 && val <= 7) {
-                          setWorkDays(e.target.valueAsNumber);
-                        }
-                          
-                      }}
-                      type="number"
-                    ></Input><InputRightElement fontSize='0.8rem'>
-             days a week
-                  </InputRightElement></InputGroup>
+                      <Input
+                        value={workDays}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                          let val = e.target.valueAsNumber;
+                          if (val >= 1 && val <= 7) {
+                            setWorkDays(e.target.valueAsNumber);
+                          }
+                        }}
+                        type="number"
+                      ></Input>
+                      <InputRightElement fontSize="0.8rem">
+                        days a week
+                      </InputRightElement>
+                    </InputGroup>
                   </FormControl>
                   <FormControl>
                     <FormLabel>Monthly Earnings</FormLabel>
                     <InputGroup>
-                    <InputLeftElement
-      pointerEvents='none'
-      color='gray.300'
-      fontSize='1.2em'
-      children='$'
-    />
-                    <Input
-                      value={!monthGoal ? "" : monthGoal}
-                      onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                        setMonthGoal(e.target.valueAsNumber);
-                      }}
-                      type="number"
-                    ></Input></InputGroup>
+                      <InputLeftElement
+                        pointerEvents="none"
+                        color="gray.300"
+                        fontSize="1.2em"
+                        children="$"
+                      />
+                      <Input
+                        value={monthGoal}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                          setMonthGoal(e.target.valueAsNumber);
+                        }}
+                        type="number"
+                      ></Input>
+                    </InputGroup>
                   </FormControl>
                   <Text>
                     Your daily earnings should approximately be: ${dayEarnings}
