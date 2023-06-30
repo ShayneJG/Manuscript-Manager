@@ -187,6 +187,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         name: session.user?.name,
         email: session.user?.email,
         payRate: process.env.PAYRATE_DEFAULT,
+        earnings: {
+          workDays: process.env.WORKDAYS,
+          monthly: process.env.MONTHLY_GOAL
+        }
       };
       await db.collection("users").insertOne(user);
     } else {
