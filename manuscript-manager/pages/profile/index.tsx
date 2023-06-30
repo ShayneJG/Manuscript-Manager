@@ -19,7 +19,7 @@ import { useSession } from "next-auth/react";
 import { ChangeEvent, useState } from "react";
 import { authOptions } from "../api/auth/[...nextauth]";
 import clientPromise from "@/lib/mongodb";
-import UserType from "@/types/user";
+import UserType, { UserEarnings } from "@/types/user";
 import Header from "@/components/page/header";
 
 interface ProfileProps {
@@ -27,10 +27,16 @@ interface ProfileProps {
 }
 
 export default function Profile({ user }: ProfileProps) {
-  const updatePayRate = async (payRate: number, email: string) => {
-    const user = {
-      email: email,
+  const updateUser = async () => {
+    if(session?.user) {
+    const user: UserType = {
+      name: session.user.name!,
+      email: session.user.email!,
       payRate: payRate,
+      earnings: {
+        workDays: workDays,
+        monthly: monthGoal,
+      },
     };
     try {
       await fetch("/api/user/updateUser", {
@@ -42,7 +48,7 @@ export default function Profile({ user }: ProfileProps) {
     } catch (error) {
       console.error(error);
       return false;
-    }
+    }}
   };
 
   const { status, data: session } = useSession();
@@ -51,7 +57,7 @@ export default function Profile({ user }: ProfileProps) {
   const [payRate, setPayRate] = useState<number>(user.payRate);
   const [workDays, setWorkDays] = useState<number>(user.earnings?.workDays!);
   const [dayEarnings, setDayEarnings] = useState<number>();
-  const [monthGoal, setMonthGoal] = useState<number>();
+  const [monthGoal, setMonthGoal] = useState<number>(user.earnings?.monthly!);
   const toast = useToast();
 
   if (status === "unauthenticated") {
@@ -92,10 +98,37 @@ export default function Profile({ user }: ProfileProps) {
                   ></Input>
                   <FormHelperText>e.g., 0.0070</FormHelperText>
                 </FormControl>
+                <Box>
+                  <Heading>Goals</Heading>
+
+                  <FormControl>
+                    <FormLabel>Weekly Workdays</FormLabel>
+                    <Input
+                      value={workDays}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                        setWorkDays(e.target.valueAsNumber);
+                      }}
+                      type="number"
+                    ></Input>
+                  </FormControl>
+                  <FormControl>
+                    <FormLabel>Monthly Earnings</FormLabel>
+                    <Input
+                      value={!monthGoal ? "" : monthGoal}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                        setMonthGoal(e.target.valueAsNumber);
+                      }}
+                      type="number"
+                    ></Input>
+                  </FormControl>
+                  <Text>
+                    Your daily earnings should approximately be: ${dayEarnings}
+                  </Text>
+                </Box>
                 <Button
                   onClick={async (e) => {
                     e.preventDefault();
-                    if (!payRate) {
+                    if (!payRate || !workDays || !monthGoal) {
                       toast({
                         title: "Update unsuccessful",
                         description: "A field cannot be blank",
@@ -105,10 +138,7 @@ export default function Profile({ user }: ProfileProps) {
                       });
                       return;
                     }
-                    let update = await updatePayRate(
-                      payRate,
-                      session?.user?.email!
-                    );
+                    let update = await updateUser();
                     if (update) {
                       toast({
                         title: "Update successful",
@@ -127,43 +157,6 @@ export default function Profile({ user }: ProfileProps) {
           </Box>
 
           {/* GOALS */}
-
-          <Box className="w-2/3">
-            <Heading>Goals</Heading>
-            
-            <form>
-              <FormControl>
-                <FormLabel>Weekly Workdays</FormLabel>
-                <Input
-                  value={workDays}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                    setWorkDays(e.target.valueAsNumber);
-                  }}
-                  type="number"
-                ></Input>
-              </FormControl>
-              <FormControl>
-                <FormLabel>Monthly Earnings</FormLabel>
-                <Input
-                  value={!monthGoal ? "" : monthGoal}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                    setMonthGoal(e.target.valueAsNumber);
-                  }}
-                  type="number"
-                ></Input>
-              </FormControl>
-              <Text>Your daily earnings should approximately be: ${dayEarnings}</Text>
-              <Button
-                type="submit"
-                onSubmit={async (e) => {
-                  e.preventDefault();
-                  //TODO: submit the data to the db
-                }}
-              >
-                Update
-              </Button>
-            </form>
-          </Box>
         </Grid>
       </div>
     );
@@ -189,8 +182,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         payRate: process.env.PAYRATE_DEFAULT,
         earnings: {
           workDays: process.env.WORKDAYS,
-          monthly: process.env.MONTHLY_GOAL
-        }
+          monthly: process.env.MONTHLY_GOAL,
+        },
       };
       await db.collection("users").insertOne(user);
     } else {
@@ -199,9 +192,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         email: userData?.email,
         payRate: userData?.payRate,
         earnings: {
-          workDays: userData.earnings.workDays ? userData.earnings.workDays : process.env.WORKDAYS,
-          monthly: userData.earnings.monthly ? userData.earnings.monthly : process.env.MONTHLY_GOAL
-        }
+          workDays: userData.earnings?.workDays || process.env.WORKDAYS,
+          monthly: userData.earnings?.monthly || process.env.MONTHLY_GOAL,
+        },
       };
     }
   }
