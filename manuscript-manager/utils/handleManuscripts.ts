@@ -70,16 +70,18 @@ export async function handleManuscripts(
       action === "POST"
         ? console.log("There was an error submitting the manuscript.")
         : console.log("There was an error updating the manuscript.");
+      return false;
     }
 
     if (response.ok) {
       // TODO: reset state values and input fields
       console.log("Response ok:", json);
       reset();
+      get();
+      return true;
     }
   } catch (error) {
     console.error("Error:", error);
   }
   // update state by fetching new manuscripts for today
-  get();
 }

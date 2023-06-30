@@ -31,12 +31,14 @@ interface CreateManuscriptProps {
   manuscriptToUpdate?: ManuscriptType;
   setManuscriptsInState: (manuscript: ManuscriptType[]) => void;
   user: UserType;
+  setManuscriptToUpdate: (manuscript: ManuscriptType | undefined) => void;
 }
 
 export default function CreateManuscript({
   manuscriptToUpdate,
   setManuscriptsInState,
   user,
+  setManuscriptToUpdate,
 }: CreateManuscriptProps) {
   const [manuscriptID, setManuscriptID] = useState<string>("");
   const [date, setDate] = useState<Date>(new Date());
@@ -49,10 +51,10 @@ export default function CreateManuscript({
   const [authorBio, setAuthorBio] = useState<number>(0);
   const name = user.name || undefined;
   const payRate = user.payRate || undefined;
-//Error states
-const [manuscriptIDError, setManuscriptIDError] = useState<boolean>(false);
-const [wordCountError, setwordCountError] = useState<boolean>(false);
-const [turnAroundError, setTurnAroundError] = useState<boolean>(false);
+  //Error states
+  const [manuscriptIDError, setManuscriptIDError] = useState<boolean>(false);
+  const [wordCountError, setwordCountError] = useState<boolean>(false);
+  const [turnAroundError, setTurnAroundError] = useState<boolean>(false);
 
   function formValidation() {
     //reset any previous errors
@@ -60,26 +62,26 @@ const [turnAroundError, setTurnAroundError] = useState<boolean>(false);
     setTurnAroundError(false);
     setwordCountError(false);
     let validates: boolean = true;
-    const turnAroundRegex = /^(?:[0-9]|[0-9][0-9]):(?:[0-5][0-9]):(?:[0-5][0-9])$/;
+    const turnAroundRegex =
+      /^(?:[0-9]|[0-9][0-9]):(?:[0-5][0-9]):(?:[0-5][0-9])$/;
 
-    if(!manuscriptID) {
+    if (!manuscriptID) {
       setManuscriptIDError(true);
       validates = false;
     }
 
-    if(!turnAroundRegex.test(turnAround)) {
+    if (!turnAroundRegex.test(turnAround)) {
       setTurnAroundError(true);
       validates = false;
     }
-    if(!wordCount) {
+    if (!wordCount) {
       setwordCountError(true);
       validates = false;
-    } 
-    
-    console.log(validates)
+    }
+
+    console.log(validates);
     return validates;
   }
-
 
   // Resets state to default values.
   function resetManuscriptState() {
@@ -130,23 +132,24 @@ const [turnAroundError, setTurnAroundError] = useState<boolean>(false);
       user: name,
       payRate: payRate,
     };
-    if(formValidation()){
-    handleManuscripts(
-      "POST",
-      resetManuscriptState,
-      getTodaysManuscripts,
-      date,
-      manuscriptID,
-      wordCount,
-      latex,
-      double,
-      triple,
-      bonus,
-      turnAround,
-      authorBio,
-      userInfo,
-      undefined
-    )};
+    if (formValidation()) {
+      handleManuscripts(
+        "POST",
+        resetManuscriptState,
+        getTodaysManuscripts,
+        date,
+        manuscriptID,
+        wordCount,
+        latex,
+        double,
+        triple,
+        bonus,
+        turnAround,
+        authorBio,
+        userInfo,
+        undefined
+      );
+    }
   }
 
   // Handles updating of a manuscript
@@ -157,23 +160,25 @@ const [turnAroundError, setTurnAroundError] = useState<boolean>(false);
       user: name,
       payRate: payRate,
     };
-    if(formValidation()){
-    handleManuscripts(
-      "PATCH",
-      resetManuscriptState,
-      getTodaysManuscripts,
-      date,
-      manuscriptID,
-      wordCount,
-      latex,
-      double,
-      triple,
-      bonus,
-      turnAround,
-      authorBio,
-      userInfo,
-      manuscriptToUpdate
-    )};
+    if (formValidation()) {
+      let success = await handleManuscripts(
+        "PATCH",
+        resetManuscriptState,
+        getTodaysManuscripts,
+        date,
+        manuscriptID,
+        wordCount,
+        latex,
+        double,
+        triple,
+        bonus,
+        turnAround,
+        authorBio,
+        userInfo,
+        manuscriptToUpdate
+      );
+      success && setManuscriptToUpdate(undefined);
+    }
   }
 
   // If there is a manuscript being updated, sets state values accordingly so the manuscript details are displayed in the form ready to edit
@@ -204,7 +209,9 @@ const [turnAroundError, setTurnAroundError] = useState<boolean>(false);
       >
         <GridItem>
           <FormControl isRequired id="date">
-            <FormLabel htmlFor="date-picker" fontSize="sm">Date</FormLabel>
+            <FormLabel htmlFor="date-picker" fontSize="sm">
+              Date
+            </FormLabel>
             <Box>
               {/* Chakra UI does not have a date picker component. It has an input of type date,
           but that was too weird to use, so we are using react-datepicker here, which simplifies things a lot */}
@@ -232,7 +239,11 @@ const [turnAroundError, setTurnAroundError] = useState<boolean>(false);
         </GridItem>
 
         <GridItem>
-          <FormControl isInvalid={manuscriptIDError} id="manuscript ID" isRequired>
+          <FormControl
+            isInvalid={manuscriptIDError}
+            id="manuscript ID"
+            isRequired
+          >
             <FormLabel fontSize="sm">Manuscript ID</FormLabel>
             <Input
               placeholder="Manuscript ID"
@@ -242,7 +253,8 @@ const [turnAroundError, setTurnAroundError] = useState<boolean>(false);
               }
               required
               size="sm"
-            /><FormErrorMessage>Cannot be blank</FormErrorMessage>
+            />
+            <FormErrorMessage>Cannot be blank</FormErrorMessage>
           </FormControl>
         </GridItem>
         <GridItem>
@@ -283,13 +295,14 @@ const [turnAroundError, setTurnAroundError] = useState<boolean>(false);
                 setWordCount(e.target.valueAsNumber);
               }}
               size="sm"
-            /> <FormErrorMessage>Cannot be blank</FormErrorMessage>
+            />{" "}
+            <FormErrorMessage>Cannot be blank</FormErrorMessage>
           </FormControl>
         </GridItem>
         <GridItem alignSelf="end">
           <Stack direction="row" id="checkboxes">
             <Checkbox
-              id='latex'
+              id="latex"
               checked={latex}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 setLatex(e.target.checked);
@@ -300,7 +313,7 @@ const [turnAroundError, setTurnAroundError] = useState<boolean>(false);
               </FormLabel>
             </Checkbox>
             <Checkbox
-              id='double'
+              id="double"
               checked={double}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 setDouble(e.target.checked);
@@ -311,7 +324,7 @@ const [turnAroundError, setTurnAroundError] = useState<boolean>(false);
               </FormLabel>
             </Checkbox>
             <Checkbox
-              id='triple'
+              id="triple"
               checked={triple}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 setTriple(e.target.checked);
@@ -324,7 +337,11 @@ const [turnAroundError, setTurnAroundError] = useState<boolean>(false);
           </Stack>
         </GridItem>
         <GridItem>
-          <FormControl isInvalid={turnAroundError} isRequired id="turnAround time">
+          <FormControl
+            isInvalid={turnAroundError}
+            isRequired
+            id="turnAround time"
+          >
             <FormLabel fontSize="sm">Turnaround Time</FormLabel>
             <Input
               placeholder="Turnaround"
@@ -333,7 +350,8 @@ const [turnAroundError, setTurnAroundError] = useState<boolean>(false);
                 setTurnAround(e.target.value)
               }
               size="sm"
-            /> <FormErrorMessage>Must be in the format: 00:00:00</FormErrorMessage>
+            />{" "}
+            <FormErrorMessage>Must be in the format: 00:00:00</FormErrorMessage>
           </FormControl>
         </GridItem>
         {/* Boxing together the 3 toggle options to make layout simpler
