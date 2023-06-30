@@ -102,7 +102,10 @@ export default function Profile({ user }: ProfileProps) {
                   ></Input>
                   <FormHelperText>e.g., 0.0070</FormHelperText>
                 </FormControl>
-                <Box>
+                
+                  
+                  {/* GOALS */}
+
                   <Heading>Goals</Heading>
 
                   <FormControl>
@@ -144,7 +147,7 @@ export default function Profile({ user }: ProfileProps) {
                   <Text>
                     Your daily earnings should approximately be: ${dayEarnings}
                   </Text>
-                </Box>
+                
                 <Button
                   onClick={async (e) => {
                     e.preventDefault();
@@ -176,7 +179,7 @@ export default function Profile({ user }: ProfileProps) {
             </Box>
           </Box>
 
-          {/* GOALS */}
+          
         </Grid>
       </div>
     );
