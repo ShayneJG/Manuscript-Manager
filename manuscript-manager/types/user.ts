@@ -7,6 +7,6 @@ export default  interface UserType {
 }
 
 interface UserEarnings {
-    weekly: number;
+    workDays: number;
     monthly: number;
 }
