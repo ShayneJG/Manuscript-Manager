@@ -12,6 +12,9 @@ import {
   Heading,
   Grid,
   Text,
+  InputGroup,
+  InputLeftElement,
+  InputRightElement,
 } from "@chakra-ui/react";
 import { GetServerSideProps } from "next";
 import { getServerSession } from "next-auth";
@@ -102,24 +105,39 @@ export default function Profile({ user }: ProfileProps) {
                   <Heading>Goals</Heading>
 
                   <FormControl>
-                    <FormLabel>Weekly Workdays</FormLabel>
+                    <FormLabel>Workdays</FormLabel>
+                    <InputGroup>
+                    
                     <Input
                       value={workDays}
                       onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                        setWorkDays(e.target.valueAsNumber);
+                        let val = e.target.valueAsNumber
+                        if(val >= 1 && val <= 7) {
+                          setWorkDays(e.target.valueAsNumber);
+                        }
+                          
                       }}
                       type="number"
-                    ></Input>
+                    ></Input><InputRightElement fontSize='0.8rem'>
+             days a week
+                  </InputRightElement></InputGroup>
                   </FormControl>
                   <FormControl>
                     <FormLabel>Monthly Earnings</FormLabel>
+                    <InputGroup>
+                    <InputLeftElement
+      pointerEvents='none'
+      color='gray.300'
+      fontSize='1.2em'
+      children='$'
+    />
                     <Input
                       value={!monthGoal ? "" : monthGoal}
                       onChange={(e: ChangeEvent<HTMLInputElement>) => {
                         setMonthGoal(e.target.valueAsNumber);
                       }}
                       type="number"
-                    ></Input>
+                    ></Input></InputGroup>
                   </FormControl>
                   <Text>
                     Your daily earnings should approximately be: ${dayEarnings}
