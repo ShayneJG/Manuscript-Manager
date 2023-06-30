@@ -49,8 +49,8 @@ export default function Profile({ user }: ProfileProps) {
 
   //state
   const [payRate, setPayRate] = useState<number>(user.payRate);
-  const [day, setDay] = useState<number>(0);
-  const [weekGoal, setWeekGoal] = useState<number>();
+  const [workDays, setWorkDays] = useState<number>(0);
+  const [dayEarnings, setDayEarnings] = useState<number>();
   const [monthGoal, setMonthGoal] = useState<number>();
   const toast = useToast();
 
@@ -135,9 +135,9 @@ export default function Profile({ user }: ProfileProps) {
               <FormControl>
                 <FormLabel>Weekly Workdays</FormLabel>
                 <Input
-                  value={day}
+                  value={workDays}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                    setDay(e.target.valueAsNumber);
+                    setWorkDays(e.target.valueAsNumber);
                   }}
                   type="number"
                 ></Input>
@@ -152,6 +152,7 @@ export default function Profile({ user }: ProfileProps) {
                   type="number"
                 ></Input>
               </FormControl>
+              <Text>Your daily earnings should approximately be: ${dayEarnings}</Text>
               <Button
                 type="submit"
                 onSubmit={async (e) => {
