@@ -19,11 +19,12 @@ import {
 import { GetServerSideProps } from "next";
 import { getServerSession } from "next-auth";
 import { useSession } from "next-auth/react";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { authOptions } from "../api/auth/[...nextauth]";
 import clientPromise from "@/lib/mongodb";
 import UserType, { UserEarnings } from "@/types/user";
 import Header from "@/components/page/header";
+import { roundLimit } from "@/utils/math";
 
 interface ProfileProps {
   user: UserType;
@@ -55,6 +56,17 @@ export default function Profile({ user }: ProfileProps) {
     }
   };
 
+
+  function dailyEarnings() {
+    //assume 30 days a month, approx 4 weeks. 
+    const totalWorkDays: number = workDays * 4; 
+    const earningsPerDay: number = monthGoal / totalWorkDays;  
+
+    setDayEarnings(roundLimit(earningsPerDay));
+  }
+
+  
+
   const { status, data: session } = useSession();
 
   //state
@@ -63,6 +75,8 @@ export default function Profile({ user }: ProfileProps) {
   const [dayEarnings, setDayEarnings] = useState<number>();
   const [monthGoal, setMonthGoal] = useState<number>(user.earnings?.monthly!);
   const toast = useToast();
+
+  useEffect(() => {dailyEarnings()}, [workDays, monthGoal])
 
   if (status === "unauthenticated") {
     return (
