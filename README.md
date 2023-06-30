@@ -29,3 +29,11 @@ We had an issue where Shayne was working on form validation, while Emma was work
 We reverted main to a state before the merges, and Shayne re-branched form validation to include the redesign, which avoided merge conflicts. 
 
 We'll communicate more effectively and identify situations where our work overlaps; when it does overlap, we'll make sure to update/merge/rebase before we encounter difficult merges like this in the future. 
+
+## Schema-less Architecture
+
+Database validation has been harder during development by far this time, as we had opted to go schema-less. This results in the front-end being 100% responsible for validation for all data heading to the database. It was a terrible idea, because adding Mongoose would have been simple and easy, and would provide a baseline validation that would be useful all the way through development and into production. 
+
+### solution
+
+Use Mongoose... We will implement it soon.
