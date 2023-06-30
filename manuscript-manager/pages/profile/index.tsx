@@ -49,7 +49,7 @@ export default function Profile({ user }: ProfileProps) {
 
   //state
   const [payRate, setPayRate] = useState<number>(user.payRate);
-  const [workDays, setWorkDays] = useState<number>(0);
+  const [workDays, setWorkDays] = useState<number>(user.earnings?.workDays!);
   const [dayEarnings, setDayEarnings] = useState<number>();
   const [monthGoal, setMonthGoal] = useState<number>();
   const toast = useToast();
@@ -198,6 +198,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         name: userData?.name,
         email: userData?.email,
         payRate: userData?.payRate,
+        earnings: {
+          workDays: userData.earnings.workDays ? userData.earnings.workDays : process.env.WORKDAYS,
+          monthly: userData.earnings.monthly ? userData.earnings.monthly : process.env.MONTHLY_GOAL
+        }
       };
     }
   }
