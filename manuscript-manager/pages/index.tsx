@@ -56,6 +56,7 @@ export default function Home(props: HomeProps) {
           <Flex direction="column" gap="12">
             <CreateManuscript
               user={user}
+              setManuscriptToUpdate={setManuscriptToUpdate}
               manuscriptToUpdate={manuscriptToUpdate}
               setManuscriptsInState={setManuscriptsInState}
             />
