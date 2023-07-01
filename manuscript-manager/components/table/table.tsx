@@ -20,7 +20,7 @@ interface ManuscriptTableProps {
   data: ManuscriptType[];
   caption?: string;
   setManuscriptToUpdate: (manuscript: ManuscriptType) => void;
-  
+
   setManuscriptsInState: (manuscript: ManuscriptType[]) => void;
 }
 
@@ -29,7 +29,7 @@ export default function ManuscriptTable({
   data,
   caption,
   setManuscriptToUpdate,
-  
+
   setManuscriptsInState,
 }: ManuscriptTableProps) {
   let tick: string = "✓";
@@ -58,8 +58,8 @@ export default function ManuscriptTable({
 
             return (
               <Tr key={index}>
-                {/* <Td>{date.toDateString()}</Td>
-                <Td>{manuscript.user}</Td> */}
+                <Td>{date.toDateString()}</Td>
+                <Td>{manuscript.user}</Td>
                 <Td>{manuscript.manuscriptID}</Td>
                 <Td>{manuscript.wordCount}</Td>
                 <Td>{manuscript.latex ? tick : undefined}</Td>
