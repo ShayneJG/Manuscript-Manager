@@ -25,7 +25,7 @@ import clientPromise from "@/lib/mongodb";
 import UserType, { UserEarnings } from "@/types/user";
 import Header from "@/components/page/header";
 import { roundLimit } from "@/utils/math";
-
+import { determineEndDate, determineStartDate, payPeriodDays } from "@/utils/dates";
 interface ProfileProps {
   user: UserType;
 }
@@ -234,7 +234,24 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         },
       };
     }
+
+      //Data for the charts
+
+      // process.env.TZ = 'Australia/Perth';
+       console.log(process.env.TZ)
+
+
+      console.log("the new date is: ", new Date())
+    
+    console.log("the pay period is: ", payPeriodDays(new Date()));
+    
   }
+
+
+
+
+
+  
 
   return {
     props: {
