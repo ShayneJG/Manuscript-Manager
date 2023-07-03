@@ -32,7 +32,7 @@ export function determinePrevMonthStartDate(date: Date): Date {
 // returns the end date of current pay period
 export function determineEndDate(month: number, year: number, day: number) {
   let endDate;
-  day <= 20
+  day < 20
     ? (endDate = new Date(year, month, 20))
     : (endDate = new Date(year, month + 1, 20));
   return endDate;
@@ -70,18 +70,21 @@ export function dayFilter(
   });
 }
 
+//does not require manuscripts
 export function payPeriodDays(dateObj: Date) {
     //get the day/month/year from the date passed
 
-    let  month: number = dateObj.getUTCMonth(); //months from 1-12
+    let  month: number = dateObj.getUTCMonth(); 
     let  day: number = dateObj.getUTCDate();
     let  year: number = dateObj.getUTCFullYear();
 
 
     let start = determineStartDate(month, year, day);
+    console.log("pay period day: ", day, month, year)
+    console.log("start date: ", start)
 
     let end = determineEndDate(month, year, day);
-
+    console.log("end date: ", end)
     let days = []
 
     let currentDatePointer = new Date(start) 
