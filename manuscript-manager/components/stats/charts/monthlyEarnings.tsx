@@ -26,14 +26,15 @@ ChartJS.register(
 
 //Data needs to be grabbed via serversideprops and passed.
 interface MonthlyEarningsProps {
-  currentMonth: ManuscriptType[];
-  previousMonth: ManuscriptType[];
+  currentMonth: ManuscriptType[], 
+  dateInPeriod: Date
+  
 }
 
 //chart for the profile page. Will break down and show monthly earnings.
 export default function MonthlyEarningsChart({
   currentMonth,
-  previousMonth,
+ dateInPeriod
 }: MonthlyEarningsProps) {
   function earningsCalculator(labels: Date[], month: ManuscriptType[]) {
     // initiates variable that holds all the manuscripts, grouped under a date key.
@@ -86,13 +87,13 @@ export default function MonthlyEarningsChart({
   }
 
   // retrieves all days in the month and stores the dates as default dates.
-  const labels: Date[] = payPeriodDays(new Date());
+  const labels: Date[] = payPeriodDays(dateInPeriod);
 
   //console.log("labels: ", labels)
 
   const currentEarnings = earningsCalculator(labels, currentMonth);
 
-  const previousEarnings = earningsCalculator(labels, previousMonth);
+  
 
   // shorter labels for readability.
   let shortLabels: string[] = labels.map((date) => {

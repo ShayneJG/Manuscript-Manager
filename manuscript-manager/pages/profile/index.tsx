@@ -199,7 +199,7 @@ export default function Profile({ user, currentMonth, lastMonth }: ProfileProps)
             </Box>
           </Box>
            <Box>
-           <MonthlyEarningsChart currentMonth={currentMonth} previousMonth={lastMonth} />
+           <MonthlyEarningsChart currentMonth={currentMonth} dateInPeriod={new Date()} />
           </Box>       
           
         </Grid>
