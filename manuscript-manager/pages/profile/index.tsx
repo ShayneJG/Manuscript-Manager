@@ -25,7 +25,7 @@ import clientPromise from "@/lib/mongodb";
 import UserType, { UserEarnings } from "@/types/user";
 import Header from "@/components/page/header";
 import { roundLimit } from "@/utils/math";
-import { lastMonthStartDate, payPeriodDays } from "@/utils/dates";
+import { lastMonthStartDate, payPeriodDays, thisMonthStartDate } from "@/utils/dates";
 import { ManuscriptType } from "@/types/manuscripts";
 import { WithId } from "mongodb";
 import MonthlyEarningsChart from "@/components/stats/charts/monthlyEarnings";
@@ -248,7 +248,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       //current month
       
       const query = {
-        date: { $gte: lastMonthStartDate.toISOString() },
+        date: { $gte: thisMonthStartDate.toISOString() },
         user: session.user?.name
       }
        currentMonthData = await db.collection("manuscripts").find(query).toArray();

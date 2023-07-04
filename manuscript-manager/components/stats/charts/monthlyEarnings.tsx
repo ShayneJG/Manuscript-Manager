@@ -44,12 +44,13 @@ export default function MonthlyEarningsChart({currentMonth, previousMonth}: Mont
 
      
     const labels: Date[] = payPeriodDays(new Date());
+    console.log("labels: ", labels)
     
 
     const currentManuscriptsByDate: {[date: string]: ManuscriptType[]}  = {}
 
     currentMonth.forEach((manuscript) => {
-      const date = manuscript.date
+      const date = manuscript.date.split("T")[0]
       if(currentManuscriptsByDate[date]) {
         currentManuscriptsByDate[date].push(manuscript);
       } else {
@@ -60,10 +61,16 @@ export default function MonthlyEarningsChart({currentMonth, previousMonth}: Mont
 
     const earnings: number[] = [];
 
+    
+
+    //console.log("snipped labels: ", labelShort)
+
     labels.forEach((date) => {
-      let searchDate = date.toString().split("T")[0]
-      const manuscripts = currentManuscriptsByDate[searchDate] || [];
-        console.log("manuscript by date: ", manuscripts)
+      //console.log("label for each: ", date)
+      let searchDate = date.toISOString().split("T")[0]
+      console.log("search date: ", searchDate)
+      const manuscripts = currentManuscriptsByDate[searchDate] || null;
+        //console.log("manuscript by date: ", manuscripts)
 
       if(manuscripts) {
         earnings.push(calculateTotalEarnings(manuscripts))
