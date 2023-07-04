@@ -51,6 +51,7 @@ export default function MonthlyEarningsChart({currentMonth, previousMonth}: Mont
 
     currentMonth.forEach((manuscript) => {
       const date = manuscript.date.split("T")[0]
+      console.log("manuscript dates: ", date)
       if(currentManuscriptsByDate[date]) {
         currentManuscriptsByDate[date].push(manuscript);
       } else {
@@ -94,9 +95,13 @@ export default function MonthlyEarningsChart({currentMonth, previousMonth}: Mont
 
     console.log("earnings: ", earnings)
     
-
+    let shortLabels: string[] = labels.map((date) => {
+      return date.toLocaleDateString().slice(0, 10);
+    })
+    console.log("short label: ", shortLabels)
+    
     const data = {
-      labels,
+      labels: shortLabels,
       datasets: [
         {
           label: 'Current Month',
