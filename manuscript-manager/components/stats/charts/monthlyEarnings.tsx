@@ -73,10 +73,10 @@ export default function MonthlyEarningsChart({currentMonth, previousMonth}: Mont
     
 
     labels.forEach((date) => {
-      console.log("label for each: ", date);
+      //console.log("label for each: ", date);
       const timezoneOffset = date.getTimezoneOffset() * 60000; // Get timezone offset in milliseconds
       const searchDate = new Date(date.getTime() - timezoneOffset).toISOString().split("T")[0];
-      console.log("search date: ", searchDate);
+      //console.log("search date: ", searchDate);
       const manuscripts = currentManuscriptsByDate[searchDate] || null;
       
       if (manuscripts) {
@@ -101,7 +101,7 @@ export default function MonthlyEarningsChart({currentMonth, previousMonth}: Mont
 
     
     
-    console.log("labels: ", labels)
+    //console.log("labels: ", labels)
     
     const currentEarnings = earningsCalculator(labels, currentMonth)
     

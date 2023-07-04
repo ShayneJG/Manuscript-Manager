@@ -29,12 +29,14 @@ import { lastMonthStartDate, payPeriodDays, thisMonthStartDate } from "@/utils/d
 import { ManuscriptType } from "@/types/manuscripts";
 import { WithId } from "mongodb";
 import MonthlyEarningsChart from "@/components/stats/charts/monthlyEarnings";
+import currentAndPreviousMonths from "@/utils/database/current-previous";
 interface ProfileProps {
   user: UserType;
-  currentMonth: ManuscriptType[]
+  currentMonth: ManuscriptType[];
+  lastMonth: ManuscriptType[];
 }
 
-export default function Profile({ user, currentMonth }: ProfileProps) {
+export default function Profile({ user, currentMonth, lastMonth }: ProfileProps) {
   const updateUser = async () => {
     if (session?.user) {
       const user: UserType = {
@@ -197,7 +199,7 @@ export default function Profile({ user, currentMonth }: ProfileProps) {
             </Box>
           </Box>
            <Box>
-           <MonthlyEarningsChart currentMonth={currentMonth} />
+           <MonthlyEarningsChart currentMonth={currentMonth} previousMonth={lastMonth} />
           </Box>       
           
         </Grid>
@@ -212,7 +214,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const db = client.db("test");
 
   let user = {};
-  let currentMonthData;
+  let thisMonth;
+  let lastMonth;
 
   if (session) {
     // Find the document with the same email
@@ -247,12 +250,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
       //current month
       
-      const query = {
-        date: { $gte: thisMonthStartDate.toISOString() },
-        user: session.user?.name
-      }
-       currentMonthData = await db.collection("manuscripts").find(query).toArray();
-       currentMonthData = JSON.parse(JSON.stringify(currentMonthData))
+      
+      const [todaysManuscripts, thisMonthsManuscripts, lastMonthsManuscripts] = await currentAndPreviousMonths(session.user?.name!)
+      
+
+      console.log("serverside manuscripts: ", thisMonthsManuscripts)
+      thisMonth = thisMonthsManuscripts;
+      lastMonth = lastMonthsManuscripts;
+      
+       
        
 
 
@@ -273,7 +279,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       user: user,
-      currentMonth: currentMonthData
+      currentMonth: thisMonth,
+      lastMonth: lastMonth
     },
   };
 };
