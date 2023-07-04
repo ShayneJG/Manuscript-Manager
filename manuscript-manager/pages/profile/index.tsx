@@ -25,12 +25,16 @@ import clientPromise from "@/lib/mongodb";
 import UserType, { UserEarnings } from "@/types/user";
 import Header from "@/components/page/header";
 import { roundLimit } from "@/utils/math";
-import { determineEndDate, determineStartDate, payPeriodDays } from "@/utils/dates";
+import { lastMonthStartDate, payPeriodDays } from "@/utils/dates";
+import { ManuscriptType } from "@/types/manuscripts";
+import { WithId } from "mongodb";
+import MonthlyEarningsChart from "@/components/stats/charts/monthlyEarnings";
 interface ProfileProps {
   user: UserType;
+  currentMonth: ManuscriptType[]
 }
 
-export default function Profile({ user }: ProfileProps) {
+export default function Profile({ user, currentMonth }: ProfileProps) {
   const updateUser = async () => {
     if (session?.user) {
       const user: UserType = {
@@ -192,7 +196,9 @@ export default function Profile({ user }: ProfileProps) {
               </form>
             </Box>
           </Box>
-
+           <Box>
+           <MonthlyEarningsChart currentMonth={currentMonth} />
+          </Box>       
           
         </Grid>
       </div>
@@ -206,12 +212,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const db = client.db("test");
 
   let user = {};
+  let currentMonthData;
 
   if (session) {
     // Find the document with the same email
     const email = session?.user?.email;
     const userData = await db.collection("users").findOne({ email });
 
+    //if there is no userData found, create a user based on the session data and insert into our user collection
     if (!userData) {
       user = {
         name: session.user?.name,
@@ -236,13 +244,19 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
 
       //Data for the charts
-      const dates = payPeriodDays(new Date());
+
+      //current month
+      
       const query = {
-        date: dates,
+        date: { $gte: lastMonthStartDate.toISOString() },
         user: session.user?.name
       }
-      const currentMonthData = await db.collection("manuscripts").find(query).toArray();
+       currentMonthData = await db.collection("manuscripts").find(query).toArray();
+       currentMonthData = JSON.parse(JSON.stringify(currentMonthData))
+       
 
+
+      
 
       
 
@@ -259,6 +273,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       user: user,
+      currentMonth: currentMonthData
     },
   };
 };

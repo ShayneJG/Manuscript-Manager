@@ -29,7 +29,7 @@ import { Line } from 'react-chartjs-2';
   //Data needs to be grabbed via serversideprops and passed. 
 interface MonthlyEarningsProps {
     currentMonth: ManuscriptType[],
-    previousMonth: ManuscriptType[]
+    previousMonth?: ManuscriptType[]
 }
 
 //chart for the profile page. Will break down and show monthly earnings. 
@@ -37,7 +37,7 @@ export default function MonthlyEarningsChart({currentMonth, previousMonth}: Mont
     
 
 
-    
+    console.log("client-side manuscripts: ", currentMonth)
 
     
 
@@ -56,11 +56,14 @@ export default function MonthlyEarningsChart({currentMonth, previousMonth}: Mont
         currentManuscriptsByDate[date] = [manuscript]
       }
     })
+    console.log("manuscripts grouped: ", currentManuscriptsByDate)
 
     const earnings: number[] = [];
 
     labels.forEach((date) => {
-      const manuscripts = currentManuscriptsByDate[date.toString()] || [];
+      let searchDate = date.toString().split("T")[0]
+      const manuscripts = currentManuscriptsByDate[searchDate] || [];
+        console.log("manuscript by date: ", manuscripts)
 
       if(manuscripts) {
         earnings.push(calculateTotalEarnings(manuscripts))
@@ -82,6 +85,7 @@ export default function MonthlyEarningsChart({currentMonth, previousMonth}: Mont
       },
     };
 
+    console.log("earnings: ", earnings)
     
 
     const data = {
@@ -94,7 +98,7 @@ export default function MonthlyEarningsChart({currentMonth, previousMonth}: Mont
       ]
     }
 
-
+    return (<Line data={data} options={options} />)
 
 
 }
