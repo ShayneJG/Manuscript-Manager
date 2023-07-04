@@ -120,7 +120,6 @@ export default function MonthlyEarningsChart({currentMonth, previousMonth}: Mont
       },
     };
 
-    console.log("earnings: ", )
     
     // shorter labels for readability. 
     let shortLabels: string[] = labels.map((date) => {
