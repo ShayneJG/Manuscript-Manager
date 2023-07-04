@@ -32,23 +32,29 @@ interface MonthlyEarningsProps {
     previousMonth?: ManuscriptType[]
 }
 
+
+
 //chart for the profile page. Will break down and show monthly earnings. 
 export default function MonthlyEarningsChart({currentMonth, previousMonth}: MonthlyEarningsProps)  {
     
 
+  function earningsCalculator(labels: Date[], month: ManuscriptType[]) {
 
-    console.log("client-side manuscripts: ", currentMonth)
-
-    
-
-
-     
-    const labels: Date[] = payPeriodDays(new Date());
-    console.log("labels: ", labels)
-    
-
+    // initiates variable that holds all the manuscripts, grouped under a date key. 
+    // this will allow us to calculate the earnings per day. 
+    // its format is this for visual reference: 
+    // {
+    //   date: [manuscript, manuscript],
+    //   date: [manuscript, manuscript],
+    //   date: [manuscript, manuscript],
+    //   etc...
+    // }
+    // where each date is unique, and represents all manuscripts done that day for the logged in user.
     const currentManuscriptsByDate: {[date: string]: ManuscriptType[]}  = {}
 
+    // this forEach will go through every manuscript of this pay period and place it in the 
+    // currentManuscriptsByDate. First manuscript of each date will create the key, any subsequent
+    // manuscripts will be pushed into the array. 
     currentMonth.forEach((manuscript) => {
       const date = manuscript.date.split("T")[0]
       console.log("manuscript dates: ", date)
@@ -64,22 +70,43 @@ export default function MonthlyEarningsChart({currentMonth, previousMonth}: Mont
 
     
 
-    //console.log("snipped labels: ", labelShort)
+    
 
     labels.forEach((date) => {
-      //console.log("label for each: ", date)
-      let searchDate = date.toISOString().split("T")[0]
-      console.log("search date: ", searchDate)
+      console.log("label for each: ", date);
+      const timezoneOffset = date.getTimezoneOffset() * 60000; // Get timezone offset in milliseconds
+      const searchDate = new Date(date.getTime() - timezoneOffset).toISOString().split("T")[0];
+      console.log("search date: ", searchDate);
       const manuscripts = currentManuscriptsByDate[searchDate] || null;
-        //console.log("manuscript by date: ", manuscripts)
-
-      if(manuscripts) {
-        earnings.push(calculateTotalEarnings(manuscripts))
+      
+      if (manuscripts) {
+        earnings.push(calculateTotalEarnings(manuscripts));
       } else {
-        earnings.push(0)
+        earnings.push(0);
       }
-    })
+    });
 
+    return earnings
+
+  }
+
+
+    console.log("client-side manuscripts: ", currentMonth)
+
+    
+
+
+    // retrieves all days in the month and stores the dates as default dates.
+    const labels: Date[] = payPeriodDays(new Date());
+
+    
+    
+    console.log("labels: ", labels)
+    
+    const currentEarnings = earningsCalculator(labels, currentMonth)
+    
+
+    // options for chart. Can add colour here. 
     const options = {
       responsive: true,
       plugins: {
@@ -93,19 +120,20 @@ export default function MonthlyEarningsChart({currentMonth, previousMonth}: Mont
       },
     };
 
-    console.log("earnings: ", earnings)
+    console.log("earnings: ", )
     
+    // shorter labels for readability. 
     let shortLabels: string[] = labels.map((date) => {
       return date.toLocaleDateString().slice(0, 10);
     })
-    console.log("short label: ", shortLabels)
+    //console.log("short label: ", shortLabels)
     
     const data = {
       labels: shortLabels,
       datasets: [
         {
           label: 'Current Month',
-          data: earnings
+          data: currentEarnings
         }
       ]
     }
