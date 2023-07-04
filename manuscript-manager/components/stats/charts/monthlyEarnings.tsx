@@ -29,7 +29,7 @@ import { Line } from 'react-chartjs-2';
   //Data needs to be grabbed via serversideprops and passed. 
 interface MonthlyEarningsProps {
     currentMonth: ManuscriptType[],
-    previousMonth?: ManuscriptType[]
+    previousMonth: ManuscriptType[]
 }
 
 
@@ -104,6 +104,7 @@ export default function MonthlyEarningsChart({currentMonth, previousMonth}: Mont
     //console.log("labels: ", labels)
     
     const currentEarnings = earningsCalculator(labels, currentMonth)
+    const previousEarnings = earningsCalculator(labels, previousMonth)
     
 
     // options for chart. Can add colour here. 
@@ -115,7 +116,7 @@ export default function MonthlyEarningsChart({currentMonth, previousMonth}: Mont
         },
         title: {
           display: true,
-          text: 'Chart.js Line Chart',
+          text: 'Monthly Earnings',
         },
       },
     };
@@ -132,8 +133,10 @@ export default function MonthlyEarningsChart({currentMonth, previousMonth}: Mont
       datasets: [
         {
           label: 'Current Month',
-          data: currentEarnings
-        }
+          data: currentEarnings,
+          borderColor: 'rgb(132, 99, 255)',
+      backgroundColor: 'rgba(132, 99, 255, 0.5)'
+        }, 
       ]
     }
 
