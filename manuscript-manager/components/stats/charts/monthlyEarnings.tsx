@@ -1,5 +1,5 @@
 import { ManuscriptType } from "@/types/manuscripts";
-import  {payPeriodDays}  from "@/utils/dates";
+import { payPeriodDays } from "@/utils/dates";
 import { calculateTotalEarnings } from "@/utils/monthlyTotals";
 import {
   Chart as ChartJS,
@@ -10,39 +10,35 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
-import { Line } from 'react-chartjs-2';
+} from "chart.js";
+import { Line } from "react-chartjs-2";
 
+//chart.js has tree-shaking, so by registering these elements, we can reduce the amount of code at build time, i.e., the only parts of chart.js that make it into the production build will be the parts we use.
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
-  //chart.js has tree-shaking, so by registering these elements, we can reduce the amount of code at build time, i.e., the only parts of chart.js that make it into the production build will be the parts we use. 
-  ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend
-  );
-
-
-  //Data needs to be grabbed via serversideprops and passed. 
+//Data needs to be grabbed via serversideprops and passed.
 interface MonthlyEarningsProps {
-    currentMonth: ManuscriptType[],
-    previousMonth: ManuscriptType[]
+  currentMonth: ManuscriptType[];
+  previousMonth: ManuscriptType[];
 }
 
-
-
-//chart for the profile page. Will break down and show monthly earnings. 
-export default function MonthlyEarningsChart({currentMonth, previousMonth}: MonthlyEarningsProps)  {
-    
-
+//chart for the profile page. Will break down and show monthly earnings.
+export default function MonthlyEarningsChart({
+  currentMonth,
+  previousMonth,
+}: MonthlyEarningsProps) {
   function earningsCalculator(labels: Date[], month: ManuscriptType[]) {
-
-    // initiates variable that holds all the manuscripts, grouped under a date key. 
-    // this will allow us to calculate the earnings per day. 
-    // its format is this for visual reference: 
+    // initiates variable that holds all the manuscripts, grouped under a date key.
+    // this will allow us to calculate the earnings per day.
+    // its format is this for visual reference:
     // {
     //   date: [manuscript, manuscript],
     //   date: [manuscript, manuscript],
@@ -50,35 +46,33 @@ export default function MonthlyEarningsChart({currentMonth, previousMonth}: Mont
     //   etc...
     // }
     // where each date is unique, and represents all manuscripts done that day for the logged in user.
-    const currentManuscriptsByDate: {[date: string]: ManuscriptType[]}  = {}
+    const currentManuscriptsByDate: { [date: string]: ManuscriptType[] } = {};
 
-    // this forEach will go through every manuscript of this pay period and place it in the 
+    // this forEach will go through every manuscript of this pay period and place it in the
     // currentManuscriptsByDate. First manuscript of each date will create the key, any subsequent
-    // manuscripts will be pushed into the array. 
+    // manuscripts will be pushed into the array.
     currentMonth.forEach((manuscript) => {
-      const date = manuscript.date.split("T")[0]
-      console.log("manuscript dates: ", date)
-      if(currentManuscriptsByDate[date]) {
+      const date = manuscript.date.split("T")[0];
+      console.log("manuscript dates: ", date);
+      if (currentManuscriptsByDate[date]) {
         currentManuscriptsByDate[date].push(manuscript);
       } else {
-        currentManuscriptsByDate[date] = [manuscript]
+        currentManuscriptsByDate[date] = [manuscript];
       }
-    })
-    console.log("manuscripts grouped: ", currentManuscriptsByDate)
+    });
+    console.log("manuscripts grouped: ", currentManuscriptsByDate);
 
     const earnings: number[] = [];
-
-    
-
-    
 
     labels.forEach((date) => {
       //console.log("label for each: ", date);
       const timezoneOffset = date.getTimezoneOffset() * 60000; // Get timezone offset in milliseconds
-      const searchDate = new Date(date.getTime() - timezoneOffset).toISOString().split("T")[0];
+      const searchDate = new Date(date.getTime() - timezoneOffset)
+        .toISOString()
+        .split("T")[0];
       //console.log("search date: ", searchDate);
       const manuscripts = currentManuscriptsByDate[searchDate] || null;
-      
+
       if (manuscripts) {
         earnings.push(calculateTotalEarnings(manuscripts));
       } else {
@@ -86,61 +80,51 @@ export default function MonthlyEarningsChart({currentMonth, previousMonth}: Mont
       }
     });
 
-    return earnings
-
+    return earnings;
   }
 
+  console.log("client-side manuscripts: ", currentMonth);
 
-    console.log("client-side manuscripts: ", currentMonth)
+  // retrieves all days in the month and stores the dates as default dates.
+  const labels: Date[] = payPeriodDays(new Date());
 
-    
+  //console.log("labels: ", labels)
 
+  const currentEarnings = earningsCalculator(labels, currentMonth);
 
-    // retrieves all days in the month and stores the dates as default dates.
-    const labels: Date[] = payPeriodDays(new Date());
+  const previousEarnings = earningsCalculator(labels, previousMonth);
 
-    
-    
-    //console.log("labels: ", labels)
-    
-    const currentEarnings = earningsCalculator(labels, currentMonth)
-    const previousEarnings = earningsCalculator(labels, previousMonth)
-    
-
-    // options for chart. Can add colour here. 
-    const options = {
-      responsive: true,
-      plugins: {
-        legend: {
-          position: 'top' as const,
-        },
-        title: {
-          display: true,
-          text: 'Monthly Earnings',
-        },
+  // options for chart. Can add colour here.
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top" as const,
       },
-    };
+      title: {
+        display: true,
+        text: "Monthly Earnings",
+      },
+    },
+  };
 
-    
-    // shorter labels for readability. 
-    let shortLabels: string[] = labels.map((date) => {
-      return date.toLocaleDateString().slice(0, 10);
-    })
-    //console.log("short label: ", shortLabels)
-    
-    const data = {
-      labels: shortLabels,
-      datasets: [
-        {
-          label: 'Current Month',
-          data: currentEarnings,
-          borderColor: 'rgb(132, 99, 255)',
-      backgroundColor: 'rgba(132, 99, 255, 0.5)'
-        }, 
-      ]
-    }
+  // shorter labels for readability.
+  let shortLabels: string[] = labels.map((date) => {
+    return date.toLocaleDateString().slice(0, 10);
+  });
+  //console.log("short label: ", shortLabels)
 
-    return (<Line data={data} options={options} />)
+  const data = {
+    labels: shortLabels,
+    datasets: [
+      {
+        label: "Current Month",
+        data: currentEarnings,
+        borderColor: "rgb(132, 99, 255)",
+        backgroundColor: "rgba(132, 99, 255, 0.5)",
+      },
+    ],
+  };
 
-
+  return <Line data={data} options={options} />;
 }
