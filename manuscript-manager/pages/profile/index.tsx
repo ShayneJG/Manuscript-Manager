@@ -236,14 +236,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
 
       //Data for the charts
+      const dates = payPeriodDays(new Date());
+      const query = {
+        date: dates,
+        user: session.user?.name
+      }
+      const currentMonthData = await db.collection("manuscripts").find(query).toArray();
 
-      // process.env.TZ = 'Australia/Perth';
-       console.log(process.env.TZ)
+
+      
 
 
-      console.log("the new date is: ", new Date())
-    
-    console.log("the pay period is: ", payPeriodDays(new Date()));
     
   }
 

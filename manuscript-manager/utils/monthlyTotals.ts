@@ -82,7 +82,7 @@ function calculateTotalBonus(manuscripts: ManuscriptType[]): number {
 }
 
 // calculates total pay for a given array of manuscripts
-function calculateTotalEarnings(manuscripts: ManuscriptType[]): number {
+export function calculateTotalEarnings(manuscripts: ManuscriptType[]): number {
   const totalWordCount = calculateTotalWordCount(manuscripts);
   const totalLatexBonus = calculateTotalLatex(manuscripts);
   const totalOtherBonuses = calculateTotalBonus(manuscripts);

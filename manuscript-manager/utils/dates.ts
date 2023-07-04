@@ -81,10 +81,10 @@ export function payPeriodDays(dateObj: Date) {
 
     let start = determineStartDate(month, year, day);
     console.log("pay period day: ", day, month, year)
-    console.log("start date: ", start)
+    console.log("start date: ", start.toLocaleString())
 
     let end = determineEndDate(month, year, day);
-    console.log("end date: ", end)
+    console.log("end date: ", end.toLocaleString())
     let days = []
 
     let currentDatePointer = new Date(start) 
