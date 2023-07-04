@@ -3,13 +3,13 @@ import { currentDate, lastMonthStartDate, thisMonthStartDate } from "../dates";
 import { ManuscriptType } from "@/types/manuscripts";
 
 export default async function currentAndPreviousMonths(name: string) {
-    const client = await clientPromise;
+  const client = await clientPromise;
   const db = client.db("test");
-    const data = await db
+  const data = await db
     .collection("manuscripts")
-    .find({ 
+    .find({
       date: { $gte: lastMonthStartDate.toISOString() },
-      user: name 
+      user: name,
     })
     .sort({ date: -1 })
     .toArray();
@@ -46,6 +46,5 @@ export default async function currentAndPreviousMonths(name: string) {
     }
   );
 
-  return [todaysManuscripts, thisMonthsManuscripts, lastMonthsManuscripts]
+  return [todaysManuscripts, thisMonthsManuscripts, lastMonthsManuscripts];
 }
-
