@@ -51,7 +51,7 @@ export default function MonthlyEarningsChart({
     // this forEach will go through every manuscript of this pay period and place it in the
     // currentManuscriptsByDate. First manuscript of each date will create the key, any subsequent
     // manuscripts will be pushed into the array.
-    currentMonth.forEach((manuscript) => {
+    month.forEach((manuscript) => {
       const date = manuscript.date.split("T")[0];
       console.log("manuscript dates: ", date);
       if (currentManuscriptsByDate[date]) {
@@ -65,7 +65,9 @@ export default function MonthlyEarningsChart({
     const earnings: number[] = [];
 
     labels.forEach((date) => {
-      //console.log("label for each: ", date);
+      //timezoneoffset is critical for the dates to work correctly. Shifting between the default
+      //date and the ISO time sets the date to the day before. This is not accurate to all cases
+      //but works for AUS.
       const timezoneOffset = date.getTimezoneOffset() * 60000; // Get timezone offset in milliseconds
       const searchDate = new Date(date.getTime() - timezoneOffset)
         .toISOString()
@@ -83,8 +85,6 @@ export default function MonthlyEarningsChart({
     return earnings;
   }
 
-  console.log("client-side manuscripts: ", currentMonth);
-
   // retrieves all days in the month and stores the dates as default dates.
   const labels: Date[] = payPeriodDays(new Date());
 
@@ -93,6 +93,11 @@ export default function MonthlyEarningsChart({
   const currentEarnings = earningsCalculator(labels, currentMonth);
 
   const previousEarnings = earningsCalculator(labels, previousMonth);
+
+  // shorter labels for readability.
+  let shortLabels: string[] = labels.map((date) => {
+    return date.toLocaleDateString().slice(0, 10);
+  });
 
   // options for chart. Can add colour here.
   const options = {
@@ -108,17 +113,13 @@ export default function MonthlyEarningsChart({
     },
   };
 
-  // shorter labels for readability.
-  let shortLabels: string[] = labels.map((date) => {
-    return date.toLocaleDateString().slice(0, 10);
-  });
-  //console.log("short label: ", shortLabels)
-
   const data = {
     labels: shortLabels,
     datasets: [
       {
-        label: "Current Month",
+        label: `Current Month | total: \$${calculateTotalEarnings(
+          currentMonth
+        )}`,
         data: currentEarnings,
         borderColor: "rgb(132, 99, 255)",
         backgroundColor: "rgba(132, 99, 255, 0.5)",
