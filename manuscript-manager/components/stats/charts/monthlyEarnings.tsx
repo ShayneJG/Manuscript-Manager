@@ -126,9 +126,5 @@ export default function MonthlyEarningsChart({
     ],
   };
 
-  return (
-    <>
-      <Line data={data} options={options} />
-    </>
-  );
+  return <Line data={data} options={options} />;
 }
