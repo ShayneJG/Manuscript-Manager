@@ -34,8 +34,6 @@ interface HomeProps {
 }
 
 export default function Home(props: HomeProps) {
-
- 
   const {
     todaysManuscripts,
     thisMonthsManuscripts,
@@ -53,11 +51,10 @@ export default function Home(props: HomeProps) {
 
   return (
     <main className={`min-h-screen py-16 px-24 ${inter.className}`}>
-      <Header/>
+      <Header />
       <Grid templateColumns="repeat(10, 1fr)" gap="12">
         <GridItem colSpan={3} id="sidebar">
           <Flex direction="column" gap="12">
-            
             <CreateManuscript
               user={user}
               manuscriptToUpdate={manuscriptToUpdate}
@@ -67,7 +64,6 @@ export default function Home(props: HomeProps) {
         </GridItem>
         <GridItem colSpan={7}>
           <Flex id="maincontent" direction="column" gap="12">
-            
             <Flex direction="column" gap="12">
               <AtAGlance
                 month={monthlySummary(thisMonthsManuscripts)}
@@ -93,16 +89,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const client = await clientPromise;
   const db = client.db("test");
 
-  
-
   // gets userdata from the session and passes a user object to the page. This is basically the same data as the user session, but it has the payrate added.
 
   const session = await getServerSession(context.req, context.res, authOptions);
 
   let user: UserType = {
-    name: 'guest',
-    email: 'guest@email.com',
-    payRate: Number(process.env.PAYRATE_DEFAULT)
+    name: "guest",
+    email: "guest@email.com",
+    payRate: Number(process.env.PAYRATE_DEFAULT),
   };
 
   if (session) {
@@ -121,7 +115,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   console.log("server-side user is: ", user);
 
- const [todaysManuscripts, thisMonthsManuscripts, lastMonthsManuscripts] = await currentAndPreviousMonths(user.name)
+  const [todaysManuscripts, thisMonthsManuscripts, lastMonthsManuscripts] =
+    await currentAndPreviousMonths(user.name);
 
   return {
     props: {

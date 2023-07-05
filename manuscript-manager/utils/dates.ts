@@ -24,7 +24,7 @@ export function determineStartDate(month: number, year: number, day: number) {
 export function determinePrevMonthStartDate(date: Date): Date {
   const previousMonthDate = new Date(date);
   const currentDay = date.getDate();
-  previousMonthDate.setMonth(previousMonthDate.getMonth() -1 );
+  previousMonthDate.setMonth(previousMonthDate.getMonth() - 1);
   previousMonthDate.setDate(currentDay);
   return previousMonthDate;
 }
@@ -72,53 +72,47 @@ export function dayFilter(
 
 //does not require manuscripts
 export function payPeriodDays(dateObj: Date) {
-    //get the day/month/year from the date passed
+  //get the day/month/year from the date passed
 
-    let  month: number = dateObj.getMonth(); 
-    let  day: number = dateObj.getDate();
-    let  year: number = dateObj.getFullYear();
+  let month: number = dateObj.getMonth();
+  let day: number = dateObj.getDate();
+  let year: number = dateObj.getFullYear();
 
+  let start = determineStartDate(month, year, day);
+  console.log("pay period day: ", day, month, year);
+  console.log("start date: ", start.toLocaleString());
 
-    let start = determineStartDate(month, year, day);
-    console.log("pay period day: ", day, month, year)
-    console.log("start date: ", start.toLocaleString())
+  let end = determineEndDate(month, year, day);
+  console.log("end date: ", end.toLocaleString());
+  let days = [];
 
-    let end = determineEndDate(month, year, day);
-    console.log("end date: ", end.toLocaleString())
-    let days = []
+  let currentDatePointer = new Date(start);
 
-    let currentDatePointer = new Date(start) 
+  while (currentDatePointer <= end) {
+    days.push(new Date(currentDatePointer));
 
-    while(currentDatePointer <= end) {
-
-      days.push(new Date(currentDatePointer))
-
-
-
-      if (currentDatePointer.getDate() === getDaysInMonth(year, month)) {
-        // Transition to the next month
-        if (month === 11) {
-          currentDatePointer = new Date(year + 1, 0, 1);
-        } else {
-          currentDatePointer = new Date(year, month + 1, 1);
-        }
+    if (currentDatePointer.getDate() === getDaysInMonth(year, month)) {
+      // Transition to the next month
+      if (month === 11) {
+        currentDatePointer = new Date(year + 1, 0, 1);
       } else {
-        currentDatePointer.setDate(currentDatePointer.getDate() + 1);
+        currentDatePointer = new Date(year, month + 1, 1);
       }
+    } else {
+      currentDatePointer.setDate(currentDatePointer.getDate() + 1);
     }
-    
+  }
 
-    return days
-
+  return days;
 }
 
 export function getDaysInMonth(year: number, month: number) {
   const lastDayOfMonth = new Date(year, month + 1, 0);
-  
+
   // Get the date component of the last day
   // This gives us the total number of days in the current month
   const daysInMonth = lastDayOfMonth.getDate();
-  
+
   return daysInMonth;
 }
 
