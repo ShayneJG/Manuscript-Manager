@@ -32,7 +32,7 @@ export function determinePrevMonthStartDate(date: Date): Date {
 // returns the end date of current pay period
 export function determineEndDate(month: number, year: number, day: number) {
   let endDate;
-  day <= 20
+  day < 20
     ? (endDate = new Date(year, month, 20))
     : (endDate = new Date(year, month + 1, 20));
   return endDate;
@@ -68,6 +68,52 @@ export function dayFilter(
     const objDay = objDate.getDate();
     return objMonth === month && objYear === year && objDay === day;
   });
+}
+
+//does not require manuscripts
+export function payPeriodDays(dateObj: Date) {
+  //get the day/month/year from the date passed
+
+  let month: number = dateObj.getMonth();
+  let day: number = dateObj.getDate();
+  let year: number = dateObj.getFullYear();
+
+  let start = determineStartDate(month, year, day);
+  console.log("pay period day: ", day, month, year);
+  console.log("start date: ", start.toLocaleString());
+
+  let end = determineEndDate(month, year, day);
+  console.log("end date: ", end.toLocaleString());
+  let days = [];
+
+  let currentDatePointer = new Date(start);
+
+  while (currentDatePointer <= end) {
+    days.push(new Date(currentDatePointer));
+
+    if (currentDatePointer.getDate() === getDaysInMonth(year, month)) {
+      // Transition to the next month
+      if (month === 11) {
+        currentDatePointer = new Date(year + 1, 0, 1);
+      } else {
+        currentDatePointer = new Date(year, month + 1, 1);
+      }
+    } else {
+      currentDatePointer.setDate(currentDatePointer.getDate() + 1);
+    }
+  }
+
+  return days;
+}
+
+export function getDaysInMonth(year: number, month: number) {
+  const lastDayOfMonth = new Date(year, month + 1, 0);
+
+  // Get the date component of the last day
+  // This gives us the total number of days in the current month
+  const daysInMonth = lastDayOfMonth.getDate();
+
+  return daysInMonth;
 }
 
 export const [currentDate, currentMonth, currentYear, currentDay] =

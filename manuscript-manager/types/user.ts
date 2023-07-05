@@ -3,5 +3,10 @@ export default  interface UserType {
     image?: string;
     email: string;
     payRate: number;
+    earnings?: UserEarnings;
+}
 
+export interface  UserEarnings {
+    workDays: number;
+    monthly: number;
 }

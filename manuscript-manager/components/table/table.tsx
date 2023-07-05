@@ -2,7 +2,6 @@ import {
   Table,
   Thead,
   Tbody,
-  Tfoot,
   Tr,
   Th,
   Td,
@@ -12,7 +11,6 @@ import {
 import { ManuscriptType } from "@/types/manuscripts";
 import DeleteManuscriptButton from "../manuscript/deleteManuscriptButton";
 import UpdateManuscriptButton from "../manuscript/updateManuscriptButton";
-import styles from "/custom styles/tableStyles.module.css";
 
 //This component is used to place manuscript data into a table.
 

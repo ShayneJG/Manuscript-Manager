@@ -23,7 +23,7 @@ import { authOptions } from '../auth/[...nextauth]';
       // find user based on email
       const response = await db.collection('users').findOneAndUpdate(
         { email: user.email }, // Filter for finding the document
-        { $set: { payRate: user.payRate } }, // Update operation using the $set operator
+        { $set: { payRate: user.payRate, earnings: user.earnings } }, // Update operation using the $set operator
 
       );
       
