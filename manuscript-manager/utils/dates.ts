@@ -24,7 +24,7 @@ export function determineStartDate(month: number, year: number, day: number) {
 export function determinePrevMonthStartDate(date: Date): Date {
   const previousMonthDate = new Date(date);
   const currentDay = date.getDate();
-  previousMonthDate.setMonth(previousMonthDate.getMonth() - 1);
+  previousMonthDate.setMonth(previousMonthDate.getMonth() -1 );
   previousMonthDate.setDate(currentDay);
   return previousMonthDate;
 }
@@ -74,9 +74,9 @@ export function dayFilter(
 export function payPeriodDays(dateObj: Date) {
     //get the day/month/year from the date passed
 
-    let  month: number = dateObj.getUTCMonth(); 
-    let  day: number = dateObj.getUTCDate();
-    let  year: number = dateObj.getUTCFullYear();
+    let  month: number = dateObj.getMonth(); 
+    let  day: number = dateObj.getDate();
+    let  year: number = dateObj.getFullYear();
 
 
     let start = determineStartDate(month, year, day);

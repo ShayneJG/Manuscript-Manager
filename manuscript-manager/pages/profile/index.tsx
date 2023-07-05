@@ -25,7 +25,7 @@ import clientPromise from "@/lib/mongodb";
 import UserType, { UserEarnings } from "@/types/user";
 import Header from "@/components/page/header";
 import { roundLimit } from "@/utils/math";
-import { lastMonthStartDate, payPeriodDays, thisMonthStartDate } from "@/utils/dates";
+import { determinePrevMonthStartDate, determineStartDate, lastMonthStartDate, payPeriodDays, thisMonthStartDate } from "@/utils/dates";
 import { ManuscriptType } from "@/types/manuscripts";
 import { WithId } from "mongodb";
 import MonthlyEarningsChart from "@/components/stats/charts/monthlyEarnings";
@@ -34,9 +34,14 @@ interface ProfileProps {
   user: UserType;
   currentMonth: ManuscriptType[];
   lastMonth: ManuscriptType[];
+  
 }
 
+
+
 export default function Profile({ user, currentMonth, lastMonth }: ProfileProps) {
+
+  //handles updating the userdata
   const updateUser = async () => {
     if (session?.user) {
       const user: UserType = {
@@ -62,7 +67,7 @@ export default function Profile({ user, currentMonth, lastMonth }: ProfileProps)
     }
   };
 
-
+  // gives an approximate income per day required to meet goals
   function dailyEarnings() {
     //assume 30 days a month, approx 4 weeks. 
     const totalWorkDays: number = workDays * 4; 
@@ -71,8 +76,11 @@ export default function Profile({ user, currentMonth, lastMonth }: ProfileProps)
     setDayEarnings(roundLimit(earningsPerDay));
   }
 
+  console.log("last month start date", lastMonthStartDate)
   
 
+  
+  // session data for the logged in user
   const { status, data: session } = useSession();
 
   //state
@@ -81,9 +89,11 @@ export default function Profile({ user, currentMonth, lastMonth }: ProfileProps)
   const [dayEarnings, setDayEarnings] = useState<number>();
   const [monthGoal, setMonthGoal] = useState<number>(user.earnings?.monthly!);
   const toast = useToast();
-
+  
+  //makes sure that the daily earnings approximation is updated when required
   useEffect(() => {dailyEarnings()}, [workDays, monthGoal])
 
+  // ensure that a user is logged in. If not logged in, refuse entry
   if (status === "unauthenticated") {
     return (
       <Alert status="error">
@@ -199,7 +209,8 @@ export default function Profile({ user, currentMonth, lastMonth }: ProfileProps)
             </Box>
           </Box>
            <Box>
-           <MonthlyEarningsChart currentMonth={currentMonth} dateInPeriod={new Date()} />
+           <MonthlyEarningsChart manuscripts={currentMonth} dateInPeriod={new Date()} label="Current Month" />
+           <MonthlyEarningsChart manuscripts={lastMonth} dateInPeriod={lastMonthStartDate} label="Previous Month" />
           </Box>       
           
         </Grid>
