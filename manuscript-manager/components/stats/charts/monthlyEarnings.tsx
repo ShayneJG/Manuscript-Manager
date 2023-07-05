@@ -29,7 +29,6 @@ ChartJS.register(
 interface MonthlyEarningsProps {
   manuscripts: ManuscriptType[];
   dateInPeriod: Date;
-
   label: string;
 }
 
@@ -57,7 +56,7 @@ export default function MonthlyEarningsChart({
     // manuscripts will be pushed into the array.
     month.forEach((manuscript) => {
       const date = manuscript.date.split("T")[0];
-      console.log("manuscript dates: ", date);
+      //console.log("manuscript dates: ", date);
       if (currentManuscriptsByDate[date]) {
         currentManuscriptsByDate[date].push(manuscript);
       } else {
@@ -77,10 +76,10 @@ export default function MonthlyEarningsChart({
         .toISOString()
         .split("T")[0];
       //console.log("search date: ", searchDate);
-      const manuscripts = currentManuscriptsByDate[searchDate] || null;
+      const dayManuscripts = currentManuscriptsByDate[searchDate] || null;
 
-      if (manuscripts) {
-        earnings.push(calculateTotalEarnings(manuscripts));
+      if (dayManuscripts) {
+        earnings.push(calculateTotalEarnings(dayManuscripts));
       } else {
         earnings.push(0);
       }
