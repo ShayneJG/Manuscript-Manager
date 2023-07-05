@@ -1,5 +1,6 @@
 import { ManuscriptType } from "@/types/manuscripts";
 import { payPeriodDays } from "@/utils/dates";
+import { roundLimit } from "@/utils/math";
 import { calculateTotalEarnings } from "@/utils/monthlyTotals";
 import {
   Chart as ChartJS,
@@ -26,15 +27,14 @@ ChartJS.register(
 
 //Data needs to be grabbed via serversideprops and passed.
 interface MonthlyEarningsProps {
-  currentMonth: ManuscriptType[], 
-  dateInPeriod: Date
-  
+  currentMonth: ManuscriptType[];
+  dateInPeriod: Date;
 }
 
 //chart for the profile page. Will break down and show monthly earnings.
 export default function MonthlyEarningsChart({
   currentMonth,
- dateInPeriod
+  dateInPeriod,
 }: MonthlyEarningsProps) {
   function earningsCalculator(labels: Date[], month: ManuscriptType[]) {
     // initiates variable that holds all the manuscripts, grouped under a date key.
@@ -93,8 +93,6 @@ export default function MonthlyEarningsChart({
 
   const currentEarnings = earningsCalculator(labels, currentMonth);
 
-  
-
   // shorter labels for readability.
   let shortLabels: string[] = labels.map((date) => {
     return date.toLocaleDateString().slice(0, 10);
@@ -109,7 +107,9 @@ export default function MonthlyEarningsChart({
       },
       title: {
         display: true,
-        text: "Monthly Earnings",
+        text: `Monthly Earnings | total: \$${roundLimit(
+          calculateTotalEarnings(currentMonth)
+        )}`,
       },
     },
   };
@@ -118,9 +118,8 @@ export default function MonthlyEarningsChart({
     labels: shortLabels,
     datasets: [
       {
-        label: `Current Month | total: \$${calculateTotalEarnings(
-          currentMonth
-        )}`,
+        label: `Current Month
+        `,
         data: currentEarnings,
         borderColor: "rgb(132, 99, 255)",
         backgroundColor: "rgba(132, 99, 255, 0.5)",
@@ -128,5 +127,9 @@ export default function MonthlyEarningsChart({
     ],
   };
 
-  return <Line data={data} options={options} />;
+  return (
+    <>
+      <Line data={data} options={options} />
+    </>
+  );
 }
