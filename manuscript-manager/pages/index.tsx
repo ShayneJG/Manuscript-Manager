@@ -57,6 +57,7 @@ export default function Home(props: HomeProps) {
           <Flex direction="column" gap="12">
             <CreateManuscript
               user={user}
+              setManuscriptToUpdate={setManuscriptToUpdate}
               manuscriptToUpdate={manuscriptToUpdate}
               setManuscriptsInState={setManuscriptsInState}
             />
@@ -66,8 +67,9 @@ export default function Home(props: HomeProps) {
           <Flex id="maincontent" direction="column" gap="12">
             <Flex direction="column" gap="12">
               <AtAGlance
-                month={monthlySummary(thisMonthsManuscripts)}
-                prevMonth={monthlySummary(lastMonthsManuscripts)}
+                thisMonthsManuscripts={thisMonthsManuscripts}
+                lastMonthsManuscripts={lastMonthsManuscripts}
+                manuscriptsInState={manuscriptsInState}
               />
               <ManuscriptTable
                 data={manuscriptsInState}
@@ -115,8 +117,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   console.log("server-side user is: ", user);
 
+
   const [todaysManuscripts, thisMonthsManuscripts, lastMonthsManuscripts] =
     await currentAndPreviousMonths(user.name);
+
 
   return {
     props: {
