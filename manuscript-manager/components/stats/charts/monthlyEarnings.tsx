@@ -118,8 +118,7 @@ export default function MonthlyEarningsChart({
     labels: shortLabels,
     datasets: [
       {
-        label: `Current Month
-        `,
+        label: `Current Month`,
         data: currentEarnings,
         borderColor: "rgb(132, 99, 255)",
         backgroundColor: "rgba(132, 99, 255, 0.5)",
