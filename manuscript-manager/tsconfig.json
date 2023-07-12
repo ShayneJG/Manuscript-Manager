@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "types": ["@types/babel__core"],
+    "types": ["@types/babel__core", "jest"],
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
