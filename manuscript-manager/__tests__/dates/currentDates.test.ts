@@ -1,4 +1,4 @@
-import { currentDates } from "@/utils/dates"; // Replace 'your-module' with the actual module path
+import { currentDates } from "@/utils/dates"; 
 
 describe('currentDates', () => {
   it('should return the current date, month, year, and day', () => {

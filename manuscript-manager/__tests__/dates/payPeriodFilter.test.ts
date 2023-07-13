@@ -2,7 +2,6 @@ import { ManuscriptType } from "@/types/manuscripts";
 
 import * as datesUtils from '@/utils/dates';
 
-import {jest} from '@jest/globals';
 
 describe("payPeriodFilter", () => {
 
@@ -94,7 +93,6 @@ describe("payPeriodFilter", () => {
     //act
 
     const result = datesUtils.payPeriodFilter(manuscripts, month, year, day);
-    console.log(result)
     
 
     //assert
