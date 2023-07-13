@@ -1,25 +1,19 @@
 import { ManuscriptType } from "@/types/manuscripts";
-import {
-  determineStartDate,
-  determineEndDate,
-  payPeriodFilter,
-} from "@/utils/dates";
+
+import * as datesUtils from '@/utils/dates';
+
 import {jest} from '@jest/globals';
 
 describe("payPeriodFilter", () => {
-  //mocking start and end date functions
 
-  
 
-  
+    //TODO: Mock determineStartDate, determineEndDate
+
   //test
   
   test("returns an array of manuscripts filtered by pay period", () => {
     //arrange
-    jest.mock('@/utils/dates', () => ({
-        determineStartDate: jest.fn().mockReturnValue(new Date(2023, 3, 21)),
-        determineEndDate: jest.fn().mockReturnValue(new Date(2023, 4, 20)),
-      }));
+    
     const manuscripts: ManuscriptType[] = [
       {
         user: "shayne geilman",
@@ -99,7 +93,7 @@ describe("payPeriodFilter", () => {
 
     //act
 
-    const result = payPeriodFilter(manuscripts, month, year, day);
+    const result = datesUtils.payPeriodFilter(manuscripts, month, year, day);
     console.log(result)
     
 
@@ -151,7 +145,6 @@ describe("payPeriodFilter", () => {
         createdAt: "2023-03-24T14:31:35.794+00:00",
       },
     ]);
-    
     
   });
 });
