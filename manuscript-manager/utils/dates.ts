@@ -32,7 +32,7 @@ export function determinePrevMonthStartDate(date: Date): Date {
 // returns the end date of current pay period
 export function determineEndDate(month: number, year: number, day: number) {
   let endDate;
-  day < 20
+  day <= 20
     ? (endDate = new Date(year, month, 20))
     : (endDate = new Date(year, month + 1, 20));
   return endDate;
