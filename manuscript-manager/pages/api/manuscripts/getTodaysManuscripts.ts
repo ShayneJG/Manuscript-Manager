@@ -14,7 +14,7 @@ export default async function getTodaysManuscripts(
 
   try {
     const client = await clientPromise;
-    const db = client.db("test");
+    const db = client.db();
 
     // get user data
     const session = await getServerSession(req, res, authOptions);

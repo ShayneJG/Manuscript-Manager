@@ -18,7 +18,7 @@ import { authOptions } from '../auth/[...nextauth]';
           res.send({ error: 'Session not authenticated' });
         } else {
             const client = await clientPromise; // clientPromise is a function that gets the instance of the MongoDB database
-            const db = client.db("test")
+            const db = client.db()
 
       // create new user based on req.body
       await db.collection('users').insertOne(user);

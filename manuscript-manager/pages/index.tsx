@@ -89,7 +89,7 @@ export default function Home(props: HomeProps) {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   // we need today's manuscripts, this month's manuscripts, and last month's manuscripts
   const client = await clientPromise;
-  const db = client.db("test");
+  const db = client.db();
 
   // gets userdata from the session and passes a user object to the page. This is basically the same data as the user session, but it has the payrate added.
 

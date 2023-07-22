@@ -4,7 +4,7 @@ import { ManuscriptType } from "@/types/manuscripts";
 
 export default async function currentAndPreviousMonths(name: string) {
   const client = await clientPromise;
-  const db = client.db("test");
+  const db = client.db();
   const data = await db
     .collection("manuscripts")
     .find({
