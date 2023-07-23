@@ -163,8 +163,7 @@ export default function Profile({ user, currentMonth, lastMonth }: ProfileProps)
                         pointerEvents="none"
                         color="gray.300"
                         fontSize="1.2em"
-                        children="$"
-                      />
+                      >$</InputLeftElement>
                       <Input
                         value={monthGoal}
                         onChange={(e: ChangeEvent<HTMLInputElement>) => {
