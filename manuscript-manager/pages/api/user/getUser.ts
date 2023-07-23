@@ -15,7 +15,7 @@ export default  async function getUser(req: NextApiRequest, res: NextApiResponse
       res.send({ error: 'Session not authenticated' });
     } else {
         const client = await clientPromise; // clientPromise is a function that gets the instance of the MongoDB database
-        const db = client.db("test")
+        const db = client.db()
 
       // Find the document with the same email
       const user = await db.collection('users').findOne({ email });

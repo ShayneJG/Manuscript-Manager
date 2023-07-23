@@ -12,7 +12,7 @@ export async function getManuscripts(
 ) {
   try {
     const client = await clientPromise; // clientPromise is a function that gets the instance of the MongoDB database
-    const db = client.db("test"); // specifies which collection in the database we are accessing
+    const db = client.db(); // specifies which collection in the database we are accessing
 
     const manuscripts = await db // uses MongoDB MQL queries to access info from the database
       .collection("manuscripts") // specifies the subsection/subcollection

@@ -163,8 +163,7 @@ export default function Profile({ user, currentMonth, lastMonth }: ProfileProps)
                         pointerEvents="none"
                         color="gray.300"
                         fontSize="1.2em"
-                        children="$"
-                      />
+                      >$</InputLeftElement>
                       <Input
                         value={monthGoal}
                         onChange={(e: ChangeEvent<HTMLInputElement>) => {
@@ -222,7 +221,7 @@ export default function Profile({ user, currentMonth, lastMonth }: ProfileProps)
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerSession(context.req, context.res, authOptions);
   const client = await clientPromise;
-  const db = client.db("test");
+  const db = client.db();
 
   let user = {};
   let thisMonth;
