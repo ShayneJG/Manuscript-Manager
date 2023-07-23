@@ -36,7 +36,7 @@ function AtAGlance({
       ...manuscriptsInState,
     ];
     setMonth(monthlySummary(monthlyManuscripts));
-  }, [manuscriptsInState]);
+  }, [manuscriptsInState, thisMonthsManuscripts]);
 
   // generates the summaries for each property of earnings
   const summaries: JSX.Element[] = Object.keys(month).map((key) => (
