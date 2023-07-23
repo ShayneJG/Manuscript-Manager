@@ -91,7 +91,7 @@ export default function Profile({ user, currentMonth, lastMonth }: ProfileProps)
   const toast = useToast();
   
   //makes sure that the daily earnings approximation is updated when required
-  useEffect(() => {dailyEarnings()}, [dailyEarnings, workDays, monthGoal])
+  useEffect(() => {dailyEarnings()}, [workDays, monthGoal])
 
   // ensure that a user is logged in. If not logged in, refuse entry
   if (status === "unauthenticated") {
