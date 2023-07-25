@@ -17,12 +17,24 @@ export default async function postManuscript(
 
   try {
     const client = await clientPromise;
-    const response = await client
-      .db()
-      .collection("manuscripts")
-      .insertOne(newManuscript);
-    return res.status(200).json(response);
-  } catch (e) {
-    console.error(e);
-  }
-}
+    const collection = client.db().collection("manuscripts");
+  
+    const existingManuscript = await collection.findOne({
+      manuscriptID: newManuscript.manuscriptID,
+    });
+  
+    if (existingManuscript) {
+      return res.status(409).json({ message: "Manuscript already exists" });
+    } else {
+      const response = await collection.insertOne(newManuscript);
+  
+      // Fetch the newly inserted manuscript separately using its unique identifier
+      const insertedManuscript = await collection.findOne({
+        _id: response.insertedId,
+      });
+  
+      return res.status(200).json(insertedManuscript);
+    }
+  } catch (error) {
+    return res.status(500).json(error);
+  }}
