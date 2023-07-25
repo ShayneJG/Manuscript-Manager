@@ -16,7 +16,17 @@ interface SummaryProps {
 }
 
 function Summary({ statistic, label, lastStatistic }: SummaryProps) {
-  const percent: string = getPercentageChange(statistic, lastStatistic) + "%";
+  let num: number = getPercentageChange(statistic, lastStatistic)
+  let percent: string = num + "%";
+  let comparison: boolean = true;
+
+  //check whether NaN or infinite.
+  if(Number.isNaN(num) || !Number.isFinite(num)) {
+    percent = "No data to compare"
+    comparison = false;
+  }
+
+
 
   let name;
   let dollars;
@@ -49,9 +59,9 @@ function Summary({ statistic, label, lastStatistic }: SummaryProps) {
       </StatNumber>
       <StatHelpText>
         {percent}
-        <StatArrow
+        {comparison && <StatArrow
           type={statistic > lastStatistic ? "increase" : "decrease"}
-        ></StatArrow>
+        ></StatArrow>}
       </StatHelpText>
 
       <StatHelpText>
