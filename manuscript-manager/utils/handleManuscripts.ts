@@ -67,10 +67,14 @@ export async function handleManuscripts(
     const json = await response.json();
 
     if (!response.ok) {
+      //handle specific response codes here
+      if(response.status === 409) {
+        return "Manuscript already exists"
+      }
       action === "POST"
         ? console.log("There was an error submitting the manuscript.")
         : console.log("There was an error updating the manuscript.");
-      return false;
+      return "error"
     }
 
     if (response.ok) {
@@ -78,10 +82,11 @@ export async function handleManuscripts(
       console.log("Response ok:", json);
       reset();
       get();
-      return true;
+      return "success";
     }
   } catch (error) {
     console.error("Error:", error);
+    return error
   }
   // update state by fetching new manuscripts for today
 }

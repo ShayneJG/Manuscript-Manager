@@ -11,6 +11,7 @@ import {
   Input,
   Box,
   FormControl,
+  useToast,
   FormLabel,
   FormHelperText,
   Checkbox,
@@ -25,6 +26,7 @@ import { ChangeEvent, useState } from "react";
 import UserType from "@/types/user";
 import { useEffect } from "react";
 import { handleManuscripts } from "@/utils/handleManuscripts";
+
 //this component handles the creation of new manuscripts, and will eventually send the manuscript as a request to the backend.
 
 interface CreateManuscriptProps {
@@ -40,6 +42,7 @@ export default function CreateManuscript({
   user,
   setManuscriptToUpdate,
 }: CreateManuscriptProps) {
+  //manuscript state
   const [manuscriptID, setManuscriptID] = useState<string>("");
   const [date, setDate] = useState<Date>(new Date());
   const [wordCount, setWordCount] = useState<number | undefined>();
@@ -55,7 +58,10 @@ export default function CreateManuscript({
   const [manuscriptIDError, setManuscriptIDError] = useState<boolean>(false);
   const [wordCountError, setwordCountError] = useState<boolean>(false);
   const [turnAroundError, setTurnAroundError] = useState<boolean>(false);
-
+  //button loading state
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  //toast
+  const toast = useToast();
   function formValidation() {
     //reset any previous errors
     setManuscriptIDError(false);
@@ -127,13 +133,15 @@ export default function CreateManuscript({
   // Handles submission of a manuscript
   async function handleSubmit(e: MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
-
+    setIsLoading(true);
+    console.log("is loading: ", isLoading)
     const userInfo = {
       user: name,
       payRate: payRate,
     };
+    try{
     if (formValidation()) {
-      handleManuscripts(
+      const response = await handleManuscripts(
         "POST",
         resetManuscriptState,
         getTodaysManuscripts,
@@ -148,18 +156,32 @@ export default function CreateManuscript({
         authorBio,
         userInfo,
         undefined
-      );
+      )
+      response === "success" ? toast({
+        title: 'Manuscript uploaded.',
+      status: 'success',
+      duration: 5000,
+    }) : toast({
+      title: 'Manuscript failed to upload.',
+      status: 'error',
+      description: `${response}`})
+
     }
-  }
+  } finally {
+    setIsLoading(false);
+  }}
 
   // Handles updating of a manuscript
   async function handleUpdate(e: MouseEvent<HTMLButtonElement>) {
+    
     e.preventDefault();
-
+    setIsLoading(true);
+    
     const userInfo = {
       user: name,
       payRate: payRate,
     };
+    try {
     if (formValidation()) {
       let success = await handleManuscripts(
         "PATCH",
@@ -179,7 +201,9 @@ export default function CreateManuscript({
       );
       success && setManuscriptToUpdate(undefined);
     }
-  }
+  } finally {
+    setIsLoading(false);
+  }}
 
   // If there is a manuscript being updated, sets state values accordingly so the manuscript details are displayed in the form ready to edit
   useEffect(() => {
@@ -367,6 +391,7 @@ export default function CreateManuscript({
               isDisabled={name && payRate ? true : false}
             >
               <Button
+              isLoading={isLoading}
                 isDisabled={name && payRate ? false : true}
                 onClick={(e) => handleUpdate(e)}
                 className="w-full"
@@ -382,6 +407,7 @@ export default function CreateManuscript({
               isDisabled={name && payRate ? true : false}
             >
               <Button
+              isLoading={isLoading}
                 isDisabled={name && payRate ? false : true}
                 onClick={(e) => handleSubmit(e)}
                 className="w-full"
