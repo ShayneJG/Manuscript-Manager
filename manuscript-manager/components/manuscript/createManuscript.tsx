@@ -416,13 +416,6 @@ export default function CreateManuscript({
               </Button>
             </Tooltip>
           )}
-          <Button
-            onClick={() => {
-              resetManuscriptState();
-            }}
-          >
-            Reset
-          </Button>
         </GridItem>
       </Grid>
     </Box>
