@@ -84,8 +84,6 @@ export default function CreateManuscript({
       setwordCountError(true);
       validates = false;
     }
-
-    console.log(validates);
     return validates;
   }
 
@@ -121,7 +119,6 @@ export default function CreateManuscript({
 
       if (response.ok) {
         // update todays manuscripts in state
-        console.log("Response ok:", json);
 
         setManuscriptsInState(json);
       }
@@ -134,76 +131,79 @@ export default function CreateManuscript({
   async function handleSubmit(e: MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
     setIsLoading(true);
-    console.log("is loading: ", isLoading)
-    const userInfo = {
-      user: name,
-      payRate: payRate,
-    };
-    try{
-    if (formValidation()) {
-      const response = await handleManuscripts(
-        "POST",
-        resetManuscriptState,
-        getTodaysManuscripts,
-        date,
-        manuscriptID,
-        wordCount,
-        latex,
-        double,
-        triple,
-        bonus,
-        turnAround,
-        authorBio,
-        userInfo,
-        undefined
-      )
-      response === "success" ? toast({
-        title: 'Manuscript uploaded.',
-      status: 'success',
-      duration: 5000,
-    }) : toast({
-      title: 'Manuscript failed to upload.',
-      status: 'error',
-      description: `${response}`})
-
-    }
-  } finally {
-    setIsLoading(false);
-  }}
-
-  // Handles updating of a manuscript
-  async function handleUpdate(e: MouseEvent<HTMLButtonElement>) {
-    
-    e.preventDefault();
-    setIsLoading(true);
-    
     const userInfo = {
       user: name,
       payRate: payRate,
     };
     try {
-    if (formValidation()) {
-      let success = await handleManuscripts(
-        "PATCH",
-        resetManuscriptState,
-        getTodaysManuscripts,
-        date,
-        manuscriptID,
-        wordCount,
-        latex,
-        double,
-        triple,
-        bonus,
-        turnAround,
-        authorBio,
-        userInfo,
-        manuscriptToUpdate
-      );
-      success && setManuscriptToUpdate(undefined);
+      if (formValidation()) {
+        const response = await handleManuscripts(
+          "POST",
+          resetManuscriptState,
+          getTodaysManuscripts,
+          date,
+          manuscriptID,
+          wordCount,
+          latex,
+          double,
+          triple,
+          bonus,
+          turnAround,
+          authorBio,
+          userInfo,
+          undefined
+        );
+        //pop the toast based on response
+        response === "success"
+          ? toast({
+              title: "Manuscript uploaded.",
+              status: "success",
+              duration: 5000,
+            })
+          : toast({
+              title: "Manuscript failed to upload.",
+              status: "error",
+              description: `${response}`,
+            });
+      }
+    } finally {
+      setIsLoading(false);
     }
-  } finally {
-    setIsLoading(false);
-  }}
+  }
+
+  // Handles updating of a manuscript
+  async function handleUpdate(e: MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    setIsLoading(true);
+
+    const userInfo = {
+      user: name,
+      payRate: payRate,
+    };
+    try {
+      if (formValidation()) {
+        let success = await handleManuscripts(
+          "PATCH",
+          resetManuscriptState,
+          getTodaysManuscripts,
+          date,
+          manuscriptID,
+          wordCount,
+          latex,
+          double,
+          triple,
+          bonus,
+          turnAround,
+          authorBio,
+          userInfo,
+          manuscriptToUpdate
+        );
+        success && setManuscriptToUpdate(undefined);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   // If there is a manuscript being updated, sets state values accordingly so the manuscript details are displayed in the form ready to edit
   useEffect(() => {
@@ -327,7 +327,7 @@ export default function CreateManuscript({
           <Stack direction="row" id="checkboxes">
             <Checkbox
               id="latex"
-              checked={latex}
+              isChecked={latex}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 setLatex(e.target.checked);
               }}
@@ -338,7 +338,7 @@ export default function CreateManuscript({
             </Checkbox>
             <Checkbox
               id="double"
-              checked={double}
+              isChecked={double}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 setDouble(e.target.checked);
               }}
@@ -349,7 +349,7 @@ export default function CreateManuscript({
             </Checkbox>
             <Checkbox
               id="triple"
-              checked={triple}
+              isChecked={triple}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 setTriple(e.target.checked);
               }}
@@ -391,7 +391,7 @@ export default function CreateManuscript({
               isDisabled={name && payRate ? true : false}
             >
               <Button
-              isLoading={isLoading}
+                isLoading={isLoading}
                 isDisabled={name && payRate ? false : true}
                 onClick={(e) => handleUpdate(e)}
                 className="w-full"
@@ -407,7 +407,7 @@ export default function CreateManuscript({
               isDisabled={name && payRate ? true : false}
             >
               <Button
-              isLoading={isLoading}
+                isLoading={isLoading}
                 isDisabled={name && payRate ? false : true}
                 onClick={(e) => handleSubmit(e)}
                 className="w-full"
