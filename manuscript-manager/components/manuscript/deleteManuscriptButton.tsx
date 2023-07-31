@@ -4,6 +4,7 @@
 import { ManuscriptType } from "@/types/manuscripts";
 import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, useDisclosure, useToast } from "@chakra-ui/react";
 import { RefObject, useRef } from "react";
+import {AiFillDelete} from "react-icons/ai"
 
 interface DeleteManuscriptButtonProps {
   manuscript: ManuscriptType;
@@ -73,7 +74,7 @@ export default function DeleteManuscriptButton({
 
   return <>
   
-  <Button size='sm' colorScheme="red" className="ml-1" onClick={onOpen}>Delete</Button>
+  <Button size='sm' colorScheme="red" className="ml-1" onClick={onOpen}><AiFillDelete /></Button>
 
 {/* 
   Below is the confirmation popup for the delete button
