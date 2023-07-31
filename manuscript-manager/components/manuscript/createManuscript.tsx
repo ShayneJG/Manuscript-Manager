@@ -21,6 +21,7 @@ import {
   Grid,
   GridItem,
   FormErrorMessage,
+  Heading,
 } from "@chakra-ui/react";
 import { ChangeEvent, useState } from "react";
 import UserType from "@/types/user";
@@ -224,7 +225,8 @@ export default function CreateManuscript({
   }, [manuscriptToUpdate]);
 
   return (
-    <Box borderWidth="1px" borderRadius="lg" p={2} className="text-dark">
+    <Box borderWidth="1px" borderRadius="lg" p={2} className="text-dark flex flex-col text-center bg-lightBlue/5 shadow-md">
+      <Heading className="pb-2" size="sm">New Manuscript</Heading>
       <Grid
         templateColumns="repeat(2, 50%)"
         alignItems="center"
