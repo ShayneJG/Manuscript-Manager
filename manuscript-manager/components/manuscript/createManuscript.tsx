@@ -225,8 +225,15 @@ export default function CreateManuscript({
   }, [manuscriptToUpdate]);
 
   return (
-    <Box borderWidth="1px" borderRadius="lg" p={2} className="text-dark flex flex-col text-center bg-lightBlue/5 shadow-md">
-      <Heading className="pb-2" size="sm">New Manuscript</Heading>
+    <Box
+      borderWidth="1px"
+      borderRadius="lg"
+      p={2}
+      className="text-dark flex flex-col text-center bg-lightBlue/5 shadow-md"
+    >
+      <Heading className="pb-2" size="sm">
+        New Manuscript
+      </Heading>
       <Grid
         templateColumns="repeat(2, 50%)"
         alignItems="center"
@@ -389,21 +396,31 @@ export default function CreateManuscript({
 
         <GridItem w="100%" alignSelf="end">
           {manuscriptToUpdate ? (
-            <Tooltip
-              hasArrow
-              bg="red.600"
-              label="No user or pay rate found. If logged in, please ensure your profile is up-to-date"
-              isDisabled={name && payRate ? true : false}
-            >
-              <Button
-                isLoading={isLoading}
-                isDisabled={name && payRate ? false : true}
-                onClick={(e) => handleUpdate(e)}
-                className="w-full"
+            <div>
+              <Tooltip
+                hasArrow
+                bg="red.600"
+                label="No user or pay rate found. If logged in, please ensure your profile is up-to-date"
+                isDisabled={name && payRate ? true : false}
               >
-                Update
-              </Button>
-            </Tooltip>
+                <Button
+                  colorScheme="blue"
+                  isLoading={isLoading}
+                  isDisabled={name && payRate ? false : true}
+                  onClick={(e) => handleUpdate(e)}
+                  className="w-full mb-1"
+                >
+                  Update
+                </Button>
+              </Tooltip>
+              <Button className="w-full"
+               colorScheme="red"
+               onClick={() => {
+                resetManuscriptState();
+                setManuscriptToUpdate(undefined)
+              }}
+               >Cancel</Button>
+            </div>
           ) : (
             <Tooltip
               hasArrow
