@@ -73,7 +73,7 @@ export default function DeleteManuscriptButton({
 
   return <>
   
-  <button onClick={onOpen}>Delete</button>
+  <Button size='sm' colorScheme="red" className="m-1" onClick={onOpen}>Delete</Button>
 
 {/* 
   Below is the confirmation popup for the delete button
