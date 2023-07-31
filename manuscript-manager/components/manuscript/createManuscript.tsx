@@ -224,7 +224,7 @@ export default function CreateManuscript({
   }, [manuscriptToUpdate]);
 
   return (
-    <Box borderWidth="1px" borderRadius="lg" p={2}>
+    <Box borderWidth="1px" borderRadius="lg" p={2} className="text-dark">
       <Grid
         templateColumns="repeat(2, 50%)"
         alignItems="center"
@@ -240,6 +240,7 @@ export default function CreateManuscript({
               {/* Chakra UI does not have a date picker component. It has an input of type date,
           but that was too weird to use, so we are using react-datepicker here, which simplifies things a lot */}
               <DatePicker
+                className="bg-transparent"
                 id="date-picker"
                 dateFormat={"dd/MM/yyyy"}
                 selected={date}
@@ -278,7 +279,7 @@ export default function CreateManuscript({
               required
               size="sm"
             />
-            <FormErrorMessage>Cannot be blank</FormErrorMessage>
+            <FormErrorMessage className="h-0">Cannot be blank</FormErrorMessage>
           </FormControl>
         </GridItem>
         <GridItem>
@@ -320,11 +321,11 @@ export default function CreateManuscript({
               }}
               size="sm"
             />{" "}
-            <FormErrorMessage>Cannot be blank</FormErrorMessage>
+            <FormErrorMessage className="h-0">Cannot be blank</FormErrorMessage>
           </FormControl>
         </GridItem>
         <GridItem alignSelf="end">
-          <Stack direction="row" id="checkboxes">
+          <Stack className="p-2" direction="row" id="checkboxes">
             <Checkbox
               id="latex"
               isChecked={latex}
@@ -375,7 +376,9 @@ export default function CreateManuscript({
               }
               size="sm"
             />{" "}
-            <FormErrorMessage>Must be in the format: 00:00:00</FormErrorMessage>
+            <FormErrorMessage className="h-0">
+              Must be in the format: 00:00:00
+            </FormErrorMessage>
           </FormControl>
         </GridItem>
         {/* Boxing together the 3 toggle options to make layout simpler
@@ -407,6 +410,7 @@ export default function CreateManuscript({
               isDisabled={name && payRate ? true : false}
             >
               <Button
+                colorScheme="blue"
                 isLoading={isLoading}
                 isDisabled={name && payRate ? false : true}
                 onClick={(e) => handleSubmit(e)}
