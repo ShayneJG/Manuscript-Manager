@@ -20,7 +20,7 @@ import { GetServerSideProps } from "next";
 import { getServerSession } from "next-auth";
 import { useSession } from "next-auth/react";
 import { ChangeEvent, useEffect, useState } from "react";
-import { authOptions } from "../api/auth/[...nextauth]";
+import { authOptions } from "./api/auth/[...nextauth]";
 import clientPromise from "@/lib/mongodb";
 import UserType from "@/types/user";
 import Header from "@/components/page/header";
