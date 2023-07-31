@@ -106,10 +106,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       email: userData?.email,
       payRate: userData?.payRate ? userData.payRate : null,
     };
-    console.log("user updated: ", user);
+    // console.log("user updated: ", user);
   }
 
-  console.log("server-side user is: ", user);
+  // console.log("server-side user is: ", user);
 
   const [todaysManuscripts, thisMonthsManuscripts, lastMonthsManuscripts] =
     await currentAndPreviousMonths(user.name);
