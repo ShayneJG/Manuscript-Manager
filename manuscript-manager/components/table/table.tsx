@@ -33,7 +33,7 @@ export default function ManuscriptTable({
   let tick: string = "✓";
   return (
     <TableContainer>
-      <Table variant={"striped"} size="md">
+      <Table variant={"striped"} size="md" className="bg-lightBlue/5 shadow-md border">
         {caption ? <TableCaption>{caption}</TableCaption> : undefined}
         <Thead>
           <Tr>
