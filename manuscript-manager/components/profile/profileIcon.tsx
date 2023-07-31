@@ -30,7 +30,7 @@ export default function ProfileAvatarDropdown() {
       //User exists: Show profile and menu
       <Flex alignItems="center" gap="2">
         <Menu>
-          <h1>{name}</h1>
+          <h1 className="text-font font-bold text-lg ">{name}</h1>
           <MenuButton>
             <Avatar name={name} src={image} size="lg" />
           </MenuButton>
