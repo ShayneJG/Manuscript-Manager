@@ -22,7 +22,8 @@ export default function ProfileAvatarDropdown() {
 
   let name: string = session?.user?.name || "no name";
   let image: string = session?.user?.image || "";
-  let email: string = session?.user?.email || "no email";
+
+  
 
   if (session) {
     return (
@@ -31,7 +32,7 @@ export default function ProfileAvatarDropdown() {
         <Menu>
           <h1>{name}</h1>
           <MenuButton>
-            <Avatar name={name} src={image} />
+            <Avatar name={name} src={image} size="lg" />
           </MenuButton>
           <MenuList>
             <MenuGroup title="Profile">
@@ -70,7 +71,7 @@ export default function ProfileAvatarDropdown() {
       <Flex>
         <Menu>
           <MenuButton>
-            {" "}
+            
             <Avatar name={"Guest"} />
           </MenuButton>
           <MenuList>
