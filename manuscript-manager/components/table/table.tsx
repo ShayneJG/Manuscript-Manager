@@ -17,6 +17,7 @@ import UpdateManuscriptButton from "../manuscript/updateManuscriptButton";
 interface ManuscriptTableProps {
   data: ManuscriptType[];
   caption?: string;
+  includeDate?: boolean
   setManuscriptToUpdate: (manuscript: ManuscriptType) => void;
 
   setManuscriptsInState: (manuscript: ManuscriptType[]) => void;
@@ -24,19 +25,25 @@ interface ManuscriptTableProps {
 
 // Takes data and caption passed from Home component and displays it in a table.
 export default function ManuscriptTable({
+  includeDate,
   data,
   caption,
   setManuscriptToUpdate,
-
   setManuscriptsInState,
 }: ManuscriptTableProps) {
   let tick: string = "✓";
   return (
     <TableContainer>
-      <Table variant={"striped"} size="md" colorScheme="blackAlpha" className="bg-lightBlue/5 shadow-md border">
+      <Table
+        variant={"striped"}
+        size="md"
+        colorScheme="blackAlpha"
+        className="bg-lightBlue/5 shadow-md border"
+      >
         {caption ? <TableCaption>{caption}</TableCaption> : undefined}
         <Thead>
           <Tr>
+            {includeDate && <Th>Date</Th>}
             <Th maxWidth="100px">Manuscript</Th>
             <Th maxWidth="60px">Wordcount</Th>
             <Th maxWidth="60px">LaTeX</Th>
@@ -56,8 +63,8 @@ export default function ManuscriptTable({
 
             return (
               <Tr key={index}>
-                {/* <Td>{date.toDateString()}</Td>
-                <Td>{manuscript.user}</Td> */}
+                {includeDate && <Td>{date.toDateString()}</Td>
+                }
                 <Td>{manuscript.manuscriptID}</Td>
                 <Td>{manuscript.wordCount}</Td>
                 <Td>{manuscript.latex ? tick : undefined}</Td>
