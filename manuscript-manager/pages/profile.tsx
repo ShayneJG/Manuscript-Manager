@@ -20,7 +20,7 @@ import { GetServerSideProps } from "next";
 import { getServerSession } from "next-auth";
 import { useSession } from "next-auth/react";
 import { ChangeEvent, useEffect, useState } from "react";
-import { authOptions } from "../api/auth/[...nextauth]";
+import { authOptions } from "./api/auth/[...nextauth]";
 import clientPromise from "@/lib/mongodb";
 import UserType from "@/types/user";
 import Header from "@/components/page/header";
@@ -34,13 +34,13 @@ interface ProfileProps {
   user: UserType;
   currentMonth: ManuscriptType[];
   lastMonth: ManuscriptType[];
-  
 }
 
-
-
-export default function Profile({ user, currentMonth, lastMonth }: ProfileProps) {
-
+export default function Profile({
+  user,
+  currentMonth,
+  lastMonth,
+}: ProfileProps) {
   //handles updating the userdata
   const updateUser = async () => {
     if (session?.user) {
@@ -69,17 +69,15 @@ export default function Profile({ user, currentMonth, lastMonth }: ProfileProps)
 
   // gives an approximate income per day required to meet goals
   function dailyEarnings() {
-    //assume 30 days a month, approx 4 weeks. 
-    const totalWorkDays: number = workDays * 4; 
-    const earningsPerDay: number = monthGoal / totalWorkDays;  
+    //assume 30 days a month, approx 4 weeks.
+    const totalWorkDays: number = workDays * 4;
+    const earningsPerDay: number = monthGoal / totalWorkDays;
 
     setDayEarnings(roundLimit(earningsPerDay));
   }
 
-  console.log("last month start date", lastMonthStartDate)
-  
+  console.log("last month start date", lastMonthStartDate);
 
-  
   // session data for the logged in user
   const { status, data: session } = useSession();
 
@@ -89,9 +87,11 @@ export default function Profile({ user, currentMonth, lastMonth }: ProfileProps)
   const [dayEarnings, setDayEarnings] = useState<number>();
   const [monthGoal, setMonthGoal] = useState<number>(user.earnings?.monthly!);
   const toast = useToast();
-  
+
   //makes sure that the daily earnings approximation is updated when required
-  useEffect(() => {dailyEarnings()}, [workDays, monthGoal])
+  useEffect(() => {
+    dailyEarnings();
+  }, [workDays, monthGoal]);
 
   // ensure that a user is logged in. If not logged in, refuse entry
   if (status === "unauthenticated") {
@@ -105,8 +105,7 @@ export default function Profile({ user, currentMonth, lastMonth }: ProfileProps)
     return <Spinner></Spinner>;
   } else {
     return (
-      <div className="min-h-screen py-16 px-24">
-        <Header />
+      <main>
         <Grid templateColumns={"repeat(2, 1fr)"} gap={6}>
           {/* PROFILE */}
           <Box className="w-2/3" id="profile">
@@ -132,51 +131,52 @@ export default function Profile({ user, currentMonth, lastMonth }: ProfileProps)
                   ></Input>
                   <FormHelperText>e.g., 0.0070</FormHelperText>
                 </FormControl>
-                
-                  
-                  {/* GOALS */}
 
-                  <Heading>Goals</Heading>
+                {/* GOALS */}
 
-                  <FormControl>
-                    <FormLabel>Workdays</FormLabel>
-                    <InputGroup>
-                      <Input
-                        value={workDays}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                          let val = e.target.valueAsNumber;
-                          if (val >= 1 && val <= 7) {
-                            setWorkDays(e.target.valueAsNumber);
-                          }
-                        }}
-                        type="number"
-                      ></Input>
-                      <InputRightElement fontSize="0.8rem">
-                        days a week
-                      </InputRightElement>
-                    </InputGroup>
-                  </FormControl>
-                  <FormControl>
-                    <FormLabel>Monthly Earnings</FormLabel>
-                    <InputGroup>
-                      <InputLeftElement
-                        pointerEvents="none"
-                        color="gray.300"
-                        fontSize="1.2em"
-                      >$</InputLeftElement>
-                      <Input
-                        value={monthGoal}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                          setMonthGoal(e.target.valueAsNumber);
-                        }}
-                        type="number"
-                      ></Input>
-                    </InputGroup>
-                  </FormControl>
-                  <Text>
-                    Your daily earnings should approximately be: ${dayEarnings}
-                  </Text>
-                
+                <Heading>Goals</Heading>
+
+                <FormControl>
+                  <FormLabel>Workdays</FormLabel>
+                  <InputGroup>
+                    <Input
+                      value={workDays}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                        let val = e.target.valueAsNumber;
+                        if (val >= 1 && val <= 7) {
+                          setWorkDays(e.target.valueAsNumber);
+                        }
+                      }}
+                      type="number"
+                    ></Input>
+                    <InputRightElement fontSize="0.8rem">
+                      days a week
+                    </InputRightElement>
+                  </InputGroup>
+                </FormControl>
+                <FormControl>
+                  <FormLabel>Monthly Earnings</FormLabel>
+                  <InputGroup>
+                    <InputLeftElement
+                      pointerEvents="none"
+                      color="gray.300"
+                      fontSize="1.2em"
+                    >
+                      $
+                    </InputLeftElement>
+                    <Input
+                      value={monthGoal}
+                      onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                        setMonthGoal(e.target.valueAsNumber);
+                      }}
+                      type="number"
+                    ></Input>
+                  </InputGroup>
+                </FormControl>
+                <Text>
+                  Your daily earnings should approximately be: ${dayEarnings}
+                </Text>
+
                 <Button
                   onClick={async (e) => {
                     e.preventDefault();
@@ -207,13 +207,20 @@ export default function Profile({ user, currentMonth, lastMonth }: ProfileProps)
               </form>
             </Box>
           </Box>
-           <Box>
-           <MonthlyEarningsChart manuscripts={currentMonth} dateInPeriod={new Date()} label="Current Month" />
-           <MonthlyEarningsChart manuscripts={lastMonth} dateInPeriod={lastMonthStartDate} label="Previous Month" />
-          </Box>       
-          
+          <Box>
+            <MonthlyEarningsChart
+              manuscripts={currentMonth}
+              dateInPeriod={new Date()}
+              label="Current Month"
+            />
+            <MonthlyEarningsChart
+              manuscripts={lastMonth}
+              dateInPeriod={lastMonthStartDate}
+              label="Previous Month"
+            />
+          </Box>
         </Grid>
-      </div>
+      </main>
     );
   }
 }
@@ -256,41 +263,23 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       };
     }
 
-      //Data for the charts
+    //Data for the charts
 
-      //current month
-      
-      
-      const [todaysManuscripts, thisMonthsManuscripts, lastMonthsManuscripts] = await currentAndPreviousMonths(session.user?.name!)
-      
+    //current month
 
-      console.log("serverside manuscripts: ", thisMonthsManuscripts)
-      thisMonth = thisMonthsManuscripts;
-      lastMonth = lastMonthsManuscripts;
-      
-       
-       
+    const [todaysManuscripts, thisMonthsManuscripts, lastMonthsManuscripts] =
+      await currentAndPreviousMonths(session.user?.name!);
 
-
-      
-
-      
-
-
-    
+    console.log("serverside manuscripts: ", thisMonthsManuscripts);
+    thisMonth = thisMonthsManuscripts;
+    lastMonth = lastMonthsManuscripts;
   }
-
-
-
-
-
-  
 
   return {
     props: {
       user: user,
       currentMonth: thisMonth,
-      lastMonth: lastMonth
+      lastMonth: lastMonth,
     },
   };
 };

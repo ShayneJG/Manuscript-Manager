@@ -21,6 +21,7 @@ import {
   Grid,
   GridItem,
   FormErrorMessage,
+  Heading,
 } from "@chakra-ui/react";
 import { ChangeEvent, useState } from "react";
 import UserType from "@/types/user";
@@ -224,7 +225,15 @@ export default function CreateManuscript({
   }, [manuscriptToUpdate]);
 
   return (
-    <Box borderWidth="1px" borderRadius="lg" p={2}>
+    <Box
+      borderWidth="1px"
+      borderRadius="lg"
+      p={2}
+      className="text-dark flex flex-col text-center bg-lightBlue/5 shadow-md"
+    >
+      <Heading className="pb-2" size="sm">
+        New Manuscript
+      </Heading>
       <Grid
         templateColumns="repeat(2, 50%)"
         alignItems="center"
@@ -240,6 +249,7 @@ export default function CreateManuscript({
               {/* Chakra UI does not have a date picker component. It has an input of type date,
           but that was too weird to use, so we are using react-datepicker here, which simplifies things a lot */}
               <DatePicker
+                className="bg-transparent"
                 id="date-picker"
                 dateFormat={"dd/MM/yyyy"}
                 selected={date}
@@ -278,7 +288,7 @@ export default function CreateManuscript({
               required
               size="sm"
             />
-            <FormErrorMessage>Cannot be blank</FormErrorMessage>
+            <FormErrorMessage className="h-0">Cannot be blank</FormErrorMessage>
           </FormControl>
         </GridItem>
         <GridItem>
@@ -320,11 +330,11 @@ export default function CreateManuscript({
               }}
               size="sm"
             />{" "}
-            <FormErrorMessage>Cannot be blank</FormErrorMessage>
+            <FormErrorMessage className="h-0">Cannot be blank</FormErrorMessage>
           </FormControl>
         </GridItem>
         <GridItem alignSelf="end">
-          <Stack direction="row" id="checkboxes">
+          <Stack className="p-2" direction="row" id="checkboxes">
             <Checkbox
               id="latex"
               isChecked={latex}
@@ -375,7 +385,9 @@ export default function CreateManuscript({
               }
               size="sm"
             />{" "}
-            <FormErrorMessage>Must be in the format: 00:00:00</FormErrorMessage>
+            <FormErrorMessage className="h-0">
+              Must be in the format: 00:00:00
+            </FormErrorMessage>
           </FormControl>
         </GridItem>
         {/* Boxing together the 3 toggle options to make layout simpler
@@ -384,21 +396,31 @@ export default function CreateManuscript({
 
         <GridItem w="100%" alignSelf="end">
           {manuscriptToUpdate ? (
-            <Tooltip
-              hasArrow
-              bg="red.600"
-              label="No user or pay rate found. If logged in, please ensure your profile is up-to-date"
-              isDisabled={name && payRate ? true : false}
-            >
-              <Button
-                isLoading={isLoading}
-                isDisabled={name && payRate ? false : true}
-                onClick={(e) => handleUpdate(e)}
-                className="w-full"
+            <div>
+              <Tooltip
+                hasArrow
+                bg="red.600"
+                label="No user or pay rate found. If logged in, please ensure your profile is up-to-date"
+                isDisabled={name && payRate ? true : false}
               >
-                Update
-              </Button>
-            </Tooltip>
+                <Button
+                  colorScheme="blue"
+                  isLoading={isLoading}
+                  isDisabled={name && payRate ? false : true}
+                  onClick={(e) => handleUpdate(e)}
+                  className="w-full mb-1"
+                >
+                  Update
+                </Button>
+              </Tooltip>
+              <Button className="w-full"
+               colorScheme="red"
+               onClick={() => {
+                resetManuscriptState();
+                setManuscriptToUpdate(undefined)
+              }}
+               >Cancel</Button>
+            </div>
           ) : (
             <Tooltip
               hasArrow
@@ -407,6 +429,7 @@ export default function CreateManuscript({
               isDisabled={name && payRate ? true : false}
             >
               <Button
+                colorScheme="blue"
                 isLoading={isLoading}
                 isDisabled={name && payRate ? false : true}
                 onClick={(e) => handleSubmit(e)}

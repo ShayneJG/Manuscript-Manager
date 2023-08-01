@@ -8,21 +8,12 @@ import { getServerSession } from "next-auth";
 import { GetServerSideProps } from "next"; // in-built getServerSideProps type
 import clientPromise from "../lib/mongodb";
 import { ManuscriptType } from "@/types/manuscripts";
-import ProfileAvatarDropdown from "@/components/profile/profileIcon";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import UserType from "@/types/user";
 import { Flex, Grid, GridItem } from "@chakra-ui/react";
-import { Heading } from "@chakra-ui/react";
-
-import {
-  currentDate,
-  thisMonthStartDate,
-  lastMonthStartDate,
-} from "@/utils/dates";
-import { monthlySummary } from "@/utils/monthlyTotals";
 import { useState } from "react";
-import Header from "@/components/page/header";
 import currentAndPreviousMonths from "@/utils/database/current-previous";
+import Head from "next/head";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -47,11 +38,14 @@ export default function Home(props: HomeProps) {
     ManuscriptType[]
   >([...todaysManuscripts]);
 
-  console.log("Client side user is: ", user);
+  // console.log("Client side user is: ", user);
 
   return (
-    <main className={`min-h-screen py-16 px-24 ${inter.className}`}>
-      <Header />
+    <main>
+      <Head>
+        <title>Manuscript Manager</title>
+      </Head>
+
       <Grid templateColumns="repeat(10, 1fr)" gap="12">
         <GridItem colSpan={3} id="sidebar">
           <Flex direction="column" gap="12">
@@ -112,15 +106,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       email: userData?.email,
       payRate: userData?.payRate ? userData.payRate : null,
     };
-    console.log("user updated: ", user);
+    // console.log("user updated: ", user);
   }
 
-  console.log("server-side user is: ", user);
-
+  // console.log("server-side user is: ", user);
 
   const [todaysManuscripts, thisMonthsManuscripts, lastMonthsManuscripts] =
     await currentAndPreviousMonths(user.name);
-
 
   return {
     props: {
