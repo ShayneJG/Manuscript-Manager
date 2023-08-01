@@ -6,7 +6,7 @@ import clientPromise from "../../../lib/mongodb";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 // API route handler that gets executed when the .../api/manuscript route is called
-export async function getManuscripts(
+export async function getManuscript(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
