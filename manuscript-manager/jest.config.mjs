@@ -10,7 +10,7 @@ const createJestConfig = nextJest({
 const config = {
   //this is required by jest to understand imports properly
   moduleNameMapper: {
-    '^@/utils/(.*)$': '<rootDir>/utils/$1',
+    '^@/(.*)$': '<rootDir>/$1',
   },
   // Add more setup options before each test is run
   // setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
