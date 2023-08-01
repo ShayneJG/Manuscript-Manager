@@ -6,21 +6,26 @@ import clientPromise from "../../../lib/mongodb";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 // API route handler that gets executed when the .../api/manuscript route is called
-export async function getManuscript(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export async function getManuscript(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const client = await clientPromise; // clientPromise is a function that gets the instance of the MongoDB database
-    const db = client.db(); // specifies which collection in the database we are accessing
+    if (req.method === "GET") {
+      const { identification } = req.query;
+      const client = await clientPromise; // clientPromise is a function that gets the instance of the MongoDB database
+      const db = client.db(); // specifies which collection in the database we are accessing
 
-    const manuscripts = await db // uses MongoDB MQL queries to access info from the database
-      .collection("manuscripts") // specifies the subsection/subcollection
-      .find({})
-      .toArray();
-
-    res.json(manuscripts); // serves the response in JSON format to the browser - this will be displayed when visiting the /api/manuscripts path in browser
-  } catch (e) {
-    console.error(e);
+      const manuscript = await db // uses MongoDB MQL queries to access info from the database
+        .collection("manuscripts") // specifies the subsection/subcollection
+        .findOne({ manuscriptID: identification });
+      if (manuscript) {
+        res.status(200).json(manuscript);
+      } else {
+        res.status(404).send("No manuscript found");
+      }
+    } // serves the response in JSON format to the browser - this will be displayed when visiting the /api/manuscripts path in browser
+    else {
+      res.status(405).send("Method not allowed");
+    }
+  } catch (e: any) {
+    res.status(500).send(e.message);
   }
 }
