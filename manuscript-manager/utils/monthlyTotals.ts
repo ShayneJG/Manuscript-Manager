@@ -12,7 +12,7 @@ import { defaultPayRate, defaultLatexBonus } from "./constants";
 import { Earnings } from "@/components/stats/atAGlance";
 
 // calculates total wordcount for a given array of manuscripts
-function calculateTotalWordCount(manuscripts: ManuscriptType[]): number {
+export function calculateTotalWordCount(manuscripts: ManuscriptType[]): number {
   const totalWordCount = manuscripts.reduce((total, manuscript) => {
     return total + manuscript.wordCount + manuscript.authorBio;
   }, 0);
