@@ -347,6 +347,7 @@ export default function CreateManuscript({
               </FormLabel>
             </Checkbox>
             <Checkbox
+              isDisabled={triple}
               id="double"
               isChecked={double}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
@@ -358,6 +359,7 @@ export default function CreateManuscript({
               </FormLabel>
             </Checkbox>
             <Checkbox
+              isDisabled={double}
               id="triple"
               isChecked={triple}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
@@ -413,13 +415,16 @@ export default function CreateManuscript({
                   Update
                 </Button>
               </Tooltip>
-              <Button className="w-full"
-               colorScheme="red"
-               onClick={() => {
-                resetManuscriptState();
-                setManuscriptToUpdate(undefined)
-              }}
-               >Cancel</Button>
+              <Button
+                className="w-full"
+                colorScheme="red"
+                onClick={() => {
+                  resetManuscriptState();
+                  setManuscriptToUpdate(undefined);
+                }}
+              >
+                Cancel
+              </Button>
             </div>
           ) : (
             <Tooltip
