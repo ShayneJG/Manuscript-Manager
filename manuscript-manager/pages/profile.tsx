@@ -25,7 +25,7 @@ import clientPromise from "@/lib/mongodb";
 import UserType from "@/types/user";
 import Header from "@/components/page/header";
 import { roundLimit } from "@/utils/math";
-import { lastMonthStartDate } from "@/utils/dates";
+import { lastMonthStartDate, thisMonthStartDate } from "@/utils/dates";
 import { ManuscriptType } from "@/types/manuscripts";
 import { WithId } from "mongodb";
 import MonthlyEarningsChart from "@/components/stats/charts/monthlyEarnings";
@@ -210,7 +210,7 @@ export default function Profile({
           <Box>
             <MonthlyEarningsChart
               manuscripts={currentMonth}
-              dateInPeriod={new Date()}
+              dateInPeriod={thisMonthStartDate}
               label="Current Month"
             />
             <MonthlyEarningsChart

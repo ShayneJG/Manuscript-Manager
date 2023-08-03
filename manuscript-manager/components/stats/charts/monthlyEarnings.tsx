@@ -90,6 +90,7 @@ export default function MonthlyEarningsChart({
 
   // retrieves all days in the month and stores the dates as default dates.
   const labels: Date[] = payPeriodDays(dateInPeriod);
+  console.log("labels: ", labels);
 
   //console.log("labels: ", labels)
 
@@ -98,7 +99,8 @@ export default function MonthlyEarningsChart({
   // shorter labels for readability.
   let shortLabels: string[] = labels.map((date) => {
     return date.toLocaleDateString().slice(0, 10);
-  });
+  })
+  console.log('shortlabels: ', shortLabels);
 
   // options for chart. Can add colour here.
   const options = {
