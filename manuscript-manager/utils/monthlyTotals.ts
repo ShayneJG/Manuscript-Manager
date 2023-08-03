@@ -41,7 +41,7 @@ export function calculateTotalLatex(manuscripts: ManuscriptType[]): number {
 // }
 
 // calculates total other bonuses (speed, double, triple, extra)
-function calculateTotalBonus(manuscripts: ManuscriptType[]): number {
+export function calculateTotalBonus(manuscripts: ManuscriptType[]): number {
   // check if speed bonus applies
   // for each manuscript, check if speed is true
   // if it is, multiply manuscript.wordCount by 0.1, add the results together
