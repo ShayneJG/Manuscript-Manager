@@ -42,11 +42,8 @@ export default function ProfileAvatarDropdown() {
               <MenuItem as="a" href="/search">
                 Manuscript Search
               </MenuItem>
-              <MenuItem as="a" href="/monthly">
-                Monthly Data
-              </MenuItem>
-              <MenuItem as="a" href="/goals">
-                Goals
+              <MenuItem as="a" href="/statistics">
+                Manuscript Statistics
               </MenuItem>
             </MenuGroup>
             <MenuDivider />
