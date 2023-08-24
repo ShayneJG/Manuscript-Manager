@@ -23,8 +23,6 @@ export default function ProfileAvatarDropdown() {
   let name: string = session?.user?.name || "no name";
   let image: string = session?.user?.image || "";
 
-  
-
   if (session) {
     return (
       //User exists: Show profile and menu
@@ -42,11 +40,8 @@ export default function ProfileAvatarDropdown() {
               <MenuItem as="a" href="/search">
                 Manuscript Search
               </MenuItem>
-              <MenuItem as="a" href="/monthly">
-                Monthly Data
-              </MenuItem>
-              <MenuItem as="a" href="/goals">
-                Goals
+              <MenuItem as="a" href="/statistics">
+                Manuscript Statistics
               </MenuItem>
             </MenuGroup>
             <MenuDivider />
@@ -68,17 +63,16 @@ export default function ProfileAvatarDropdown() {
     );
   } else {
     return (
-      <Flex>
+      <Flex alignItems="center" gap="2">
+        <h1>{"Sign in for functionality ->"}</h1>
         <Menu>
           <MenuButton>
-            
             <Avatar name={"Guest"} />
           </MenuButton>
           <MenuList>
             <MenuItem onClick={() => signIn()}>Sign In</MenuItem>
           </MenuList>
         </Menu>
-        <h1>{"Guest: Not signed in"}</h1>
       </Flex>
     );
   }
