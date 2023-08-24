@@ -10,26 +10,26 @@ interface DataViewProps {
 
 export default function DataView({ labels, view, setView }: DataViewProps): JSX.Element {
   return (
-    <div>
-      {view !== 0 ? (
-        <Button
+    <div className='flex'>
+      
+        <Button isDisabled={view === 0}
           onClick={() => {
             setView(view - 1);
           }}
         >
           <AiOutlineArrowLeft />
         </Button>
-      ) : null}
+      
       <div>{labels[view]}</div>
-      {view !== labels.length - 1 ? (
-        <Button
+      
+        <Button isDisabled={view === labels.length - 1}
           onClick={() => {
             setView(view + 1);
           }}
         >
           <AiOutlineArrowRight />
         </Button>
-      ) : null}
+      
     </div>
   );
 }
