@@ -22,6 +22,8 @@ import {
   GridItem,
   FormErrorMessage,
   Heading,
+  Wrap,
+  WrapItem,
 } from "@chakra-ui/react";
 import { ChangeEvent, useState } from "react";
 import UserType from "@/types/user";
@@ -334,43 +336,54 @@ export default function CreateManuscript({
           </FormControl>
         </GridItem>
         <GridItem alignSelf="end">
-          <Stack className="p-2" direction="row" id="checkboxes">
-            <Checkbox
-              id="latex"
-              isChecked={latex}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                setLatex(e.target.checked);
-              }}
-            >
-              <FormLabel htmlFor="latex" margin={0} fontSize="sm">
-                LaTeX
-              </FormLabel>
-            </Checkbox>
-            <Checkbox
-              isDisabled={triple}
-              id="double"
-              isChecked={double}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                setDouble(e.target.checked);
-              }}
-            >
-              <FormLabel htmlFor="double" margin={0} fontSize="sm">
-                Double
-              </FormLabel>
-            </Checkbox>
-            <Checkbox
-              isDisabled={double}
-              id="triple"
-              isChecked={triple}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                setTriple(e.target.checked);
-              }}
-            >
-              <FormLabel htmlFor="triple" margin={0} fontSize="sm">
-                Triple
-              </FormLabel>
-            </Checkbox>
-          </Stack>
+          <Wrap
+            flexWrap={"wrap"}
+            className="ml-2"
+            direction="row"
+            id="checkboxes"
+          >
+            <WrapItem>
+              <Checkbox
+                id="latex"
+                isChecked={latex}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                  setLatex(e.target.checked);
+                }}
+              >
+                <FormLabel htmlFor="latex" margin={0} fontSize="sm">
+                  LaTeX
+                </FormLabel>
+              </Checkbox>
+            </WrapItem>
+            <WrapItem>
+              <Checkbox
+                isDisabled={triple}
+                id="double"
+                isChecked={double}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                  setDouble(e.target.checked);
+                }}
+              >
+                <FormLabel htmlFor="double" margin={0} fontSize="sm">
+                  Double
+                </FormLabel>
+              </Checkbox>
+            </WrapItem>
+            <WrapItem>
+              <Checkbox
+                isDisabled={double}
+                id="triple"
+                isChecked={triple}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                  setTriple(e.target.checked);
+                }}
+              >
+                <FormLabel htmlFor="triple" margin={0} fontSize="sm">
+                  Triple
+                </FormLabel>
+              </Checkbox>
+            </WrapItem>
+          </Wrap>
         </GridItem>
         <GridItem>
           <FormControl
