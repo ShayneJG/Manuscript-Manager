@@ -10,7 +10,7 @@ export default function App({
   Component,
   pageProps: { session, ...pageProps },
 }: AppProps<{ session: Session }>) {
-  //wrappers for chakra and Auth0 (SessionProvider)
+  //wrappers for chakra and nextAuth (SessionProvider)
   //do not add anything but wrappers
   return (
     <ChakraProvider>
