@@ -11,6 +11,7 @@ import { Flex, Grid, GridItem } from "@chakra-ui/react";
 import { useState } from "react";
 import currentAndPreviousMonths from "@/utils/database/current-previous";
 import Head from "next/head";
+import getUser from "@/utils/getUser";
 
 interface HomeProps {
   todaysManuscripts: ManuscriptType[];
@@ -26,9 +27,11 @@ export default function Home(props: HomeProps) {
     lastMonthsManuscripts,
     user,
   } = props;
+  //holds the manuscript that is being updated, if one is being updated. If one is not being updated, it is undefined.
   const [manuscriptToUpdate, setManuscriptToUpdate] = useState<
     ManuscriptType | undefined
   >(undefined);
+  //holds manuscripts to be displayed in the table. Retrieved via getServerSideProps, initialised as todays manuscripts.
   const [manuscriptsInState, setManuscriptsInState] = useState<
     ManuscriptType[]
   >([...todaysManuscripts]);
@@ -37,6 +40,7 @@ export default function Home(props: HomeProps) {
 
   return (
     <main>
+      {/* this head component injects the title into the DOM */}
       <Head>
         <title>Manuscript Manager</title>
       </Head>
@@ -77,31 +81,13 @@ export default function Home(props: HomeProps) {
 // getServerSideProps will find manuscripts from the DB before sending data to end-user
 export const getServerSideProps: GetServerSideProps = async (context) => {
   // we need today's manuscripts, this month's manuscripts, and last month's manuscripts
-  const client = await clientPromise;
-  const db = client.db();
 
-  // gets userdata from the session and passes a user object to the page. This is basically the same data as the user session, but it has the payrate added.
-
-  const session = await getServerSession(context.req, context.res, authOptions);
-
-  // this user obj is loosely typed because we rely on having no user to prevent unauthenticated manuscript submittions. All API calls will bounce back without causing errors.
-  // TODO: Strongly type user with User type. Possibly create 'default' unauthenticated user and auto reject it on the front end?
+  //TODO: FIX user typing. Strong typing conflicts with our front end authentication.
+  //TODO: refactored user data fetching. DO NOT DEPLOY to production until tested properly.
+  const session = await getUser(context);
   let user: any = {};
-
   if (session) {
-    // Find the document with the same email
-    const email = session?.user?.email;
-    const userData = await db.collection("users").findOne({ email });
-
-    //creates and passes user object for email and payrate usage. Probably not the correct way, as this overlaps with getSession, but it works.
-    user = {
-      name: userData?.name,
-      email: userData?.email,
-      payRate: userData?.payRate ? userData.payRate : null,
-    };
-    // console.log("user updated: ", user);
-
-    // console.log("server-side user is: ", user);
+    user = session;
   }
   const [todaysManuscripts, thisMonthsManuscripts, lastMonthsManuscripts] =
     await currentAndPreviousMonths(user.name);
