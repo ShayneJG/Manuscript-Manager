@@ -242,7 +242,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
-  //initialise variables, these pass to front end as empty and will not throw errors on the front
+  //initialise variables, these pass to front end as empty and will not throw errors on the front.
+  //TODO: typing. This cannot be replaced by getUser just yet, as we are creating the user data here if it didn't already exist.
   let user = {};
   let thisMonth;
   let lastMonth;
@@ -252,6 +253,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const userData = await db.collection("users").findOne({ email });
 
   //if there is no userData found, create a user based on the session data and insert into our user collection
+
   if (!userData) {
     user = {
       name: session.user?.name,
