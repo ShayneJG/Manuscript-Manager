@@ -1,5 +1,4 @@
 import AtAGlance from "@/components/stats/atAGlance";
-
 import ManuscriptTable from "@/components/table/table";
 import CreateManuscript from "@/components/manuscript/createManuscript";
 import { getServerSession } from "next-auth";
@@ -85,11 +84,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const session = await getServerSession(context.req, context.res, authOptions);
 
-  let user: UserType = {
-    name: "guest",
-    email: "guest@email.com",
-    payRate: Number(process.env.PAYRATE_DEFAULT),
-  };
+  // this user obj is loosely typed because we rely on having no user to prevent unauthenticated manuscript submittions. All API calls will bounce back without causing errors.
+  // TODO: Strongly type user with User type. Possibly create 'default' unauthenticated user and auto reject it on the front end?
+  let user: any = {};
 
   if (session) {
     // Find the document with the same email
@@ -103,10 +100,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       payRate: userData?.payRate ? userData.payRate : null,
     };
     // console.log("user updated: ", user);
+
+    // console.log("server-side user is: ", user);
   }
-
-  // console.log("server-side user is: ", user);
-
   const [todaysManuscripts, thisMonthsManuscripts, lastMonthsManuscripts] =
     await currentAndPreviousMonths(user.name);
 
