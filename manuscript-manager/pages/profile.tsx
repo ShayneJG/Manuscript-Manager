@@ -23,11 +23,9 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { authOptions } from "./api/auth/[...nextauth]";
 import clientPromise from "@/lib/mongodb";
 import UserType from "@/types/user";
-import Header from "@/components/page/header";
 import { roundLimit } from "@/utils/math";
 import { lastMonthStartDate, thisMonthStartDate } from "@/utils/dates";
 import { ManuscriptType } from "@/types/manuscripts";
-import { WithId } from "mongodb";
 import MonthlyEarningsChart from "@/components/stats/charts/monthlyEarnings";
 import currentAndPreviousMonths from "@/utils/database/current-previous";
 import Head from "next/head";
@@ -244,50 +242,49 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
+  //initialise variables, these pass to front end as empty and will not throw errors on the front
   let user = {};
   let thisMonth;
   let lastMonth;
 
-  if (session) {
-    // Find the document with the same email
-    const email = session?.user?.email;
-    const userData = await db.collection("users").findOne({ email });
+  // Find the document with the same email
+  const email = session?.user?.email;
+  const userData = await db.collection("users").findOne({ email });
 
-    //if there is no userData found, create a user based on the session data and insert into our user collection
-    if (!userData) {
-      user = {
-        name: session.user?.name,
-        email: session.user?.email,
-        payRate: process.env.PAYRATE_DEFAULT,
-        earnings: {
-          workDays: process.env.WORKDAYS,
-          monthly: process.env.MONTHLY_GOAL,
-        },
-      };
-      await db.collection("users").insertOne(user);
-    } else {
-      user = {
-        name: userData?.name,
-        email: userData?.email,
-        payRate: userData?.payRate,
-        earnings: {
-          workDays: userData.earnings?.workDays || process.env.WORKDAYS,
-          monthly: userData.earnings?.monthly || process.env.MONTHLY_GOAL,
-        },
-      };
-    }
-
-    //Data for the charts
-
-    //current month
-
-    const [todaysManuscripts, thisMonthsManuscripts, lastMonthsManuscripts] =
-      await currentAndPreviousMonths(session.user?.name!);
-
-    console.log("serverside manuscripts: ", thisMonthsManuscripts);
-    thisMonth = thisMonthsManuscripts;
-    lastMonth = lastMonthsManuscripts;
+  //if there is no userData found, create a user based on the session data and insert into our user collection
+  if (!userData) {
+    user = {
+      name: session.user?.name,
+      email: session.user?.email,
+      payRate: process.env.PAYRATE_DEFAULT,
+      earnings: {
+        workDays: process.env.WORKDAYS,
+        monthly: process.env.MONTHLY_GOAL,
+      },
+    };
+    await db.collection("users").insertOne(user);
+  } else {
+    user = {
+      name: userData?.name,
+      email: userData?.email,
+      payRate: userData?.payRate,
+      earnings: {
+        workDays: userData.earnings?.workDays || process.env.WORKDAYS,
+        monthly: userData.earnings?.monthly || process.env.MONTHLY_GOAL,
+      },
+    };
   }
+
+  //Data for the charts
+
+  //current month
+
+  const [todaysManuscripts, thisMonthsManuscripts, lastMonthsManuscripts] =
+    await currentAndPreviousMonths(session.user?.name!);
+
+  console.log("serverside manuscripts: ", thisMonthsManuscripts);
+  thisMonth = thisMonthsManuscripts;
+  lastMonth = lastMonthsManuscripts;
 
   return {
     props: {
