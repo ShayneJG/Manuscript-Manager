@@ -10,12 +10,14 @@ export default function App({
   Component,
   pageProps: { session, ...pageProps },
 }: AppProps<{ session: Session }>) {
+  //wrappers for chakra and Auth0 (SessionProvider)
+  //do not add anything but wrappers
   return (
     <ChakraProvider>
       <SessionProvider session={session}>
         <div className={`min-h-screen py-16 px-24 bg-background`}>
           <Header />
-        <Component {...pageProps} />
+          <Component {...pageProps} />
         </div>
       </SessionProvider>
     </ChakraProvider>
