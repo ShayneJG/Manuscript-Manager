@@ -185,7 +185,7 @@ export default function CreateManuscript({
     };
     try {
       if (formValidation()) {
-        let success = await handleManuscripts(
+        let response = await handleManuscripts(
           "PATCH",
           resetManuscriptState,
           getTodaysManuscripts,
@@ -201,7 +201,18 @@ export default function CreateManuscript({
           userInfo,
           manuscriptToUpdate
         );
-        success && setManuscriptToUpdate(undefined);
+        response === "success"
+          ? toast({
+              title: "Manuscript updated.",
+              status: "success",
+              duration: 5000,
+            })
+          : toast({
+              title: "Manuscript failed to update.",
+              status: "error",
+              description: `${response}`,
+            });
+        response && setManuscriptToUpdate(undefined);
       }
     } finally {
       setIsLoading(false);
