@@ -234,6 +234,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const client = await clientPromise;
   const db = client.db();
 
+  //kick client back to main page
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
   let user = {};
   let thisMonth;
   let lastMonth;
