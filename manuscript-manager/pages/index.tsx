@@ -1,11 +1,8 @@
 import AtAGlance from "@/components/stats/atAGlance";
 import ManuscriptTable from "@/components/table/table";
 import CreateManuscript from "@/components/manuscript/createManuscript";
-import { getServerSession } from "next-auth";
 import { GetServerSideProps } from "next"; // in-built getServerSideProps type
-import clientPromise from "../lib/mongodb";
 import { ManuscriptType } from "@/types/manuscripts";
-import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import UserType from "@/types/user";
 import { Flex, Grid, GridItem } from "@chakra-ui/react";
 import { useState } from "react";
