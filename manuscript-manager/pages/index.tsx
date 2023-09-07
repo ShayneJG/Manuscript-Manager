@@ -1,7 +1,5 @@
-import { Inter } from "next/font/google";
 import AtAGlance from "@/components/stats/atAGlance";
-import jan from "@/data/Jan.json";
-import feb from "@/data/Feb.json";
+
 import ManuscriptTable from "@/components/table/table";
 import CreateManuscript from "@/components/manuscript/createManuscript";
 import { getServerSession } from "next-auth";
@@ -14,8 +12,6 @@ import { Flex, Grid, GridItem } from "@chakra-ui/react";
 import { useState } from "react";
 import currentAndPreviousMonths from "@/utils/database/current-previous";
 import Head from "next/head";
-
-const inter = Inter({ subsets: ["latin"] });
 
 interface HomeProps {
   todaysManuscripts: ManuscriptType[];
