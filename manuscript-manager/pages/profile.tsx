@@ -232,7 +232,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const client = await clientPromise;
   const db = client.db();
 
-  //kick client back to main page
+  //kick client back to main page if user fails to authenticate
   if (!session) {
     return {
       redirect: {
