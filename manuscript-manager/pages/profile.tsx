@@ -30,6 +30,7 @@ import { ManuscriptType } from "@/types/manuscripts";
 import { WithId } from "mongodb";
 import MonthlyEarningsChart from "@/components/stats/charts/monthlyEarnings";
 import currentAndPreviousMonths from "@/utils/database/current-previous";
+import Head from "next/head";
 interface ProfileProps {
   user: UserType;
   currentMonth: ManuscriptType[];
@@ -106,6 +107,9 @@ export default function Profile({
   } else {
     return (
       <main>
+        <Head>
+          <title>{session?.user?.name!}'s profile</title>
+        </Head>
         <Grid templateColumns={"repeat(2, 1fr)"} gap={6}>
           {/* PROFILE */}
           <Box className="w-2/3" id="profile">
